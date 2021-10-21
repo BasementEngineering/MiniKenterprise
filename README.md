@@ -1,31 +1,37 @@
 # MiniKenterprise
 The Mini Kenterprise is a fun little project for anyone who wants to take a dive into the world of Arduino and electronics.
 
-![Rendering](images/MiniKenterprise_Rendering.JPG)
+![Rendering](images/Rendering.jpg)
 
 
 ## Bill of Materials
 Electronics to buy:
-| Position | Component | Quantity | Link |
-|----------|-----------|----------|------|
-- 1x Breadboard
-- 2x N50 Motor + 76mm Propeller
-- 1x Wemos D1 Mini Development Board
-- 2x DRV8833 H-Bridge/Motor Driver Module
-- 1x 18650 Li-Ion Battery Cell
-- 1x 18650 Holder
-- 1x 5V Step Up/ Boost Converter
-- 5x NeoPixel RGB LED
+| Position | Component | Description | Quantity | Link |
+|----------|-----------|-------------|----------|------|
+| 1 | Breadboard | 400 dots | 1x | [Aliexpress](https://de.aliexpress.com/item/32711841420.html?spm=a2g0o.productlist.0.0.69aa381393BqnZ&algo_pvid=5b0b763c-7e39-470d-ad8d-dc896d8a2570&algo_exp_id=5b0b763c-7e39-470d-ad8d-dc896d8a2570-1&pdp_ext_f=%7B%22sku_id%22%3A%2260928567388%22%7D) [AZ Delivery](https://www.az-delivery.de/products/mini-breadboard?_pos=1&_sid=12607a080&_ss=r) |
+| 2 | Jumper Wires | stiff | 1x | [Aliexpress](https://de.aliexpress.com/item/1005002828254543.html?spm=a2g0o.productlist.0.0.273e66efIJdZJB&algo_pvid=34572367-adc8-4615-9ad0-2bd02f056100&aem_p4p_detail=20211021042446286150965408330007926505&algo_exp_id=34572367-adc8-4615-9ad0-2bd02f056100-54&pdp_ext_f=%7B%22sku_id%22%3A%2212000022367973906%22%7D) [reichelt](https://www.reichelt.de/steckbruecken-drahtbruecken-set-140-teilig-steckboard-dbs-p79056.html?&trstct=pos_1&nbc=1) |
+| 3 | Pins |Male Pin Headers | 20x | [Aliexpress](https://de.aliexpress.com/item/32993182990.html?spm=a2g0o.productlist.0.0.45532ff4sSm6qG&algo_pvid=c676763d-3223-4d05-9876-854d71d37ee1&algo_exp_id=c676763d-3223-4d05-9876-854d71d37ee1-0&pdp_ext_f=%7B%22sku_id%22%3A%2266952136433%22%7D) [Kein Link]() |
+| 4 | Battery | 18650 Li-Ion Cell | 1x | [AliExpress](https://de.aliexpress.com/item/1005003394481523.html?spm=a2g0o.productlist.0.0.2f2a17e9Wt8ZAj&algo_pvid=c32a842c-d0d7-45cc-a587-c66c44ccf0d9&algo_exp_id=c32a842c-d0d7-45cc-a587-c66c44ccf0d9-2&pdp_ext_f=%7B%22sku_id%22%3A%2212000025582890802%22%7D) |
+| 5 | BMS | TP4056 + Discharge Protection | 1x | [Aliexpress](https://de.aliexpress.com/item/4000522397541.html?spm=a2g0o.productlist.0.0.460e70f9hiyFH7&algo_pvid=164f3526-5845-419f-90b8-9293f51a1c33&algo_exp_id=164f3526-5845-419f-90b8-9293f51a1c33-3&pdp_ext_f=%7B%22sku_id%22%3A%2210000002700974720%22%7D)
+| 6 | Switch | 2 Pin Toggle Switch | 1x | [Aliexpress](https://de.aliexpress.com/item/32919390284.html?spm=a2g0o.productlist.0.0.3bd64051ZGI1Yw&algo_pvid=4c30ae6c-6183-40d9-bef8-32658080ae47&algo_exp_id=4c30ae6c-6183-40d9-bef8-32658080ae47-0&pdp_ext_f=%7B%22sku_id%22%3A%2210000000938211422%22%7D) |
+| 7 | Voltage Booster | 5V 3A Boost | 1x | [Aliexpress](https://de.aliexpress.com/item/1005002027119464.html?spm=a2g0o.productlist.0.0.81a7711bHeSAoy&algo_pvid=311379db-8755-4eef-8dd7-f3721bee5998&algo_exp_id=311379db-8755-4eef-8dd7-f3721bee5998-2&pdp_ext_f=%7B%22sku_id%22%3A%2212000018457419913%22%7D) |
+| 8 | Capacitor | 220uF min 5V | 1x | [Aliexpress](https://de.aliexpress.com/item/1005002665279737.html?spm=a2g0o.productlist.0.0.14e96b707g8gqj&algo_pvid=c82a71e4-b990-44a4-8e94-b2d8248bfb01&algo_exp_id=c82a71e4-b990-44a4-8e94-b2d8248bfb01-2&pdp_ext_f=%7B%22sku_id%22%3A%2212000021619765234%22%7D) |
+| 9 | Motor Driver | DRV8833 Dual H-Bridge | 1x | [Aliexpress](https://de.aliexpress.com/item/4000083406292.html?spm=a2g0o.productlist.0.0.1ceb2eb7kfWKHc&algo_pvid=acb5065d-311a-4a24-9c37-187b0974ba84&algo_exp_id=acb5065d-311a-4a24-9c37-187b0974ba84-0&pdp_ext_f=%7B%22sku_id%22%3A%2210000000221355749%22%7D) |
+| 10 | Motor | M20 5V min DC Motor, 12mm diameter | 1mm shaft | 2x | [Aliexpress](https://de.aliexpress.com/item/1005003199253570.html?spm=a2g0o.productlist.0.0.59025931P1d5qQ&algo_pvid=8513311f-bc9c-472d-8655-51d8797c7d1c&algo_exp_id=8513311f-bc9c-472d-8655-51d8797c7d1c-7&pdp_ext_f=%7B%22sku_id%22%3A%2212000024625599971%22%7D) |
+| 11 | Peopeller | 1mm hole, 76mm diameter | 2x | [Aliexpress](https://de.aliexpress.com/item/1005003314629873.html?spm=a2g0o.productlist.0.0.56e46a65bcZ5sh&algo_pvid=80799301-ed8d-4227-9d88-257a5cae9411&algo_exp_id=80799301-ed8d-4227-9d88-257a5cae9411-12&pdp_ext_f=%7B%22sku_id%22%3A%2212000025168258281%22%7D) | 
+| 12 | Microcontroller | Wemos D1 Mini | 1x | [Aliexpress](https://de.aliexpress.com/item/32831353752.html?spm=a2g0o.productlist.0.0.e76c5dcdMkkDG3&algo_pvid=a7b307b0-bce5-47fd-b257-1bd2229e5fea&algo_exp_id=a7b307b0-bce5-47fd-b257-1bd2229e5fea-0&pdp_ext_f=%7B%22sku_id%22%3A%2210000014440741148%22%7D) |
+| 13 | RGB LED | Neopixel WS2812b | 1x | [Aliexpress](https://de.aliexpress.com/item/1005001908190390.html?spm=a2g0o.productlist.0.0.2a487705VLL9jw&algo_pvid=c4bda5cd-ed14-4bc9-b3c0-2085d5bf01b2&aem_p4p_detail=202110210452322979753173701440003605751&algo_exp_id=c4bda5cd-ed14-4bc9-b3c0-2085d5bf01b2-4&pdp_ext_f=%7B%22sku_id%22%3A%2212000018083134356%22%7D) |
 
 Parts to print:
 - 2x Fan Holders
 - 1x Center Connector
+- 2x hard Plastic Bottles 1l (eg. Coke, Sprite, ...)
 
 ## Assembly
 ### 1. Start the Printer
 Get the STL files (FanMount.stl and CenterEnclosure.stl) and open them in the slicing software of your choice. Cura is a good slicer for that. Set the layer height to 0.4 mm. You can go for 0.2 mm, which will look better, but it will also take a lot of time.
 The parts where designed for 3D printing and don't need any support. The two fan mounts have to be printed with the backside laying on the printbed.
-![Printing](images/PrintingSettings.JPG)
+![Printing](images/Slicing.jpg)
 Start the slicing process and export the file to an SD card, a USB drive, whatever your 3D printer uses and start printing.
 
 ### 2. Put Wires on the external components
