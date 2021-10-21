@@ -1,16 +1,17 @@
 #define MOTOR_EN 16
 #define MOTOR_IN1 2
-#define MOTOR_IN2 0
+#define MOTOR_IN2 14
 #define MOTOR_IN3 4
 #define MOTOR_IN4 5
 
-#define LED_PIN 14
+#define LED_PIN 12
 //D0 -> GPIO16
 //D4 -> GPIO2
-//D3 -> GPIO0
+//D5 -> GPIO14
 //D2 -> GPIO4
 //D1 -> GPIO5
-//D5 -> GPIO14
+//D6 -> GPIO12
+// Do not use GPIO 0 aka. D3, FLASHING Pin
 
 #include "PropulsionSystem.h"
 PropulsionSystem propulsionSystem(MOTOR_EN,MOTOR_IN1,MOTOR_IN2,MOTOR_IN3,MOTOR_IN4);
