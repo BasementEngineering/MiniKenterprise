@@ -1,6 +1,6 @@
 # MiniKenterprise
 The Mini Kenterprise is a fun little project for anyone who wants to take a dive into the world of Arduino and electronics.
-![Rendering](MiniKenterprise_Rendering.jpg)
+![Rendering](/MiniKenterprise_Rendering.jpg)
 
 
 ## Bill of Materials
@@ -24,7 +24,7 @@ Parts to print:
 ### 1. Start the Printer
 Get the STL files (FanMount.stl and CenterEnclosure.stl) and open them in the slicing software of your choice. Cura is a good slicer for that. Set the layer height to 0.4 mm. You can go for 0.2 mm, which will look better, but it will also take a lot of time.
 The parts where designed for 3D printing and don't need any support. The two fan mounts have to be printed with the backside laying on the printbed.
-![Printing](PrintingSettings.jpg)
+![Printing](/PrintingSettings.jpg)
 Start the slicing process and export the file to an SD card, a USB drive, whatever your 3D printer uses and start printing.
 
 ### 2. Put Wires on the external components
