@@ -28,8 +28,8 @@ Further Components..
 | Position | Component | Description | Quantity | Link |
 |----------|-----------|-------------|----------|------|
 | 1 | Bottle | hard plastic 1l (eg. Coke, Sprite, ...) | 2x | |
-| 2 | Centerpiece | 3D printed electronics enclosure | 1x | [STL File](3dFiles/Centerpiece_Body) & [STL File](3dFiles/Centerpiece_Cap)  |
-| 3 | Fan Holder | 3D printed | 2x | [STL File](3dFiles/FanHolder)|
+| 2 | Centerpiece | 3D printed electronics enclosure | 1x | [STL File](3dFiles/Centerpiece_Body.stl) & [STL File](3dFiles/Centerpiece_Cap.stl)  |
+| 3 | Fan Holder | 3D printed | 2x | [STL File](3dFiles/FanHolder.stl)|
 | 4 | Ziptie | 200mm long, 4.3mm wide | 6x | |
 | 5 | Schrauben | 3mm * 10mm | 2x | |
 
