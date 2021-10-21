@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title>Mini Kenterprise</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="dataBuffer.js" charset="utf-8"></script>
+    <script src="ui.js" charset="utf-8"></script>
+    <script src="backendCommunication.js" charset="utf-8"></script>
+    
+  </head>
+  <body>
+  <div id="left" class="sidepanel">
+    <h3>L</h3>
+    <input id="leftSlider" type="range" min="-100" max="100" value="0" class="slider" />
+  </div>
+  <div id="center">
+    <h1>Kenterprise Controller</h1>
+    <h4>Voltage</h4>
+    <input id="voltage" type="number"  disabled></input>
+    <br>
+    <h4>LED Conrtol</h4>
+    <label>R</label><input id="red" type="range" min="0" max="255" onmouseup="updateColor()"></input><br>
+    <label>G</label><input id="green" type="range" min="0" max="255" onmouseup="updateColor()"></input><br>
+    <label>B</label><input id="blue" type="range" min="0" max="255" onmouseup="updateColor()"></input><br>
+    <input id="colorView" type="text"  disabled></input>
+  </div>
+  <div id="right" class="sidepanel">
+    <h3>R</h3>
+    <input onmouseup="console.log('mosueup')" id="rightSlider" type="range" min="-100" max="100" value="0" class="slider" />
+  </div>
+
+  <script src="main.js" charset="utf-8"></script>
+  </body>
+</html>
