@@ -45,6 +45,9 @@ Start the slicing process and export the file to an SD card, a USB drive, whatev
 While the print is in progress you can prepare the motors the switch and the battery holder by adding wires and nice little pins to them. This is the trickiest 
 ### 3. Put Pins on everything
 ### 4. Assemble the breadboard
+![Electronics](images/Electronics.jpg)
+![Front Panel](images/FrontPanel.jpg)
+![Schematic](images/Schematic.jpg)
 ### 5. Program the Microcontroller
 ### 6. Prepare the 3D Printed Parts
 ### 7. Put everything together
