@@ -1,3 +1,9 @@
+/*
+ * The "backend" features all of the logic. 
+ * It parses input from the frontend aka. the website running on the connected device 
+ * and controls the propulsion system and the leds accordingly.
+ */
+
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include <WebSocketsServer.h>
@@ -7,76 +13,36 @@
 
 #define DEBUG
 #define TIMEOUT 2000
+
 int connectionCount = 0;
 
 ESP8266WebServer server(80);
 WebSocketsServer socketServer = WebSocketsServer(81);
+
+//Pointers to things that the backend will have access to during runtime
 PropulsionSystem* myPropulsionPointer = NULL;
 Adafruit_NeoPixel* myLedStrip = NULL;
 
 /*** Function Prototypes ***/
+//Main Functions
+void setupBackend(PropulsionSystem* pointer, Adafruit_NeoPixel* ledPointer);
+void updateBackend();
+void parseInput(String input);
+//helpers
+//... for serving files (such as our frontend website)
 String getContentType(String filename);
 bool handleFileRead(String path);
+//...for settingup our websocket connection
 void startWebsocket();
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght);
+//...for Parsing
+String getSplitString(String data, char separator, int index);
+//...for led stuff
+
+/***           ***/
 
 unsigned long lastHeartbeat = 0;
-
-#define CALCULATION (int)(((float)value/100)*255)
-
-String getSplitString(String data, char separator, int index)
-{
-  int found = 0;
-  int strIndex[] = {0, -1};
-  int maxIndex = data.length()-1;
-
-  for(int i=0; i<=maxIndex && found<=index; i++){
-    if(data.charAt(i)==separator || i==maxIndex){
-        found++;
-        strIndex[0] = strIndex[1]+1;
-        strIndex[1] = (i == maxIndex) ? i+1 : i;
-    }
-  }
-
-  return found>index ? data.substring(strIndex[0], strIndex[1]) : "";
-}
-
-void parseInput(String input){
-  Serial.println("Parsing: ");
-  Serial.println(input);
-
-  char command = input.charAt(0);
-  input.remove(0,2);
-  int value = input.toInt();
-  
-  if(command == 'L'){
-    Serial.println("Left: ");
-    Serial.println(CALCULATION);
-    myPropulsionPointer->moveRight(CALCULATION);
-  }
-  else if(command == 'R'){
-    Serial.println("Right: ");
-    Serial.println(CALCULATION);
-    myPropulsionPointer->moveLeft(CALCULATION);
-  }
-  else if(command == 'H'){
-    lastHeartbeat = millis();
-  }
-  else if(command == 'C'){
-    lastHeartbeat = millis();
-    int red = getSplitString(input, ' ',0).toInt();
-    int green = getSplitString(input, ' ',1).toInt();
-    int blue = getSplitString(input, ' ',2).toInt();
-    Serial.println("Parsed a color");
-    Serial.print("Red   : ");Serial.println(red);
-    Serial.print("Green : ");Serial.println(green);
-    Serial.print("Blue  : ");Serial.println(blue);
-    myLedStrip->setPixelColor(0,myLedStrip->Color(red,green,blue));
-    myLedStrip->show();
-  }
-
-  
-}
+#define MOTOR_PWM_CALCULATION (int)(((float)value/100)*255)
 
 void setupBackend(PropulsionSystem* pointer, Adafruit_NeoPixel* ledPointer) {
   myPropulsionPointer = pointer;
@@ -99,6 +65,43 @@ void updateBackend(){
     Serial.println("Timed Out");
     myPropulsionPointer->stop();
   }
+}
+
+void parseInput(String input){
+  Serial.println("Parsing: ");
+  Serial.println(input);
+
+  char command = input.charAt(0);
+  input.remove(0,2);
+  int value = input.toInt();
+  
+  if(command == 'L'){
+    Serial.println("Left: ");
+    Serial.println(MOTOR_PWM_CALCULATION);
+    myPropulsionPointer->moveRight(MOTOR_PWM_CALCULATION);
+  }
+  else if(command == 'R'){
+    Serial.println("Right: ");
+    Serial.println(MOTOR_PWM_CALCULATION);
+    myPropulsionPointer->moveLeft(MOTOR_PWM_CALCULATION);
+  }
+  else if(command == 'H'){
+    lastHeartbeat = millis();
+  }
+  else if(command == 'C'){
+    lastHeartbeat = millis();
+    int red = getSplitString(input, ' ',0).toInt();
+    int green = getSplitString(input, ' ',1).toInt();
+    int blue = getSplitString(input, ' ',2).toInt();
+    Serial.println("Parsed a color");
+    Serial.print("Red   : ");Serial.println(red);
+    Serial.print("Green : ");Serial.println(green);
+    Serial.print("Blue  : ");Serial.println(blue);
+    myLedStrip->fill(myLedStrip->Color(red,green,blue));
+    myLedStrip->show();
+  }
+
+  
 }
 
 /*** SERVING FILES (index and stuff) ***/
@@ -155,4 +158,21 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
       parseInput(stringInput);
       break;
   }
+}
+
+String getSplitString(String data, char separator, int index)
+{
+  int found = 0;
+  int strIndex[] = {0, -1};
+  int maxIndex = data.length()-1;
+
+  for(int i=0; i<=maxIndex && found<=index; i++){
+    if(data.charAt(i)==separator || i==maxIndex){
+        found++;
+        strIndex[0] = strIndex[1]+1;
+        strIndex[1] = (i == maxIndex) ? i+1 : i;
+    }
+  }
+
+  return found>index ? data.substring(strIndex[0], strIndex[1]) : "";
 }

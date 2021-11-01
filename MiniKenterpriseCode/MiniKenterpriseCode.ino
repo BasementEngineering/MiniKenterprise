@@ -1,23 +1,34 @@
-#define MOTOR_EN 16
-#define MOTOR_IN1 2
-#define MOTOR_IN2 14
-#define MOTOR_IN3 4
-#define MOTOR_IN4 5
+/*
+ * ! The Pin Markings on the WEMOS D1 Mini Board don't match the GPIO numbers !
+ * Do not use GPIO 0 aka. D3 as it is used for flashing programs.
+ * 
+ * Motor Pins:
+ * EN  D0 = GPIO 16
+ * IN1 D8 = GPIO 15
+ * In2 D7 = GPIO 13
+ * In3 D6 = GPIO 12
+ * IN4 D5 = GPIO 14
+ * 
+ * LED Pin:
+ * D4 = GPIO 2
+ * 
+ * ADC (Voltmeter) Pin:
+ * A0 ADC0
+ */
 
-#define LED_PIN 12
-//D0 -> GPIO16
-//D4 -> GPIO2
-//D5 -> GPIO14
-//D2 -> GPIO4
-//D1 -> GPIO5
-//D6 -> GPIO12
-// Do not use GPIO 0 aka. D3, FLASHING Pin
+#define MOTOR_EN 16
+#define MOTOR_IN1 15
+#define MOTOR_IN2 13
+#define MOTOR_IN3 12
+#define MOTOR_IN4 14
+
+#define LED_PIN 2
 
 #include "PropulsionSystem.h"
 PropulsionSystem propulsionSystem(MOTOR_EN,MOTOR_IN1,MOTOR_IN2,MOTOR_IN3,MOTOR_IN4);
 
 #include <Adafruit_NeoPixel.h>
-#define LED_COUNT 5
+#define LED_COUNT 8
 Adafruit_NeoPixel ledStrip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 #include <ESP8266WiFi.h>
@@ -30,6 +41,29 @@ Adafruit_NeoPixel ledStrip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 const char *ssid = APSSID;
 const char *password = APPSK;
+
+//helper function decalarations (full implementations are further down)
+void setupWifiAp(); // to open a wifi access point
+void testMotors(); // to do an optional motor
+void setupLedStrip();
+
+void setup(){
+
+  Serial.begin(9600);
+  Serial.println("Starting Setup");
+  propulsionSystem.initPins();
+  Serial.println("Testing motors...");
+  //testMotors();
+  setupWifiAp();
+  setupLedStrip();
+  setupBackend(&propulsionSystem,&ledStrip);
+  Serial.println("Ready");
+}
+
+void loop(){
+  updateBackend();
+  yield();
+}
 
 void setupWifiAp(){
   Serial.begin(9600);
@@ -59,7 +93,7 @@ void testMotors(){
   for( int i = 0; i<255; i++){
       Serial.print("Left Forward: ");
       Serial.println(i);
-    	propulsionSystem.moveLeft(i);
+      propulsionSystem.moveLeft(i);
       delay(50);
   }
   delay(1000);
@@ -95,23 +129,9 @@ void testMotors(){
   delay(1000);
 }
 
-void setup(){
-
-  Serial.begin(9600);
-  Serial.println("Starting Setup");
-  propulsionSystem.initPins();
-  Serial.println("Testing motors...");
-  //testMotors();
-  setupWifiAp();
+void setupLedStrip(){
   ledStrip.begin();
   ledStrip.show();
-  setupBackend(&propulsionSystem,&ledStrip);
-  Serial.println("Ready");
-}
-
-uint8_t pwmValue = 200;
-
-void loop(){
-  updateBackend();
-  yield();
+  ledStrip.fill(ledStrip.Color(250,180,0));
+  ledStrip.show();
 }
