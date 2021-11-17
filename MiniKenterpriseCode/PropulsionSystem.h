@@ -10,6 +10,8 @@ class PropulsionSystem{
   void moveRight(int speed);
   void stop();
 
+  void runTestSequence();
+
   private:
     int en;
     int in1;

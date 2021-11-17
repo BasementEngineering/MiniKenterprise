@@ -49,3 +49,44 @@ void PropulsionSystem::stop(){
   digitalWrite(in3,LOW);
   digitalWrite(in4,LOW);
 }
+
+void PropulsionSystem::runTestSequence(){
+  Serial.println("Testing Left");
+  for( int i = 0; i<255; i++){
+      Serial.print("Left Forward: ");
+      Serial.println(i);
+      moveLeft(i);
+      delay(50);
+  }
+  delay(1000);
+  moveLeft(0);
+  delay(1000);
+  for( int i = 0; i>-255; i--){
+    Serial.print("Left Reverse: ");
+    Serial.println(i);
+    moveLeft(i);
+    delay(50);
+  }
+  delay(1000);
+  moveLeft(0);
+  delay(1000);
+
+    for( int i = 0; i<255; i++){
+      Serial.print("Right Forward: ");
+      Serial.println(i);
+      moveRight(i);
+      delay(50);
+  }
+  delay(1000);
+  moveRight(0);
+  delay(1000);
+  for( int i = 0; i>-255; i--){
+    Serial.print("Right Reverse: ");
+    Serial.println(i);
+    moveRight(i);
+    delay(50);
+  }
+  delay(1000);
+  moveRight(0);
+  delay(1000);
+}

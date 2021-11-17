@@ -9,7 +9,7 @@
 #include <WebSocketsServer.h>
 
 #include "PropulsionSystem.h"
-#include <Adafruit_NeoPixel.h>
+#include "LightBar.h"
 
 #define DEBUG
 #define TIMEOUT 2000
@@ -21,11 +21,11 @@ WebSocketsServer socketServer = WebSocketsServer(81);
 
 //Pointers to things that the backend will have access to during runtime
 PropulsionSystem* myPropulsionPointer = NULL;
-Adafruit_NeoPixel* myLedStrip = NULL;
+LightBar* myLightBar = NULL;
 
 /*** Function Prototypes ***/
 //Main Functions
-void setupBackend(PropulsionSystem* pointer, Adafruit_NeoPixel* ledPointer);
+void setupBackend(PropulsionSystem* pointer, LightBar* ledPointer);
 void updateBackend();
 void parseInput(String input);
 //helpers
@@ -44,9 +44,9 @@ String getSplitString(String data, char separator, int index);
 unsigned long lastHeartbeat = 0;
 #define MOTOR_PWM_CALCULATION (int)(((float)value/100)*255)
 
-void setupBackend(PropulsionSystem* pointer, Adafruit_NeoPixel* ledPointer) {
+void setupBackend(PropulsionSystem* pointer, LightBar* ledPointer) {
   myPropulsionPointer = pointer;
-  myLedStrip = ledPointer;
+  myLightBar = ledPointer;
   SPIFFS.begin();                           // Start the SPI Flash Files System
   
   server.onNotFound([]() {                              // If the client requests any URI
@@ -97,8 +97,7 @@ void parseInput(String input){
     Serial.print("Red   : ");Serial.println(red);
     Serial.print("Green : ");Serial.println(green);
     Serial.print("Blue  : ");Serial.println(blue);
-    myLedStrip->fill(myLedStrip->Color(red,green,blue));
-    myLedStrip->show();
+    myLightBar->setMainColor(red,green,blue);
   }
 
   
