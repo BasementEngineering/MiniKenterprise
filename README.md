@@ -1,9 +1,10 @@
+# This is a WORK IN PROGRESS
+
 # MiniKenterprise
 The Mini Kenterprise is a fun little project for anyone who wants to take a dive into the world of Arduino and electronics.
 It is based on the "big" Kenterprise. A Project of mine that you can see over on [Instructables](https://www.instructables.com/Building-a-Self-Driving-Boat-ArduPilot-Rover/).
 It is currently a WORK IN PROGRESS. Once it is finished it will look something like this:
-![Rendering](images/Rendering.jpg)
-
+![Real Boat](images/RealBoat.jpg)
 
 ## Bill of Materials
 Electronics to buy:
@@ -35,6 +36,14 @@ Further Components..
 | 5 | Screws | 2mm * 10mm | 2x | |
 
 ## Assembly
+### 0. Design an Plan
+Before you can start a new DIY Project from Scratch, you will have to do a lot of planning. A lot of designing, building, testing and improving.
+Luckyly for you, i already did that and went through a couple of prototypes.
+So you will only have to read this if you are interested in the process.
+I started with a 3D model, that I designed in Fusion 360. Below you can see a rendering of the latest version.
+![Rendering](images/Rendering.jpg)
+The circuit diagram was done in PowerPoint. A more professional way would be to draw the circuit diagram in an E-CAD tool such as KiCAD.
+However I prefer powerpoint, as it is much easier to understand for Non-Electronics-Experts.
 ### 1. Start the Printer
 Get the STL files (FanMount.stl and CenterEnclosure.stl) and open them in the slicing software of your choice. Cura is a good slicer for that. Set the layer height to 0.4 mm. You can go for 0.2 mm, which will look better, but it will also take a lot of time.
 The parts where designed for 3D printing and don't need any support. The two fan mounts have to be printed with the backside laying on the printbed.
@@ -44,6 +53,10 @@ Start the slicing process and export the file to an SD card, a USB drive, whatev
 ### 2. Put Wires on the external components
 While the print is in progress you can prepare the motors the switch and the battery holder by adding wires and nice little pins to them. This is the trickiest 
 ### 3. Put Pins on everything
+The modules will often come with a bunch of pins, that are not attached to the board yet.
+You should change that by soldering them to the boards.
+For this it is easiest to stick the pins into your breadboard and place the PCB (aka the board) on top.
+Then you can solder one pin at a time. Keep in mind to not heat anything up for too long.
 ### 4. Assemble the breadboard
 ![Electronics](images/Electronics.jpg)
 ![Front Panel](images/FrontPanel.jpg)
