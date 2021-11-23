@@ -3,9 +3,9 @@
 
 #include <Adafruit_NeoPixel.h>
 
-enum MODES{SOLID,LOADING};
+enum MODES{SOLID,KNIGHT_RIDER};
 #define BLUE 0x34d8eb
-#define YELLOW 0xebe234
+#define YELLOW 0xfa8600
 
 class LightBar{
   public: 
@@ -17,10 +17,17 @@ class LightBar{
     void setMode(uint8_t newMode);
 
   private:
-    uint32_t userColor = 0;
     Adafruit_NeoPixel ledStrip;
-    bool updateRequired = false;
+    uint32_t userColor = 0;
     uint8_t mode = SOLID;
+    bool updateRequired = false;
+    unsigned long lastUpdated = 0;
+    int effectCounter = 0;
+    bool timingActive = false;
+    int updateInterval = 10;
+
+    void updateKnightRider();
+    uint32_t dimColor(uint32_t color, float factor);
 };
 
 #endif

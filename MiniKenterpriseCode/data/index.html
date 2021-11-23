@@ -22,6 +22,12 @@
     <label>G</label><input id="green" type="range" min="0" max="255" onmouseup="updateColor()"></input><br>
     <label>B</label><input id="blue" type="range" min="0" max="255" onmouseup="updateColor()"></input><br>
     <input id="colorView"  style="text-align:center;" type="text"  disabled></input><br>
+    <select id="mode" >
+      <option value="0">Solid Color</option>
+      <option value="1" selected="selected">Knight Rider</option>
+      <option value="2">Blinking</option>
+      <option value="3">Boat</option>
+    </select><br>
     <button id="colorButton" onclick="sendColor()">send</button>
   </div>
   <div id="right" class="sidepanel">

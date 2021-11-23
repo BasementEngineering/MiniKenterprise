@@ -43,51 +43,65 @@ const char *ssid = APSSID;
 const char *password = APPSK;
 
 //helper function decalarations (full implementations are further down)
+bool wifiOnline = false;
 void setupWifiAp(); // to open a wifi access point
-void testMotors(); // to do an optional motor
 
 void setup(){
   Serial.begin(9600);
   Serial.println("Starting Setup");
   propulsionSystem.initPins();
   lightBar.initLeds();
-  lightBar.setMode(SOLID);
-  lightBar.update();
-  setupWifiAp();
+  lightBar.setMode(KNIGHT_RIDER);
+  //lightBar.update();
 
+  Serial.println("Starting Backend");
   setupBackend(&propulsionSystem,&lightBar);
   Serial.println("Ready");
 }
 
 void loop(){
-  updateBackend();
+  if(wifiOnline){
+    updateBackend();
+  } else{
+    setupWifiAp();
+  }
   lightBar.update();
   yield();
 }
 
+unsigned long lastWifiUpdate = 0;
+int nextWaitInterval = 1000;
+int attemptCounter = 0;
+
 void setupWifiAp(){
-  Serial.begin(9600);
-  delay(1000);
+  if( (millis() - lastWifiUpdate) > nextWaitInterval){
+    lastWifiUpdate = millis();
   #ifdef AP_MODE
-  WiFi.softAP(ssid, password);
-  #ifdef DEBUG
-  Serial.print("Access Point \"");
-  Serial.print(ssid);
-  Serial.println("\" started");
-  Serial.print("IP address:\t");
-  Serial.println(WiFi.softAPIP());         // Send the IP address of the ESP8266 to the computer
-  #endif
+    WiFi.softAP(ssid, password);
+    #ifdef DEBUG
+      Serial.print("Access Point \"");
+      Serial.print(ssid);
+      Serial.println("\" started");
+      Serial.print("IP address:\t");
+      Serial.println(WiFi.softAPIP());         // Send the IP address of the ESP8266 to the computer
+    #endif
+    wifiOnline = true;
   #endif
   #ifndef AP_MODE
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
-  while (WiFi.waitForConnectResult() != WL_CONNECTED) {
-    delay(5000);
-    ESP.restart();
-  }
+    if(attemptCounter == 0){
+      WiFi.mode(WIFI_STA);
+      WiFi.begin(ssid, password);
+      attemptCounter++;
+    }
+    if(attemptCounter > 0){
+      if(WiFi.waitForConnectResult() == WL_CONNECTED){
+        wifiOnline = true;
+      }
+      else{
+        ESP.restart();
+      }
+    }
   #endif
-}
-
-void testMotors(){
+  }
   
 }

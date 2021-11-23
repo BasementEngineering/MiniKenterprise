@@ -25,6 +25,7 @@ function showColor(){
 
 function sendColor(){
   sendCommand("C "+ led.red +" "+led.green+" "+led.blue);
+  sendCommand("M "+ document.getElementById("mode").value);
 }
 
 function updateColor(){

@@ -116,6 +116,13 @@ void parseInput(String input){
     Serial.print("Blue  : ");Serial.println(blue);
     myLightBar->setMainColor(red,green,blue);
   }
+  else if(command == 'M'){
+    lastHeartbeat = millis();
+    int newMode = getSplitString(input, ' ',0).toInt();
+    Serial.println("Parsed a color mode");
+    Serial.println(newMode);
+    myLightBar->setMode(newMode);
+  }
 
   
 }
