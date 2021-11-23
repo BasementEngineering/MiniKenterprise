@@ -21,6 +21,9 @@ function showColor(){
   console.log(hexValue);
   colorDiv.value = hexValue;
   colorDiv.style.backgroundColor = hexValue;
+}
+
+function sendColor(){
   sendCommand("C "+ led.red +" "+led.green+" "+led.blue);
 }
 

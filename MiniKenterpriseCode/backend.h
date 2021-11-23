@@ -15,6 +15,8 @@
 #define TIMEOUT 2000
 
 int connectionCount = 0;
+bool timedOut = false;
+unsigned long lastHeartbeat = 0;
 
 ESP8266WebServer server(80);
 WebSocketsServer socketServer = WebSocketsServer(81);
@@ -29,6 +31,7 @@ void setupBackend(PropulsionSystem* pointer, LightBar* ledPointer);
 void updateBackend();
 void parseInput(String input);
 //helpers
+void checkTimeout();
 //... for serving files (such as our frontend website)
 String getContentType(String filename);
 bool handleFileRead(String path);
@@ -41,7 +44,6 @@ String getSplitString(String data, char separator, int index);
 
 /***           ***/
 
-unsigned long lastHeartbeat = 0;
 #define MOTOR_PWM_CALCULATION (int)(((float)value/100)*255)
 
 void setupBackend(PropulsionSystem* pointer, LightBar* ledPointer) {
@@ -58,13 +60,24 @@ void setupBackend(PropulsionSystem* pointer, LightBar* ledPointer) {
   startWebsocket();
 }
 
-void updateBackend(){
-  server.handleClient();
-  socketServer.loop();
+void checkTimeout(){
+  if(!timedOut){
+    
   if( (( millis() - lastHeartbeat ) > TIMEOUT ) && (connectionCount > 0)){
+    timedOut=true;
+  }
+  if(timedOut){
     Serial.println("Timed Out");
     myPropulsionPointer->stop();
   }
+  
+  }
+}
+
+void updateBackend(){
+  server.handleClient();
+  socketServer.loop();
+  checkTimeout();
 }
 
 void parseInput(String input){
@@ -87,6 +100,7 @@ void parseInput(String input){
   }
   else if(command == 'H'){
     lastHeartbeat = millis();
+    timedOut = false;
   }
   else if(command == 'C'){
     lastHeartbeat = millis();

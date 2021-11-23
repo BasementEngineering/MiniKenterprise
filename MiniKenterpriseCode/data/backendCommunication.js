@@ -17,7 +17,6 @@ function openSocket(){
 		socket = new WebSocket('ws://' + location.hostname + ':81/');
 		socket.onopen = function () {
 		  console.log("Opened socket");
-		  this.send("Hello Wordl");
 		  //onOpen();
 		};
 		socket.onerror = function (error) {
