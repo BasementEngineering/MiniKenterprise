@@ -49,4 +49,8 @@ function sendCommand(commandString){
 
 function checkResponse(response){
 	console.log(response);
+	if( response.includes("V") ){
+		var value = response.substring(2);
+		document.getElementById("voltage").value = value + " V";
+	}
 }

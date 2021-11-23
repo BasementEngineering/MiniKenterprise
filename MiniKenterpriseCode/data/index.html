@@ -15,14 +15,14 @@
   <div id="center">
     <h1>Kenterprise Controller</h1>
     <h4>Voltage</h4>
-    <input id="voltage" type="number"  disabled></input>
+    <input id="voltage" type="text" style="text-align:center;" disabled></input>
     <br>
     <h4>LED Conrtol</h4>
     <label>R</label><input id="red" type="range" min="0" max="255" onmouseup="updateColor()"></input><br>
     <label>G</label><input id="green" type="range" min="0" max="255" onmouseup="updateColor()"></input><br>
     <label>B</label><input id="blue" type="range" min="0" max="255" onmouseup="updateColor()"></input><br>
-    <input id="colorView" type="text"  disabled></input><br>
-    <button id="colorButton" type="range" min="0" max="255" onclick="sendColor()">send</button>
+    <input id="colorView"  style="text-align:center;" type="text"  disabled></input><br>
+    <button id="colorButton" onclick="sendColor()">send</button>
   </div>
   <div id="right" class="sidepanel">
     <h3>R</h3>

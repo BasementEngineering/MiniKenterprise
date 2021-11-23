@@ -17,6 +17,7 @@
 int connectionCount = 0;
 bool timedOut = false;
 unsigned long lastHeartbeat = 0;
+unsigned long lastVoltageUpdate = 0;
 
 ESP8266WebServer server(80);
 WebSocketsServer socketServer = WebSocketsServer(81);
@@ -30,6 +31,7 @@ LightBar* myLightBar = NULL;
 void setupBackend(PropulsionSystem* pointer, LightBar* ledPointer);
 void updateBackend();
 void parseInput(String input);
+void updateVoltage();
 //helpers
 void checkTimeout();
 //... for serving files (such as our frontend website)
@@ -78,6 +80,7 @@ void updateBackend(){
   server.handleClient();
   socketServer.loop();
   checkTimeout();
+  updateVoltage();
 }
 
 void parseInput(String input){
@@ -115,6 +118,24 @@ void parseInput(String input){
   }
 
   
+}
+
+#define CORRECTION_FACTOR 0.9665
+void updateVoltage(){
+  if( (( millis() - lastVoltageUpdate ) > 1000 ) && (connectionCount > 0)){
+  int sensorValue = analogRead(A0);
+  float voltage = sensorValue * (5.0 / 1023.0)*CORRECTION_FACTOR;
+  // print out the value you read:
+  String reading = String(voltage,2);
+  String command = "V "+reading;
+  Serial.println(voltage);
+  int payloadLength = command.length()+1;
+  char payload[payloadLength];
+  command.toCharArray(payload,payloadLength);
+  
+  socketServer.broadcastTXT((uint8_t*)payload, payloadLength);
+  lastVoltageUpdate = millis();
+  }
 }
 
 /*** SERVING FILES (index and stuff) ***/
