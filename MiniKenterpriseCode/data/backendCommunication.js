@@ -2,12 +2,12 @@ window.setInterval(function(){
 	sendCommand("H");
   }, 1000);
 
-function sendLeftSpeed(speed){
-	sendCommand("L "+speed);
+function sendSteering(direction){
+	sendCommand("D "+direction);
 }
 
-function sendRightSpeed(speed){
-	sendCommand("R "+speed);
+function sendSpeed(speed){
+	sendCommand("S "+speed);
 }
 
 var socket = null;

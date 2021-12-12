@@ -6,11 +6,18 @@ class PropulsionSystem{
   PropulsionSystem(int _en, int _in1, int _in2, int _in3, int _in4);
   void initPins();
 
-  void moveLeft(int speed);
-  void moveRight(int speed);
   void stop();
 
+  void setSpeed(int newSpeed);
+  void setDirection(int newDirection);
   void runTestSequence();
+  
+  
+private:
+
+  void translateToMotors(int speed, int direction);
+  void moveLeft(int speed);
+  void moveRight(int speed);
 
   private:
     int en;
@@ -18,6 +25,9 @@ class PropulsionSystem{
     int in2;
     int in3;
     int in4;
+
+    int currentSpeed = 0;
+    int currentDirection = 0;
 
     void moveMotor(int pin1,int pin2,int speed);
 };

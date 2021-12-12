@@ -14,6 +14,8 @@
 #define DEBUG
 #define TIMEOUT 2000
 
+//#define DEBUG_BACKEND
+
 int connectionCount = 0;
 bool timedOut = false;
 unsigned long lastHeartbeat = 0;
@@ -46,8 +48,6 @@ String getSplitString(String data, char separator, int index);
 
 /***           ***/
 
-#define MOTOR_PWM_CALCULATION (int)(((float)value/100)*255)
-
 void setupBackend(PropulsionSystem* pointer, LightBar* ledPointer) {
   myPropulsionPointer = pointer;
   myLightBar = ledPointer;
@@ -69,7 +69,9 @@ void checkTimeout(){
     timedOut=true;
   }
   if(timedOut){
+    #ifdef DEBUG_BACKEND
     Serial.println("Timed Out");
+    #endif
     myPropulsionPointer->stop();
   }
   
@@ -84,22 +86,28 @@ void updateBackend(){
 }
 
 void parseInput(String input){
+  #ifdef DEBUG_BACKEND
   Serial.println("Parsing: ");
   Serial.println(input);
+  #endif
 
   char command = input.charAt(0);
   input.remove(0,2);
   int value = input.toInt();
   
-  if(command == 'L'){
-    Serial.println("Left: ");
-    Serial.println(MOTOR_PWM_CALCULATION);
-    myPropulsionPointer->moveRight(MOTOR_PWM_CALCULATION);
+  if(command == 'D'){
+    #ifdef DEBUG_BACKEND
+    Serial.println("Direction: ");
+    Serial.println(value);
+    #endif
+    myPropulsionPointer->setDirection(value);
   }
-  else if(command == 'R'){
-    Serial.println("Right: ");
-    Serial.println(MOTOR_PWM_CALCULATION);
-    myPropulsionPointer->moveLeft(MOTOR_PWM_CALCULATION);
+  else if(command == 'S'){
+    #ifdef DEBUG_BACKEND
+    Serial.println("Speed: ");
+    Serial.println(value);
+    #endif
+    myPropulsionPointer->setSpeed(value);
   }
   else if(command == 'H'){
     lastHeartbeat = millis();
@@ -110,17 +118,21 @@ void parseInput(String input){
     int red = getSplitString(input, ' ',0).toInt();
     int green = getSplitString(input, ' ',1).toInt();
     int blue = getSplitString(input, ' ',2).toInt();
+    #ifdef DEBUG_BACKEND
     Serial.println("Parsed a color");
     Serial.print("Red   : ");Serial.println(red);
     Serial.print("Green : ");Serial.println(green);
     Serial.print("Blue  : ");Serial.println(blue);
+    #endif
     myLightBar->setMainColor(red,green,blue);
   }
   else if(command == 'M'){
     lastHeartbeat = millis();
     int newMode = getSplitString(input, ' ',0).toInt();
+    #ifdef DEBUG_BACKEND
     Serial.println("Parsed a color mode");
     Serial.println(newMode);
+    #endif
     myLightBar->setMode(newMode);
   }
 
@@ -135,7 +147,9 @@ void updateVoltage(){
   // print out the value you read:
   String reading = String(voltage,2);
   String command = "V "+reading;
-  Serial.println(voltage);
+  #ifdef DEBUG_BACKEND
+  Serial.println("Voltage: ");Serial.print(voltage);
+  #endif
   int payloadLength = command.length()+1;
   char payload[payloadLength];
   command.toCharArray(payload,payloadLength);
@@ -155,7 +169,7 @@ String getContentType(String filename) { // convert the file extension to the MI
 }
 
 bool handleFileRead(String path) { // send the right file to the client (if it exists)
-  #ifdef DEBUG
+  #ifdef DEBUG_BACKEND
   Serial.println("handleFileRead: " + path);
   #endif
   if (path.endsWith("/")) path += "index.html";         // If a folder is requested, send the index file
@@ -179,11 +193,15 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght
   switch (type) {
     case WStype_DISCONNECTED:  
       connectionCount--;
-      Serial.println("Socket Disconnected");     
+      #ifdef DEBUG_BACKEND
+      Serial.println("Socket Disconnected");  
+      #endif   
       break;
     case WStype_CONNECTED: 
       connectionCount++;
+      #ifdef DEBUG_BACKEND
       Serial.println("Socket Connected");
+      #endif
       break;
     case WStype_TEXT:
       char input[lenght];

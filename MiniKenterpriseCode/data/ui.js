@@ -1,6 +1,6 @@
 function initUi(){
-	initLeftSlider();
-	initRightSlider();
+	initSteeringSlider();
+	initGasSlider();
   document.getElementById("voltage").value = 4.2;
   initColorSliders();
 }
@@ -59,46 +59,38 @@ blue.oninput = function(){
 }
 }
 
-function initLeftSlider(){
-    var slider = document.getElementById("leftSlider");
-    var sendSpeed = sendLeftSpeed;
+function initSteeringSlider(){
+    var slider = document.getElementById("steeringSlider");
 
     slider.oninput = function() {
 	    if( (this.value%5) == 0){
-	    sendSpeed(this.value);
+	    sendSteering(this.value);
 	  }
     }
   
     slider.onmouseup = function(){
 	    this.value = 0;
-        sendSpeed(this.value);
+        sendSteering(this.value);
 	}
   
     slider.ontouchend = function(){
 	    this.value = 0;
-        sendSpeed(this.value);
+        sendSteering(this.value);
 	}
 }
 
-function initRightSlider(){
-    var slider = document.getElementById("rightSlider");
-    var sendSpeed = sendRightSpeed;
+function initGasSlider(){
+    var slider = document.getElementById("gasSlider");
 
     slider.oninput = function() {
-	    if( (this.value%5) == 0){
+      if( (this.value > -10) && (this.value < 10)){
+        sendSpeed(0);
+      }
+	    else if( (this.value%5) == 0){
 	    sendSpeed(this.value);
 	  }
     }
   
-    slider.onmouseup = function(){
-	    this.value = 0;
-        sendSpeed(this.value);
-	}
-  
-    slider.ontouchend = function(){
-	    this.value = 0;
-        sendSpeed(this.value);
-	}
 }
 
 ////OLD STUFF

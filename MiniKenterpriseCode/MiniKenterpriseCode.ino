@@ -35,7 +35,7 @@ LightBar lightBar(LED_COUNT, LED_PIN);
 #include <WiFiClient.h>
 #include "backend.h"
 
-#define APSSID "KenterpriseWiFi"
+#define APSSID "MiniKenterprise_05L_1"
 #define APPSK  "RowYourBoat"
 #define AP_MODE
 

@@ -1,4 +1,4 @@
-.slider {
+.gasSlider {
     width: 90%;
     height: 90%;
     margin: 0 auto;
@@ -7,6 +7,15 @@
     transform: translate(-50%,-50%);
     writing-mode: bt-lr; /* IE */
     -webkit-appearance: slider-vertical; /* WebKit */
+  }
+
+  .steeringSlider {
+    width: 90%;
+    height: 90%;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
   }
 
   .sidepanel{
