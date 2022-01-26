@@ -27,6 +27,9 @@ Electronics to buy:
 | 15 | RGB LED | Neopixel WS2812b strip (60LEDs/m) | 6x | [Aliexpress](https://de.aliexpress.com/item/4000148759042.html?spm=a2g0o.productlist.0.0.b8c26097BDVBNI&algo_pvid=2af75e62-db7f-46df-84b4-273371ba9cf5&aem_p4p_detail=2021112303561715801964981300740000365539&algo_exp_id=2af75e62-db7f-46df-84b4-273371ba9cf5-4&pdp_ext_f=%7B%22sku_id%22%3A%2212000021774801945%22%7D), [reichelt](https://www.reichelt.de/entwicklerboards-flora-rgb-smart-neopixel-4er-pack-ws2811-debo-np-f-rgb-p235471.html?&trstct=pos_6&nbc=1) |
 | 16 | Resistor | 180 kOhm | 1x | [Aliexpress](https://de.aliexpress.com/item/1005002540879857.html?spm=a2g0o.productlist.0.0.56aa1046z7vc6n&algo_pvid=b86d9d5a-bcaf-418d-a984-3a94f9342a7c&algo_exp_id=b86d9d5a-bcaf-418d-a984-3a94f9342a7c-2&pdp_ext_f=%7B%22sku_id%22%3A%2212000021063599724%22%7D), [reichelt](https://www.reichelt.de/widerstand-metalloxyd-180-kohm-0207-1-0-w-5--1w-180k-p1791.html?&trstct=pos_3&nbc=1)|
 
+![Components](images/Version1/Components.jpg)
+
+
 Further Components..
 | Position | Component | Description | Quantity | Link |
 |----------|-----------|-------------|----------|------|
@@ -36,8 +39,47 @@ Further Components..
 | 4 | Ziptie | 200mm long, 4.3mm wide | 6x | |
 | 5 | Screws | 2mm * 10mm | 2x | |
 
-## Assembly
-### 0. Design an Plan
+## Building your own Mini Kenterprise
+### 0. Choose a Version
+
+
+### 1. Find and prepare 2 bottles
+
+### 2. Print the hardware
+Get the STL files (FanMount.stl and CenterEnclosure.stl) and open them in the slicing software of your choice. Cura is a good slicer for that. Set the layer height to 0.4 mm. You can go for 0.2 mm, which will look better, but it will also take a lot of time.
+The parts where designed for 3D printing and don't need any support. The two fan mounts have to be printed with the backside laying on the printbed.
+![Printing](images/Slicing.jpg)
+Start the slicing process and export the file to an SD card, a USB drive, whatever your 3D printer uses and start printing.
+
+### 3. Assemble the electronics
+While the print is in progress you can prepare the motors the switch and the battery holder by adding wires and nice little pins to them. This is the trickiest 
+![Schematic](images/Version1/CircuitDiagram.jpg)
+#### 3.1 Assemble the power supply section
+![Power Supply](images/Version1/PowerSystemSoldered.jpg)
+![Testing and Adjusting](images/Version1/TestingAndAdjusting.jpg)
+
+
+#### 3.2 Solder Wires and Pins to further Components
+![Modified module](images/Version1/ModifiedFanModule.jpg)
+
+#### 3.3 Assemble the Breadboard
+![Modified module](images/Version1/FinishedElectronics.jpg)
+The modules will often come with a bunch of pins, that are not attached to the board yet.
+You should change that by soldering them to the boards.
+For this it is easiest to stick the pins into your breadboard and place the PCB (aka the board) on top.
+Then you can solder one pin at a time. Keep in mind to not heat anything up for too long.
+
+### 4. Put the components together
+### 5. Program the microcontroller
+### 6. Connect to the boat
+### 7. Charge the battery
+### 8. Use it
+
+
+## Sensor Attachments
+There are no attachments yet
+
+## Project History
 Before you can start a new DIY Project from Scratch, you will have to do a lot of planning. A lot of designing, building, testing and improving.
 Luckyly for you, i already did that and went through a couple of prototypes.
 So you will only have to read this if you are interested in the process.
@@ -45,28 +87,4 @@ I started with a 3D model, that I designed in Fusion 360. Below you can see a re
 ![Rendering](images/Rendering.jpg)
 The circuit diagram was done in PowerPoint. A more professional way would be to draw the circuit diagram in an E-CAD tool such as KiCAD.
 However I prefer powerpoint, as it is much easier to understand for Non-Electronics-Experts.
-### 1. Start the Printer
-Get the STL files (FanMount.stl and CenterEnclosure.stl) and open them in the slicing software of your choice. Cura is a good slicer for that. Set the layer height to 0.4 mm. You can go for 0.2 mm, which will look better, but it will also take a lot of time.
-The parts where designed for 3D printing and don't need any support. The two fan mounts have to be printed with the backside laying on the printbed.
-![Printing](images/Slicing.jpg)
-Start the slicing process and export the file to an SD card, a USB drive, whatever your 3D printer uses and start printing.
 
-### 2. Put Wires on the external components
-While the print is in progress you can prepare the motors the switch and the battery holder by adding wires and nice little pins to them. This is the trickiest 
-### 3. Put Pins on everything
-The modules will often come with a bunch of pins, that are not attached to the board yet.
-You should change that by soldering them to the boards.
-For this it is easiest to stick the pins into your breadboard and place the PCB (aka the board) on top.
-Then you can solder one pin at a time. Keep in mind to not heat anything up for too long.
-### 4. Assemble the breadboard
-![Electronics](images/Electronics.jpg)
-![Front Panel](images/FrontPanel.jpg)
-![Schematic](images/Schematic.jpg)
-### 5. Program the Microcontroller
-### 6. Prepare the 3D Printed Parts
-### 7. Put everything together
-### 8. Have fun
-
-
-## Attachments
-### Wiring Diagram
