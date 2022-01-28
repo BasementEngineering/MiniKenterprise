@@ -1,12 +1,31 @@
 # !WORK IN PROGRESS!
 
 # MiniKenterprise
-The Mini Kenterprise is a fun little project for anyone who wants to take a dive into the world of Arduino and electronics.
-It is based on the "big" Kenterprise. A Project of mine that you can see over on [Instructables](https://www.instructables.com/Building-a-Self-Driving-Boat-ArduPilot-Rover/).
-It is currently a WORK IN PROGRESS. Once it is finished it will look something like this:
-![Real Boat](images/RealBoat.jpg)
 
-## Bill of Materials
+## What is the Mini Kenterprise ?
+The Mini Kenterprise started as a fun little weekend project and to be really honest with you, I don't know what exactly it is supposed to be yet.
+First and foremost it is a shrunk down version of my "big" Kenterprise. A self driving boat for water surveying that I documented on [Instructables](https://www.instructables.com/Building-a-Self-Driving-Boat-ArduPilot-Rover/).
+While the Mini Kenterprise looks similar to it's bigg sister, its main goal is to get people interested in building their own drones.
+Building a Mini Kenterprise touches all of the areas that are important in the construction of a big drone boat. We have 3D printing, soldering, programming and even wireless communication.
+All packaged in a little RC boat that uses two regular plastic bottles to stay afloat and can be controlled with a smartphone. 
+What makes it stand out amongst other RC boats, is that you can buld and program it yourself.
+![Real Boat](images/MiniKenterpriseFeatures.png)
+It offers a bunch of features, that can be seen in the graphic above. For example, the hull is made from simple plastic bottles, a couple of 3D printed parts and zipties.
+It is an air boat, meaning that it moves by using two huge propellers. It also has a couple of LEDs that can do a cool knight rider effect.
+
+## How Do I Build One ?
+First things first, the Mini Kenterprise is not set in stone. It is not a simple of the shelf kit with instructions that tell you 100% exactly how you should build it.
+I encourage anyone to build their very own version of the kenterprise. I have built suveral versions with different kinds of motors, different bottles and different electronic modules.
+What they all share, is that they are little RC boats, that use a WiFi Microcontroller, so that they can be controlle with a smartphone.
+This little guide mainly focusses on my "Version 1". This version was built especcially for a student workshop, with parts that can be purchased from german suppliers.
+This repository also contains images and circuit diagrams for other versions as seen in the versions table.
+| Version Name 	| Motor | Motor Diameter | Fan Diameter | Bottle Size |
+|---------------|---------------|---------------|---------------|---------------|
+| Version 1	| Arduino 5V Motor Module 	| 12 mm | 75 mm | 1 L	|
+| Version 2	| 3.7V Drone Motors 		| 7 mm 	| 45 mm | 0.5 L	|
+| Version 2	| 3.7V Motors 			| 12 mm | 75 mm | 0.75 L|
+
+### Bill of Materials
 Electronics to buy:
 | Position | Component | Description | Quantity | Link |
 |----------|-----------|-------------|----------|------|
@@ -29,51 +48,82 @@ Electronics to buy:
 
 ![Components](images/Version1/Components.jpg)
 
-
 Further Components..
 | Position | Component | Description | Quantity | Link |
 |----------|-----------|-------------|----------|------|
 | 1 | Bottle | hard plastic 1l (eg. Coke, Sprite, ...) | 2x | |
-| 2 | Centerpiece | 3D printed electronics enclosure | 1x | [STL File](3dFiles/Centerpiece_Body.stl) & [STL File](3dFiles/Centerpiece_Cap.stl)  |
-| 3 | Fan Holder | 3D printed | 2x | [STL File](3dFiles/FanHolder.stl)|
-| 4 | Ziptie | 200mm long, 4.3mm wide | 6x | |
-| 5 | Screws | 2mm * 10mm | 2x | |
-
-## Building your own Mini Kenterprise
-### 0. Choose a Version
+| 2 | Centerpiece | 3D printed electronics enclosure | 1x |   |
+| 3 | Fan Holder | 3D printed | 2x | |
+| 4 | Mini Lunch Box | Plastic Container | 1x | |
+| 5 | Ziptie | 200mm long, 4.3mm wide | 6x | |
 
 
 ### 1. Find and prepare 2 bottles
+The biggest componente of a Mini Kenterprise are the two plastic bottles that help it to stay afloat. 
+It is important that the bottles have thick plastic walls. These make the boat more rigid. 
+Thin plastic bottles also tend to heavily deform when they are closed off and the temperature changes.
+I like to use coke or sprite bottles, as they tend to have thick walls. 
+Also try to find relatively straight bottles. Most manufacturers tend to give their bottles all kinds of funky shapes. 
+Unfortunateley those funky shapes make it hard to connect them to the 3D printed components.
+The size of bottle that you want to use is up to you. 0.5L bottles make for a small and fast boat. 1L bootles make the boat slower, as they are pretty heavy, but the also make it more stable and allow for a payload (maybe a sensor) to be carried.
+I found 0.75L bottles to be a great middle ground.
+Make sure to remove the label, so it doesn't peel of in the water. You can do that by filling the bottle with warm water. This liquifies the adhesive.
+Also try to remove any water from the inside with a paper towel and a long spoon.  
+![Printing](images/MaterialsHardware.jpg)
 
-### 2. Print the hardware
-Get the STL files (FanMount.stl and CenterEnclosure.stl) and open them in the slicing software of your choice. Cura is a good slicer for that. Set the layer height to 0.4 mm. You can go for 0.2 mm, which will look better, but it will also take a lot of time.
-The parts where designed for 3D printing and don't need any support. The two fan mounts have to be printed with the backside laying on the printbed.
-![Printing](images/Slicing.jpg)
+### 2. Print the bridge and the fan enclosures
+Get the STL files (FanMount.stl and CenterEnclosure.stl). Make sure to choose the right version for your motor and fan size (fans: 40mm (with 8mm motor) or 75mm(with 12mm motor) and your bottle size (0.5L or 0.75L). 
+Open them in the slicing software of your choice. Cura is a good slicer for that. 
+Set the layer height to 0.4 mm. You can go for 0.2 mm, which will looks better, but it will also take a lot more time.
+The parts where designed for 3D printing and don't need any support. The two fan mounts have to be printed with the flat side laying on the printbed.
 Start the slicing process and export the file to an SD card, a USB drive, whatever your 3D printer uses and start printing.
+![Printing](images/Slicing.jpg)
 
 ### 3. Assemble the electronics
-While the print is in progress you can prepare the motors the switch and the battery holder by adding wires and nice little pins to them. This is the trickiest 
+While the print is in progress you can prepare the interesting part of the boat (coming from an electrical engineer :D), the electronics.
+The circuit diagram shows how all of the parts have to be connected. Keep in mind that the circuit can differ, depending on the kinds of components you hava available.
 ![Schematic](images/Version1/CircuitDiagram.jpg)
 #### 3.1 Assemble the power supply section
+The "power supply section" or in other words, the powerbank should be assembled first. You can in theory put everything together on a breadboard.
+Howerver, I would not reccomend this when it comes to power supply components, as the potential to plug something in the wron way and fry your whole circuit or even start a battery fire is quite big.
+Therefore all of the power supply components should be soldered.
 ![Power Supply](images/Version1/PowerSystemSoldered.jpg)
+Make sure to check every connection twice, before you insert the battery and test it for the first time. Red to Red, Black to Black and no short curcuits.
+If your DC-DC module has to be adjusted, you should do that now using a multimeter and a screwdriver. We want 5V on the output, not 16 as seen in the picture.
 ![Testing and Adjusting](images/Version1/TestingAndAdjusting.jpg)
 
-
 #### 3.2 Solder Wires and Pins to further Components
+The rest of the components will be connected to a breadboard, this makes it easy to change your Mini Kenterprise in the future. Maybe you want to switch to different motors, or you want to add a sensor.
+A breadboard makes that possible without having to pull out the soldering ion every time. However, you will have to add so called "header pins" to your components, to be able to comfortably plug them into the breadboard.
+![Modified module](images/SolderingTips/SolderingTips.jpg)
+The best starting point are the modules, such as the microcontroller. For this it is easiest to stick the pins into your breadboard and place the PCB (aka the board) on top.
+Then you can solder one pin at a time. Keep in mind to not heat anything up for too long.
+
+The power supply connectors are probably the most important pins. These can be seen in the image below. I use three pins for each power rail. This way I inclrease the contact surface and make sure that it works, even if one pin is a little bit loose.
+I also like to use a combination of 2 pins and 3 pins and block one hole in the breadboard, as shown in the picture. 
+This way i instantly know ho to plug it in. When there is two power rails, with two connectors, i make sure to remove one pin on each side, so i can not accidentially switch them around.
+
+Most components, such as switches come without wires, so you will have to solder wires to them with. Be sure to tin the wire and the surface you want to solder to first. 
+To connect the two you then just have to hold them together and heat them up with the soldering ion before the tin connects them. Don't heat them up for too long, as the heat can melt the plastic bodies of the components.
+Isolate each connection with some shrink tubing, hotglue or electrical tape.
+
+Some modules don't really fit on the breadboard, or take up too much space. One of such modules is the motor module. You can modify it, by removing the motor from the board, and soldering long wires ( 25cm ) to it.
 ![Modified module](images/Version1/ModifiedFanModule.jpg)
 
 #### 3.3 Assemble the Breadboard
-![Modified module](images/Version1/FinishedElectronics.jpg)
-The modules will often come with a bunch of pins, that are not attached to the board yet.
-You should change that by soldering them to the boards.
-For this it is easiest to stick the pins into your breadboard and place the PCB (aka the board) on top.
-Then you can solder one pin at a time. Keep in mind to not heat anything up for too long.
+When you are done soldering, you can simply plug everything into the breadboard.
+![Finished Electronics](images/Version1/FinishedElectronics.jpg)
 
 ### 4. Put the components together
+
 ### 5. Program the microcontroller
+
 ### 6. Connect to the boat
+
 ### 7. Charge the battery
+
 ### 8. Use it
+
 
 
 ## Sensor Attachments
