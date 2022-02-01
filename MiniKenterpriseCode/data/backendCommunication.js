@@ -1,14 +1,17 @@
 window.setInterval(function(){
-	sendCommand("H");
-  }, 1000);
-
-function sendSteering(direction){
-	sendCommand("D "+direction);
-}
-
-function sendSpeed(speed){
-	sendCommand("S "+speed);
-}
+	if( (leftJoystick!= null) && (rightJoystick!= null) ){
+		if(mode == 1 || mode == 2){
+			sendCommand("S "+leftJoystick.getPercentage()); //steering
+			sendCommand("D "+rightJoystick.getPercentage()); //speed
+		}
+		else if( (mode == 3) || (mode == 4) )
+		{
+			sendCommand("L "+leftJoystick.getPercentage()); // leftspeed
+			sendCommand("R "+rightJoystick.getPercentage()); //rightspeed
+		}
+		
+	}
+  }, 100);
 
 var socket = null;
 
@@ -36,14 +39,16 @@ function openSocket(){
 var lastCommand = "";
 
 function sendCommand(commandString){
-	console.log("->"+commandString);
+	//console.log("->"+commandString);
 	lastCommand = commandString;
 
 	if(socket != null){
-	    socket.send(commandString+"\n");
+		if(socket.readyState === socket.OPEN){
+			socket.send(commandString+"\n");
+		}
 	}
 	else{
-		console.log("Socket is null");
+		//console.log("Socket is null");
 	}
 }
 
@@ -51,6 +56,7 @@ function checkResponse(response){
 	console.log(response);
 	if( response.includes("V") ){
 		var value = response.substring(2);
-		document.getElementById("voltage").value = value + " V";
+		//document.getElementById("BatteryVoltage").value = value + " V";
+		batteryVoltage = parseFloat(value);
 	}
 }

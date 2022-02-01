@@ -1,6 +1,6 @@
 function init(){
- initUi();
- openSocket();
+    initUi();
+    openSocket();
 }
 
 init();

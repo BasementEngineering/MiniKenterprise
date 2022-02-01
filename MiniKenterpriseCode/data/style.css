@@ -1,37 +1,166 @@
-.gasSlider {
-    width: 90%;
-    height: 90%;
-    margin: 0 auto;
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%,-50%);
-    writing-mode: bt-lr; /* IE */
-    -webkit-appearance: slider-vertical; /* WebKit */
-  }
+body{
+  background-color: rgb(255, 204, 0);
+  color:white;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  overflow: hidden
+}
 
-  .steeringSlider {
-    width: 90%;
-    height: 90%;
-    margin: 0 auto;
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%,-50%);
-  }
+button{
+  background-color: rgb(71, 70, 67);
+  border-color: rgb(179, 178, 175);
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 4px;
+  height: 30px;
+  color: rgb(255, 255, 255);
+}
 
-  .sidepanel{
-    text-align: center;
-    width: 25%;
-    height: 100%;
-    background-color: rgb(255, 248, 189);
-    float: left;
-    position: relative;
-  }
+select {
+  background-color: rgb(71, 70, 67);
+  border-color: rgb(179, 178, 175);
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 4px;
+  height: 30px;
+  color: rgb(255, 255, 255);
+  width: 100px;
+  text-align: center;
+}
 
-  #center {
-    text-align: center;
-    width: 50%;
-    height: 100%;
-    float: left;
-  }
+#MainGridContainer{
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  column-gap: 10px;
+}
 
+.sidepanel{
+    background-color: rgb(71, 70, 67);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.joystickContainer{
+  width: 220px;
+  height: 220px;
+  border-color: rgb(179, 178, 175);
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 30px;
+  position: relative;
+}
+
+.joystickSlider{
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  background: #d3d3d3;
+  height: 20px;
+  width: 100%;
+}
+
+#CenterGridContainer {
+    background-color: rgb(71, 70, 67);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    row-gap: 0px;
+}
+
+#BatteryVoltage{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#BatteryPanel{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.batteryFrame{
+  border-color: rgb(255, 204, 0);
+  border-style: solid;
+  border-width: 4px;
+  border-radius: 10px;
+
+  width: 80px;
+  height: 30px;
+  
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  column-gap: 5px;
+
+  padding: 5px;
+}
+
+.batteryEnd{
+  width: 6px;
+  height: 18px;
+  background-color: rgb(255, 204, 0);
+  border-radius: 2px;
+}
+
+.batteryBar{
+  background-color: rgb(255, 204, 0);
+  border-radius: 4px;
+}
+
+#LedPanel{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#LedControlsGrid{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  column-gap: 10px;
+  row-gap: 10px;
+  grid-template-areas: 
+  "A B D"
+  "A C D";
+}
+
+#Spacer{
+  grid-area: A;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  align-self: center;
+}
+
+#LedModeSelect{
+  grid-area: B;
+}
+
+#LedSendButton{
+  grid-area: C;
+}
+
+#LedColorPicker{
+  grid-area: D;
+  align-self: center;
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 40px; /* Full-width */
+  height: 40px; /* Specified height */
+  border: none;
+  background-color: transparent;
+}
+
+#LedColorPicker::-webkit-color-swatch{
+  border-radius: 10%;
+  border: none;
+}
+
+#ModePanel{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap:10px;
+}

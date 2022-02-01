@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>Mini Kenterprise</title>
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
     <link rel="stylesheet" href="style.css">
     <script src="dataBuffer.js" charset="utf-8"></script>
     <script src="ui.js" charset="utf-8"></script>
@@ -8,32 +9,60 @@
     
   </head>
   <body>
-  <div id="left" class="sidepanel">
-    <h3>Direction</h3>
-    <input id="steeringSlider" type="range" min="-100" max="100" step="5" value="0" class="steeringSlider" />
-  </div>
-  <div id="center">
-    <h1>Kenterprise Controller</h1>
-    <h4>Voltage</h4>
-    <input id="voltage" type="text" style="text-align:center;" disabled></input>
-    <br>
-    <h4>LED Conrtol</h4>
-    <label>R</label><input id="red" type="range" min="0" max="255" onmouseup="updateColor()"></input><br>
-    <label>G</label><input id="green" type="range" min="0" max="255" onmouseup="updateColor()"></input><br>
-    <label>B</label><input id="blue" type="range" min="0" max="255" onmouseup="updateColor()"></input><br>
-    <input id="colorView"  style="text-align:center;" type="text"  disabled></input><br>
-    <select id="mode" >
-      <option value="0">Solid Color</option>
-      <option value="1" selected="selected">Knight Rider</option>
-      <option value="2">Blinking</option>
-      <option value="3">Boat</option>
-    </select>
-    <button id="colorButton" onclick="sendColor()">send</button>
-  </div>
-  <div id="right" class="sidepanel">
-    <h3>Speed</h3>
-    <input onmouseup="console.log('mosueup')" id="gasSlider" type="range" min="-100" max="100" step="5" value="0" class="gasSlider" />
-  </div>
+    <div id="MainGridContainer">
+        <div class ="sidepanel">
+            <div class ="joystickContainer">
+                    <canvas id="LeftJoystickBase" width="200" height="200" 
+                      style="position: absolute; left: 10; top: 10; z-index: 0;"></canvas>
+                    <canvas id="LeftJoystick" width="200" height="200" 
+                      style="position: absolute; left: 10; top: 10; z-index: 1;"></canvas>
+            </div>
+        </div>
+        <div id ="CenterGridContainer">
+          <div id="BatteryVoltage">
+            4.20 V
+          </div>
+            <div id="BatteryPanel">
+                <div class="batteryFrame">
+                    <div id="bar0" class="batteryBar"></div>
+                    <div id="bar1" class="batteryBar"></div>
+                    <div id="bar2" class="batteryBar"></div>
+                    <div id="bar3" class="batteryBar"></div>
+                </div>
+                <div class="batteryEnd"></div>       
+            </div>
+            <div id="LedPanel">
+                <div id="LedControlsGrid">
+                    <div id="Spacer" ></div>
+                    <select id="LedModeSelect" >
+                        <option value="0">Solid Color</option>
+                        <option value="1" selected="selected">Knight Rider</option>
+                        <option value="2">Blinking</option>
+                        <option value="3">Boat</option>
+                      </select>
+                      <button type="button" id="LedSendButton" onclick="sendLedData()">Update LEDs</button>
+                    <input type="color" id="LedColorPicker"value="#fcca03">
+                </div>
+
+            </div>
+            <div id="ModePanel">
+              <button type="button" id="Mode1Button">Mode 1</button>
+              <button type="button" id="Mode2Button">Mode 2</button>
+              <button type="button" id="Mode3Button">Mode 3</button>
+              <button type="button" id="Mode4Button">Mode 4</button>
+            </div>
+
+        </div>
+        <div class ="sidepanel">
+          <div class ="joystickContainer">
+            <canvas id="RightJoystickBase" width="200" height="200" 
+              style="position: absolute; left: 10; top: 10; z-index: 0;"></canvas>
+            <canvas id="RightJoystick" width="200" height="200" 
+              style="position: absolute; left: 10; top: 10; z-index: 1;"></canvas>
+          </div>
+        </div>
+    </div>
+  
 
   <script src="main.js" charset="utf-8"></script>
   </body>

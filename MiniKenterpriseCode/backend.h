@@ -94,8 +94,18 @@ void parseInput(String input){
   char command = input.charAt(0);
   input.remove(0,2);
   int value = input.toInt();
-  
-  if(command == 'D'){
+
+  if(command == 'L'){
+    lastHeartbeat = millis();
+    int pwmSpeed = (int)(((float)value/100)*255);
+    myPropulsionPointer->moveLeft(pwmSpeed);
+  }
+  else if(command == 'R'){
+    lastHeartbeat = millis();
+    int pwmSpeed = (int)(((float)value/100)*255);
+    myPropulsionPointer->moveRight(pwmSpeed);
+  }
+  else if(command == 'D'){
     #ifdef DEBUG_BACKEND
     Serial.println("Direction: ");
     Serial.println(value);
