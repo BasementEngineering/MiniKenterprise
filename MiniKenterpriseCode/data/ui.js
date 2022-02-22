@@ -291,11 +291,8 @@ function sendLedData(){
 
   function drawBatteryIcon(){
     const levelLimits = [3.50,3.75,3.82,4.00];
-
     document.getElementById("BatteryVoltage").textContent = batteryVoltage + " V";
-    console.log(batteryVoltage);
-    console.log(levelLimits[3]);
-    console.log(batteryVoltage < levelLimits[3]);
+
       if(batteryVoltage >= levelLimits[3]){
         showBatteryBars(4);
       }

@@ -1,14 +1,15 @@
 /*** Your WiFi Credentials ***/
-#define APSSID "MiniKenterprise_05L_1"
+#define APSSID "MiniKenterprise_V3_075l"
 #define APPSK  "RowYourBoat"
 #define AP_MODE
 
 /*** Your Pin Configuration ***/
-#define MOTOR_EN 5
+/*** Version 3 ***/
+#define MOTOR_EN 15
 #define MOTOR_IN1 13
-#define MOTOR_IN2 0
+#define MOTOR_IN2 12
 #define MOTOR_IN3 14
-#define MOTOR_IN4 12
+#define MOTOR_IN4 16
 
 #define LED_PIN 2
 #define LED_COUNT 8
@@ -17,6 +18,7 @@
  * Do not use GPIO 0 aka. D3 as it is used for flashing programs.
  * 
  * Pinout Table:
+ * Wifi Antenna = Top
  * | Left Side        | Right Side    |
  * ------------------------------------
  * | RST      | RST   | TX    | GPIO1 |
@@ -27,5 +29,5 @@
  * | GPIO13   | D7    | D4    | GPIO2 |
  * | GPIO15   | D8    | G     | GND   |
  * | 3.3V Out | 3V3   | 5V    | 5V In | 
- * 
+ * USB Port = Bottom
  */
