@@ -23,6 +23,7 @@ This little guide mainly focusses on my "Version 1". This version was built espe
 - Version 1 aka workshop version: Beginner friendly version that was developed with components from german suppliers.
 - Version 2 aka small version: Smaller Version that uses 0.5l bottles and small props.
 - Version 3 aka fast version: Medium sized version with big fans and 0.75l bottles. Optimized for low weight ans high power.
+
 Here are the major technical differences in a table.
 | Version Name 	| Motor | Motor Diameter | Fan Diameter | Bottle Size |
 |---------------|---------------|---------------|---------------|---------------|

@@ -1,4 +1,4 @@
-# Version 3
+# Mini Kenterprise Version 3
 Optimised for speed with light 0.75l, strong 3.7V Motors, big fans and a very small electronics enclosure.
 Suitable for intermediates.
 ![Boat](FinishedBoat.jpg)
