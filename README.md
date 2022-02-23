@@ -3,7 +3,7 @@
 # MiniKenterprise
 
 ## What is the Mini Kenterprise ?
-The Mini Kenterprise started as a fun little weekend project 
+The Mini Kenterprise started as a fun little weekend project. It can also be used for educational purposes, such as student workshops.
 First and foremost it is a shrunk down version of my "big" Kenterprise. A self driving boat for water surveying that I documented on [Instructables](https://www.instructables.com/Building-a-Self-Driving-Boat-ArduPilot-Rover/).
 While the Mini Kenterprise looks similar to it's big sister, its main goal is to get people interested in building their own drone boats.
 ![Real Boat](images/MiniKenterpriseFeatures.png)
@@ -90,13 +90,11 @@ While the print is in progress you can prepare the interesting part of the boat 
 The circuit diagram shows how all of the parts have to be connected. Keep in mind that the circuit can differ, depending on the kinds of components you hava available.
 ![Schematic](images/Version1/CircuitDiagram.jpg)
 #### 3.1 Assemble the power supply section
-The "power supply section" or in other words, the powerbank should be assembled first. You can in theory put everything together on a breadboard.
+The "power supply section" or in other words our selfmade powerbank should be assembled first. Quick sidenote, you can also use an actual powerbank. The circuit diagram for this variant can be found under /images/version1/CircuitDiagramPowerbank.png. But if you decide to use an of the shelf powerbank, the control electronics wull not be able to check the current battery voltage.
+You can in theory put everything together on a breadboard.
 Howerver, I would not reccomend this when it comes to power supply components, as the potential to plug something in the wron way and fry your whole circuit or even start a battery fire is quite big.
 Therefore all of the power supply components should be soldered.
 ![Power Supply](images/Version1/PowerSystemSoldered.jpg)
-Make sure to check every connection twice, before you insert the battery and test it for the first time. Red to Red, Black to Black and no short curcuits.
-If your DC-DC module has to be adjusted, you should do that now using a multimeter and a screwdriver. We want 5V on the output, not 16 as seen in the picture.
-![Testing and Adjusting](images/Version1/TestingAndAdjusting.jpg)
 
 #### 3.2 Solder Wires and Pins to further Components
 The rest of the components will be connected to a breadboard, this makes it easy to change your Mini Kenterprise in the future. Maybe you want to switch to different motors, or you want to add a sensor.
