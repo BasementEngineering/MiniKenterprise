@@ -12,6 +12,7 @@ All packaged in a little RC boat that uses two regular plastic bottles to stay a
 What makes it stand out amongst other RC boats, is that you can buld and program it yourself.
 It offers a bunch of features, that can be seen in the graphic above. For example, the hull is made from simple plastic bottles, a couple of 3D printed parts and zipties.
 It is an air boat, meaning that it moves by using two huge propellers. It also has a couple of LEDs that can do a cool knight rider effect.
+https://user-images.githubusercontent.com/35432032/155309053-8130b957-cc9e-41b4-a569-48ad077a3d52.mp4
 
 ## How Do I Build One ?
 First things first, the Mini Kenterprise is not set in stone. It is not a simple of the shelf kit with instructions that tell you 100% exactly how you should build it.
@@ -125,12 +126,26 @@ When you are done soldering, you can simply plug everything into the breadboard.
 ### 5. Program the microcontroller
 
 ### 6. Connect to the boat
+After being turned on the boat acts as a WiFi Acess Point that devices can connect to.
+Take your phone and search for the WiFi Network. The name and the password can be found in the config.h file under /MiniKenterprise/Code.
+After you are connected to the WiFi your phone is probably going to tell you that the network has no internet connection and reccomend to change networks.
+Sometimes the phone even switches to another network or to mobile automatically. Make sure that you catch the popup message and tell your phone that it is ok to stay in this network.
+Now you want to open a webbrowser and enter get to the controller website. This can be done by entering the IP address 192.168.4.1 into the browsers address field.
+This will bring you to a little website that looks like this:
+![Website](images/UI.jpg)
+Time to confirm that the motors are working. Switch to mode 3 (buttons at the bottom).
+Move the right stick all the way to the front. The right motor should start pushing air out the back. If the left motor starts spinning, you can simply switch the motor connectors around. If the motor pushes backwars, you can turn its connector around (switch + and  -).
+Repeat the test for the left side.
 
-### 7. Charge the battery
+### 7. Connect and charge the battery
+Plug a Micro USB cable into the charging board. The LED should turn red, indicating that the battery is being charged. After 2 to 3 hours the LED will turn blue.
 
 ### 8. Use it
-
-
+Now your boat is working properly and has a fully charged battery. Time to head to the lake.
+Make sure that the weather is not too windy and not too rainy. It is also much more fun to play around in the sunshine.
+Turn on your boat, connect your phone and take it for a spin on the water.
+Try out the 4 different driving modes and figure out which one you like the most.
+Keep an eye on the battery, if it consistently dips below 3.2V it is empty. If the voltage sinks too low, the BMS is going to disconnect the battery and leave your boat unmanouverable. Also make sure to stay in a range of about 20m and keep a long stick or a fishing line at hand, in case the boat gets stuck somewhere:D.
 
 ## Sensor Attachments
 There are no attachments yet
@@ -143,4 +158,6 @@ I started with a 3D model, that I designed in Fusion 360. Below you can see a re
 ![Rendering](images/Rendering.jpg)
 The circuit diagram was done in PowerPoint. A more professional way would be to draw the circuit diagram in an E-CAD tool such as KiCAD.
 However I prefer powerpoint, as it is much easier to understand for Non-Electronics-Experts.
+
+
 
