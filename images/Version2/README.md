@@ -1,7 +1,7 @@
 # Mini Kenterprise Version 2
 A very tiny version of the mini Kenterprise with 0.5l bottles and small fans.
 Suitable for intermediates.
-![Boat](FinishedBoat.jpg)
+![Boat](BoatInAction.jpg)
 ### Bill of Materials
 Electronics to buy:
 | Position | Component | Description | Quantity | Link |
@@ -42,3 +42,4 @@ I reccommend to use the electronics box design of version 3. It is compatible wi
 ![Assembled Electronics](AssembledElectronics.jpg)
 ![Adapter2](FinishedBoatOpenHatch.jpg)
 ![Electronicsbox](ElectronicsBoxOpen.jpg)
+![Boat with open hatch](FinishedBoatOpenHatch.jpg)

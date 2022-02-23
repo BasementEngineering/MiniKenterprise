@@ -3,9 +3,9 @@
 # MiniKenterprise
 
 ## What is the Mini Kenterprise ?
-The Mini Kenterprise started as a fun little weekend project and to be really honest with you, I don't know what exactly it is supposed to be yet.
+The Mini Kenterprise started as a fun little weekend project 
 First and foremost it is a shrunk down version of my "big" Kenterprise. A self driving boat for water surveying that I documented on [Instructables](https://www.instructables.com/Building-a-Self-Driving-Boat-ArduPilot-Rover/).
-While the Mini Kenterprise looks similar to it's bigg sister, its main goal is to get people interested in building their own drones.
+While the Mini Kenterprise looks similar to it's big sister, its main goal is to get people interested in building their own drone boats.
 ![Real Boat](images/MiniKenterpriseFeatures.png)
 Building a Mini Kenterprise touches all of the areas that are important in the construction of a big drone boat. We have 3D printing, soldering, programming and even wireless communication.
 All packaged in a little RC boat that uses two regular plastic bottles to stay afloat and can be controlled with a smartphone. 
@@ -29,7 +29,8 @@ Here are the major technical differences in a table.
 |---------------|---------------|---------------|---------------|---------------|
 | Version 1	| Arduino 5V Motor Module 	| 12 mm | 75 mm | 1 L	|
 | Version 2	| 3.7V Drone Motors 		| 7 mm 	| 45 mm | 0.5 L	|
-| Version 2	| 3.7V Motors 			| 12 mm | 75 mm | 0.75 L|
+| Version 2	| 3.7V Motors 			    | 12 mm | 75 mm | 0.75 L|
+
 This repository contains images, circuit diagrams and material list for each version. These files and a dedicated little README can be found under images/versionX.
 But remember that this is your built. You can mix and match versions, change components around and build your very own custom Mini Kenterprise.
 
