@@ -14,6 +14,12 @@ It offers a bunch of features, that can be seen in the graphic above. For exampl
 It is an air boat, meaning that it moves by using two huge propellers. It also has a couple of LEDs that can do a cool knight rider effect.
 [Here](https://user-images.githubusercontent.com/35432032/155309053-8130b957-cc9e-41b4-a569-48ad077a3d52.mp4) is a video of the first Maiden Voyage of my first working prototype.
 
+## How does it work? 
+The Mini Kenterprise is a "smart" device that can talk internet. It works as seen in the following graphic. The boat can host its own WiFi Network (Access Point Mode) or connect to an existing WiFi Network (Station Mode). Through this WiFi Network it can talk to other devices. These devices can be Laptops, Tablest or Smartphones. Its easiest with a Smartphone.
+Next to the WiFi connection the boat also has a little Webserver, that can be accesed by the phone using a webbrowser. This server hands out a little companion website. Apart from a nice looking user interface, this website also has a little bit of code, that runs on your phone. This code opens a fast and concurrent messaging tunnel from your phone to the boat. This tunnel is called a websocket and it allows the companion website and the boat to talk to each other. 
+Thats basically it.
+![Real Boat](images/MiniKenterpriseCommunication.png)
+
 ## How Do I Build One ?
 First things first, the Mini Kenterprise is not set in stone. It is not a simple of the shelf kit with instructions that tell you 100% exactly how you should build it.
 I encourage anyone to build their very own version of the kenterprise. I have built suveral versions with different kinds of motors, different bottles and different electronic modules.
@@ -100,7 +106,7 @@ Therefore all of the power supply components should be soldered.
 #### 3.2 Solder Wires and Pins to further Components
 The rest of the components will be connected to a breadboard, this makes it easy to change your Mini Kenterprise in the future. Maybe you want to switch to different motors, or you want to add a sensor.
 A breadboard makes that possible without having to pull out the soldering ion every time. However, you will have to add so called "header pins" to your components, to be able to comfortably plug them into the breadboard.
-![Modified module](images/SolderingTips/SolderingTips.jpg)
+![Soldering Tips](images/SolderingTips/SolderingTips.jpg)
 The best starting point are the modules, such as the microcontroller. For this it is easiest to stick the pins into your breadboard and place the PCB (aka the board) on top.
 Then you can solder one pin at a time. Keep in mind to not heat anything up for too long.
 
@@ -117,12 +123,28 @@ Some modules don't really fit on the breadboard, or take up too much space. One 
 
 #### 3.3 Assemble the Breadboard
 When you are done soldering, you can simply plug everything into the breadboard.
-![Finished Electronics](images/Version1/FinishedElectronics.jpg)
+![Breadboard](images/Version1/BreadboardLayout.png)
+![Breadboard](images/Version1/BreadboardTraces.jpg)
 
 ### 4. CHECK YOUR CONNECTIONS and hook everything up
+
 ![Finished Electronics](images/Version1/FinishedElectronics.jpg)
+![Power Supply Assembled](images/Version1/HotGluing.jpg)
 
 ### 5. Program the microcontroller
+Although the electronics are assembled, they don't really do anything yet. That is because you have to tell them what to do using code. Luckyly for you the code is already written and can be found under /MiniKenterpriseCode. It can be "flashed" onto the microcontroller using the Arduino Integrated Development Environmend or Arduino IDE for short. It can be downloaded on the [Arduino Website](https://www.arduino.cc/en/software). There is one final step of preparation that you have to do after you installed the IDE. You have to install the board packages for the ESP8266. These tell the Arduino IDE how to program our specific Microcontroller. In order to install them open the Arduino IDE, got to File->Preferences and in the field "Additional Boards Manager URLs paster the following Link: http://arduino.esp8266.com/stable/package_esp8266com_index.json.
+Now click ok, go to Tools->Board:...->Boards Manager. Search for ESP8266 and install the esp8266 package.
+Now your IDE is ready to program the Mini Kenterprise.
+
+Open the MiniKenterpriseFirmware.ino file. You will have to play around with the config file to make the code suitable for your particular boat. Change the SSID to a name that you like. It is also a good idea to change the default password. If you are not building version 1, you will also have to change the pin definitions.
+Ok the code is good to go now. Time to upload it.
+
+Plug a Micro USB cable into the microcontroller of your boat and plug the other end into your PC.
+In the Arduino IDE, go to Tools->Boards->ESP8266 Boards and choose "LOLIN (WEMOS) D1 R2 & Mini". Then under Tools->Port choose the COM port that your boat is connected to.
+Next up hit the arrow button on the top left. This will start the process of compiling the code, followed by uploading it to your boat.
+If the compiler shows no errors and the upload process is completed, the board is now programmed.
+
+The last step is to move the website onto the controller. This can be done under Tools-ESP8266 Sketch Data Upload. After the upload has completed, your boat is a fully functioning smart device. It even runs a little webserver.
 
 ### 6. Connect to the boat
 After being turned on the boat acts as a WiFi Acess Point that devices can connect to.
