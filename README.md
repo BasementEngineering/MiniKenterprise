@@ -12,7 +12,7 @@ All packaged in a little RC boat that uses two regular plastic bottles to stay a
 What makes it stand out amongst other RC boats, is that you can buld and program it yourself.
 It offers a bunch of features, that can be seen in the graphic above. For example, the hull is made from simple plastic bottles, a couple of 3D printed parts and zipties.
 It is an air boat, meaning that it moves by using two huge propellers. It also has a couple of LEDs that can do a cool knight rider effect.
-https://user-images.githubusercontent.com/35432032/155309053-8130b957-cc9e-41b4-a569-48ad077a3d52.mp4
+[Here](https://user-images.githubusercontent.com/35432032/155309053-8130b957-cc9e-41b4-a569-48ad077a3d52.mp4) is a video of the first Maiden Voyage of my first working prototype.
 
 ## How Do I Build One ?
 First things first, the Mini Kenterprise is not set in stone. It is not a simple of the shelf kit with instructions that tell you 100% exactly how you should build it.
@@ -121,7 +121,8 @@ Some modules don't really fit on the breadboard, or take up too much space. One 
 When you are done soldering, you can simply plug everything into the breadboard.
 ![Finished Electronics](images/Version1/FinishedElectronics.jpg)
 
-### 4. Put the components together
+### 4. CHECK YOUR CONNECTIONS and hook everything up
+![Finished Electronics](images/Version1/FinishedElectronics.jpg)
 
 ### 5. Program the microcontroller
 
@@ -132,7 +133,7 @@ After you are connected to the WiFi your phone is probably going to tell you tha
 Sometimes the phone even switches to another network or to mobile automatically. Make sure that you catch the popup message and tell your phone that it is ok to stay in this network.
 Now you want to open a webbrowser and enter get to the controller website. This can be done by entering the IP address 192.168.4.1 into the browsers address field.
 This will bring you to a little website that looks like this:
-![Website](images/UI.jpg)
+![Website](images/UI.JPG)
 Time to confirm that the motors are working. Switch to mode 3 (buttons at the bottom).
 Move the right stick all the way to the front. The right motor should start pushing air out the back. If the left motor starts spinning, you can simply switch the motor connectors around. If the motor pushes backwars, you can turn its connector around (switch + and  -).
 Repeat the test for the left side.
