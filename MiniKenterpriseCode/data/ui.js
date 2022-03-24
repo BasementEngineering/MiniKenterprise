@@ -208,9 +208,34 @@ window.setInterval(function(){
   }, 500);
 
 function initUi(){
+  scaleItems();
   setupJoysticks();
   drawBatteryIcon();
   setMode(1);
+}
+
+function scaleItems(){
+  var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+  console.log("Width: "+width);
+  var joystickWidth = width * 0.22;
+  setJoystickSize("LeftJoystick",joystickWidth);
+  setJoystickSize("RightJoystick",joystickWidth);
+
+  /*document.getElementById("LeftJoystickContainer").style.width = joystickWidth+20;
+  document.getElementById("LeftJoystickContainer").style.height = joystickWidth+20
+  document.getElementById("LeftJoystickBase").width = joystickWidth;
+  document.getElementById("LeftJoystickBase").height = joystickWidth;
+  document.getElementById("LeftJoystick").width = joystickWidth;
+  document.getElementById("LeftJoystick").height = joystickWidth;*/
+}
+
+function setJoystickSize(name,size){
+  document.getElementById(name+"Container").style.width = size+20;
+  document.getElementById(name+"Container").style.height = size+20
+  document.getElementById(name+"Base").width = size;
+  document.getElementById(name+"Base").height = size;
+  document.getElementById(name).width = size;
+  document.getElementById(name).height = size;
 }
 
 function setupJoysticks(){
