@@ -15,6 +15,29 @@ button{
   color: rgb(255, 255, 255);
 }
 
+.MainButton{
+  background-color: rgb(71, 70, 67);
+  border-color: rgb(179, 178, 175);
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 4px;
+  height: 50px;
+  width: 50px;
+  color: rgb(255, 255, 255);
+}
+
+.popupContent {
+visibility: hidden;
+background-color: rgba(0, 0, 0, 0.6);
+width: 100%;
+height: 100%;
+top: 0%;
+left: 0%;
+text-align: center;
+position: absolute;
+z-index: 100;
+}
+
 select {
   background-color: rgb(71, 70, 67);
   border-color: rgb(179, 178, 175);
@@ -94,38 +117,26 @@ select {
   align-items: center;
 }
 
+#StatusPanel{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  justify-content: center;
+  align-items: center;
+}
+
 #BatteryPanel{
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.batteryFrame{
-  border-color: rgb(255, 204, 0);
-  border-style: solid;
-  border-width: 4px;
-  border-radius: 10px;
-
-  width: 80px;
-  height: 30px;
-  
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  column-gap: 5px;
-
-  padding: 5px;
-}
-
-.batteryEnd{
-  width: 6px;
-  height: 18px;
-  background-color: rgb(255, 204, 0);
-  border-radius: 2px;
-}
-
-.batteryBar{
-  background-color: rgb(255, 204, 0);
-  border-radius: 4px;
+#NetworkPanel{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #LedPanel{

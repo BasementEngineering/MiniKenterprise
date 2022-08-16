@@ -3,6 +3,8 @@
     <title>Mini Kenterprise</title>
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Icons/bootstrap-icons.css">
+    
     <script src="dataBuffer.js" charset="utf-8"></script>
     <script src="ui.js" charset="utf-8"></script>
     <script src="backendCommunication.js" charset="utf-8"></script>
@@ -19,39 +21,47 @@
             </div>
         </div>
         <div id ="CenterGridContainer">
-          <div id="BatteryVoltage">
-            4.20 V
-          </div>
+          <div id ="StatusPanel">
             <div id="BatteryPanel">
-                <div class="batteryFrame">
-                    <div id="bar0" class="batteryBar"></div>
-                    <div id="bar1" class="batteryBar"></div>
-                    <div id="bar2" class="batteryBar"></div>
-                    <div id="bar3" class="batteryBar"></div>
-                </div>
-                <div class="batteryEnd"></div>       
+              <i class="bi bi-battery-full" style="font-size: 4rem; color: rgb(24, 167, 19);"></i>  
             </div>
+            <div id="NetworkPanel">
+              <i class="bi bi-wifi" style="font-size: 4rem; color: rgb(105, 237, 100);"></i>  
+            </div>
+          </div>
+
+          <button type="button" class="MainButton" onclick="showPopupMenu()">
+            <i class="bi bi-info text-light" style="font-size: 2rem;"></i>
+          </button>
+
+          <button type="button" class="MainButton" onclick="showPopupMenu()">
+              <i class="bi bi-gear text-light" style="font-size: 2rem;"></i>
+          </button>
+          <div class="popupContent" id="popupMenu">
+            LED Settings
             <div id="LedPanel">
-                <div id="LedControlsGrid">
-                    <div id="Spacer" ></div>
-                    <select id="LedModeSelect" >
-                        <option value="0">Solid Color</option>
-                        <option value="1" selected="selected">Knight Rider</option>
-                        <option value="2">Blinking</option>
-                        <option value="3">Boat</option>
-                      </select>
-                      <button type="button" id="LedSendButton" onclick="sendLedData()">Update LEDs</button>
-                    <input type="color" id="LedColorPicker"value="#fcca03">
-                </div>
+              <div id="LedControlsGrid">
+                  <div id="Spacer" ></div>
+                  <select id="LedModeSelect" >
+                      <option value="0">Solid Color</option>
+                      <option value="1" selected="selected">Knight Rider</option>
+                      <option value="2">Blinking</option>
+                      <option value="3">Boat</option>
+                    </select>
+                    <button type="button" id="LedSendButton" onclick="sendLedData()">Update LEDs</button>
+                  <input type="color" id="LedColorPicker"value="#fcca03">
+              </div>
 
-            </div>
-            <div id="ModePanel">
-              <button type="button" id="Mode1Button">Mode 1</button>
-              <button type="button" id="Mode2Button">Mode 2</button>
-              <button type="button" id="Mode3Button">Mode 3</button>
-              <button type="button" id="Mode4Button">Mode 4</button>
-            </div>
-
+          </div>
+          Control Settings
+          <div id="ModePanel">
+            <button type="button" id="Mode1Button">Mode 1</button>
+            <button type="button" id="Mode2Button">Mode 2</button>
+            <button type="button" id="Mode3Button">Mode 3</button>
+            <button type="button" id="Mode4Button">Mode 4</button>
+          </div>
+          <button type="button" onclick="showPopupMenu()">Back</button>
+          </div>
         </div>
         <div class ="sidepanel">
           <div id="RightJoystickContainer" class ="joystickContainer">

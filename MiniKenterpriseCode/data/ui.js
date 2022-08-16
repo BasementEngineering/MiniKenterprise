@@ -203,14 +203,14 @@ class Joystick{
 
 }
 
-window.setInterval(function(){
+/*window.setInterval(function(){
 	drawBatteryIcon();
-  }, 500);
+  }, 500);*/
 
 function initUi(){
   scaleItems();
   setupJoysticks();
-  drawBatteryIcon();
+ // drawBatteryIcon();
   setMode(1);
 }
 
@@ -220,13 +220,6 @@ function scaleItems(){
   var joystickWidth = width * 0.22;
   setJoystickSize("LeftJoystick",joystickWidth);
   setJoystickSize("RightJoystick",joystickWidth);
-
-  /*document.getElementById("LeftJoystickContainer").style.width = joystickWidth+20;
-  document.getElementById("LeftJoystickContainer").style.height = joystickWidth+20
-  document.getElementById("LeftJoystickBase").width = joystickWidth;
-  document.getElementById("LeftJoystickBase").height = joystickWidth;
-  document.getElementById("LeftJoystick").width = joystickWidth;
-  document.getElementById("LeftJoystick").height = joystickWidth;*/
 }
 
 function setJoystickSize(name,size){
@@ -302,8 +295,23 @@ function sendLedData(){
   sendCommand("C "+ rgbColor.r +" "+rgbColor.g+" "+rgbColor.b);
   sendCommand("M "+ document.getElementById("LedModeSelect").value);
 }
+
+function showPopupMenu() {
+
+  var value = document.getElementById("popupMenu").style.visibility;
+  
+  var newStyle = "visible";
+  if(value == "visible"){
+    newStyle = "hidden";
+  }
+
+  document.getElementById("popupMenu").style.visibility = newStyle;
+  console.log("Showing popup menu");
+
+  
+  }
    
-  function showBatteryBars(bars){
+  /*function showBatteryBars(bars){
     for(var i = 0; i < 4; i++){
       if(i < bars){
         document.getElementById("bar"+i).style.visibility = "visible";
@@ -333,7 +341,7 @@ function sendLedData(){
       else{
         showBatteryBars(0);
       }
-  }
+  }*/
 
   ////OLD STUFF
 
