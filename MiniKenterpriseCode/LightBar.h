@@ -3,7 +3,7 @@
 
 #include <Adafruit_NeoPixel.h>
 
-enum MODES{SOLID,KNIGHT_RIDER};
+enum MODES{SOLID,KNIGHT_RIDER,BLINKING};
 #define BLUE 0x34d8eb
 #define YELLOW 0xfa8600
 
@@ -27,6 +27,7 @@ class LightBar{
     int updateInterval = 10;
 
     void updateKnightRider();
+    void updateBlinking();;
     uint32_t dimColor(uint32_t color, float factor);
 };
 

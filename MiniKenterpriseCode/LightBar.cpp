@@ -28,6 +28,9 @@ void LightBar::update(){
       case KNIGHT_RIDER:
         updateKnightRider();
         break;
+      case BLINKING:
+        updateBlinking();
+        break;
       default: break;
     }
     updateRequired = false;
@@ -84,6 +87,22 @@ void LightBar::updateKnightRider(){
           ledStrip.setPixelColor(i,dimColor(userColor,value));
         }
         
+   effectCounter++;
+}
+
+void LightBar::updateBlinking(){
+  const int MAX_STEPS = 100;
+  int currentStep = 0;
+  effectCounter %= MAX_STEPS;
+
+  if(effectCounter > MAX_STEPS/2){
+    ledStrip.fill(userColor);
+  }
+  else{
+    ledStrip.fill(0);
+  }
+  ledStrip.show();
+
    effectCounter++;
 }
 

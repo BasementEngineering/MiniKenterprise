@@ -3,6 +3,8 @@
 #define APPSK  "RowYourBoat"
 #define AP_MODE
 
+#define DEBUG
+
 /*** Your Pin Configuration ***/
 /*** Version 1 ***/
 /*#define MOTOR_EN 15

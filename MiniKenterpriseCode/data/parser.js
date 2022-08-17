@@ -77,7 +77,7 @@ function decodeCommand(input){
 	parts.shift(); //remove first element
 	command.parameterCount = parts.length;
 	for(var i = 0; i < command.parameterCount ;i++){
-		command.parameters.push(stuff[i]);
+		command.parameters.push(parts[i]);
 	} 
 	console.log("Decoded command: ");
 	console.log(command);
@@ -89,9 +89,7 @@ function encodeCommand(command){
 	console.log(command);
 
 	var output = "";
-	output += String(command.commandGroup);
-	output += ":";
-	output += String(command.command);
+	output += String(command.id);
 	for( var i = 0; i < command.parameterCount; i++){
 		output += " ";
 		output += String(command.parameters[i]);
@@ -152,7 +150,7 @@ function openSocket(){
 		};
 		socket.onmessage = function (e) {
 		  console.log('Server: ', e.data);
-		  checkResponse(e.data);
+		  processMessage(e.data);
 		};
 		socket.onclose = function () {
 		  console.log('WebSocket connection closed');

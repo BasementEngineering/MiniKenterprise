@@ -1,17 +1,18 @@
 function init(){
     initUi();
-    Communication_connect();
-    /*setInterval(() => {
-        checkConnection();
-    }, 2000);*/
+    setTimeout(function(){
+        Communication_setStatusCallback(onStatusUpdate);
+        Communication_connect();
+        /*setInterval(() => {
+            checkConnection();
+        }, 2000);*/
+    
+        setInterval(function(){
+            updateControls();
+            sendHeartbeat();
+          }, 100);
 
-    Communication_setStatusCallback(onStatusUpdate);
-
-    setInterval(function(){
-        updateControls();
-        sendHeartbeat();
-      }, 100);
-
+    },2000);
 }
 
 Window.onload = init();
