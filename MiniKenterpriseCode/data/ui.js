@@ -199,7 +199,7 @@ class Joystick{
         this.percentage = 0;
       }
       
-      console.log(this.percentage + " %");
+      //console.log(this.percentage + " %");
   }
 
 }
@@ -318,11 +318,14 @@ function setupJoysticks(){
 	    updateStatuIcons();
     }, 500);
 
-//Error functions
-window.setInterval(function(){
-  toggleVisibility("popupError");
-  console.log("Error");
-  }, 5000);
+function showErrorMessage(){
+  document.getElementById("popupError").style.visibility = "visible";
+}
+
+function hideErrorMessage(){
+  document.getElementById("popupError").style.visibility = "invisible";
+}
+
 //Settings functions
 function showPopupMenu() {
   toggleVisibility("popupMenu")
@@ -363,22 +366,4 @@ function setMode(newMode){
     }
   }
   
-}
-
-function hexToRgb(hex) {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : null;
-}
-
-function sendLedData(){
-  var hexColor = document.getElementById("LedColorPicker").value;
-  console.log(hexColor);
-  var rgbColor = hexToRgb(hexColor);
-
-  sendCommand("C "+ rgbColor.r +" "+rgbColor.g+" "+rgbColor.b);
-  sendCommand("M "+ document.getElementById("LedModeSelect").value);
 }

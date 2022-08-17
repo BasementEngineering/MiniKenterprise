@@ -1,17 +1,26 @@
 window.setInterval(function(){
+	updateControls();
+  }, 100);
+
+
+
+function updateControls(){
 	if( (leftJoystick!= null) && (rightJoystick!= null) ){
-		if(mode == 1 || mode == 2){
-			sendCommand("S "+leftJoystick.getPercentage()); //steering
-			sendCommand("D "+rightJoystick.getPercentage()); //speed
+		var command = generateCommand();
+
+		if(mode == 1 || mode == 2){	
+			command.id = Commands.ControlSD;
 		}
 		else if( (mode == 3) || (mode == 4) )
 		{
-			sendCommand("L "+leftJoystick.getPercentage()); // leftspeed
-			sendCommand("R "+rightJoystick.getPercentage()); //rightspeed
+			command.id = Commands.ControlLR;
 		}
-		
+		command.parameterCount = 2;
+		command.parameters.push(leftJoystick.getPercentage()); //steering
+		command.parameters.push(rightJoystick.getPercentage());
+		sendCommand(command);	
 	}
-  }, 100);
+}
 
 var socket = null;
 
@@ -38,13 +47,13 @@ function openSocket(){
 //*** OUTPUT Code -> to MCU */
 var lastCommand = "";
 
-function sendCommand(commandString){
+function sendCommand(command){
 	//console.log("->"+commandString);
 	lastCommand = commandString;
 
 	if(socket != null){
 		if(socket.readyState === socket.OPEN){
-			socket.send(commandString+"\n");
+			socket.send(encodeCommand(command+"\n");
 		}
 	}
 	else{
