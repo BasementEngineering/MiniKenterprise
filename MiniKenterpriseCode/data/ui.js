@@ -1,3 +1,4 @@
+// Joystick functions
 class Joystick{
   constructor(elementName,rotate){
       this.name = elementName;
@@ -203,10 +204,6 @@ class Joystick{
 
 }
 
-/*window.setInterval(function(){
-	drawBatteryIcon();
-  }, 500);*/
-
 function initUi(){
   scaleItems();
   setupJoysticks();
@@ -240,6 +237,91 @@ function setupJoysticks(){
   document.getElementById("Mode3Button").addEventListener("click", e => setMode(3) );
   document.getElementById("Mode4Button").addEventListener("click", e => setMode(4) );
 }
+
+  //Status Icon Functions
+  var statusData =[
+    {
+      name:"Battery",
+      indexId: "BatterySymbol",
+      icons:["bi bi-battery","bi bi-battery-half","bi bi-battery-full"],
+      critical:false
+    },
+    {
+      name:"Network",
+      indexId: "NetworkSymbol",
+      icons:["bi bi-wifi-1","bi bi-wifi-2","bi bi-wifi"],
+      critical:false
+    }
+  ];
+
+  var statusColors = ["rgb(255, 0, 0)","rgb(255, 153, 51)","rgb(0, 204, 0)"];
+
+  function percentageToIcon(percentage,parameterName){
+    var newIconName = "";
+    var newColor = "";
+    var visibility = "";
+    var parameterId = statusData.findIndex(x => x.name === parameterName);
+    var elementId = statusData[parameterId].indexId;
+
+    if(percentage > 60){
+      newIconName = statusData[parameterId].icons[2];
+      statusData[parameterId].critical=false;
+      visibility = "visible";
+      newColor = statusColors[2];
+    }
+    else if( (percentage > 20) && (percentage <= 60) ){
+      newIconName = statusData[parameterId].icons[1];
+      statusData[parameterId].critical=false;
+      visibility = "visible";
+      newColor = statusColors[1];
+    }
+    else{
+      newIconName = statusData[parameterId].icons[0];
+      statusData[parameterId].critical=true;
+      visibility = document.getElementById(elementId).style.visibility;
+      newColor = statusColors[0];
+    }
+    
+    document.getElementById(elementId).className = newIconName;
+    document.getElementById(elementId).style.visibility = visibility;
+    document.getElementById(elementId).style.color = newColor;
+  }
+
+  function updateStatuIcons(){
+    for(var i = 0; i < 2; i++){
+      if(statusData[i].critical){
+        toggleVisibility(statusData[i].indexId);
+      }
+    }
+  }
+
+  function toggleVisibility(elementId){
+    var value = document.getElementById(elementId).style.visibility;
+  
+    var newStyle = "visible";
+    if(value == "visible"){
+      newStyle = "hidden";
+    }
+  
+    document.getElementById(elementId).style.visibility = newStyle;
+  }
+
+  var simPercentage = 100;
+  window.setInterval(function(){
+    percentageToIcon(simPercentage,"Battery");
+      percentageToIcon(simPercentage,"Network");
+      simPercentage = simPercentage-3;
+      if(simPercentage < 0){
+        simPercentage = 100;
+      }
+      console.log(simPercentage);
+	    updateStatuIcons();
+    }, 500);
+
+//Settings functions
+function showPopupMenu() {
+  toggleVisibility("popupMenu")
+  }
 
 function highlightModeButton(newMode){
   for(var i = 1; i <= 4; i++){
@@ -295,81 +377,3 @@ function sendLedData(){
   sendCommand("C "+ rgbColor.r +" "+rgbColor.g+" "+rgbColor.b);
   sendCommand("M "+ document.getElementById("LedModeSelect").value);
 }
-
-function showPopupMenu() {
-
-  var value = document.getElementById("popupMenu").style.visibility;
-  
-  var newStyle = "visible";
-  if(value == "visible"){
-    newStyle = "hidden";
-  }
-
-  document.getElementById("popupMenu").style.visibility = newStyle;
-  console.log("Showing popup menu");
-
-  
-  }
-   
-  /*function showBatteryBars(bars){
-    for(var i = 0; i < 4; i++){
-      if(i < bars){
-        document.getElementById("bar"+i).style.visibility = "visible";
-      }
-      else{
-        document.getElementById("bar"+i).style.visibility = "hidden";
-      }
-    }
-  }
-
-  function drawBatteryIcon(){
-    const levelLimits = [3.50,3.75,3.82,4.00];
-    document.getElementById("BatteryVoltage").textContent = batteryVoltage + " V";
-
-      if(batteryVoltage >= levelLimits[3]){
-        showBatteryBars(4);
-      }
-      else if( ( batteryVoltage < levelLimits[3] ) && ( batteryVoltage >= levelLimits[2] ) ){
-        showBatteryBars(3);
-      }
-      else if( ( batteryVoltage < levelLimits[2] ) && ( batteryVoltage >= levelLimits[1] ) ){
-        showBatteryBars(2);
-      }
-      else if( ( batteryVoltage < levelLimits[1] ) && ( batteryVoltage > levelLimits[0] ) ){
-        showBatteryBars(1);
-      }
-      else{
-        showBatteryBars(0);
-      }
-  }*/
-
-  ////OLD STUFF
-
-  function setShape(elementId){
-    console.log("setting shape for: "+elementId);
-    var left = document.getElementById(elementId);
-    var width = left.clientWidth;
-    console.log(width);
-    left.style.height = width;
-  }
-  
-  function drawImage(canvas){
-    var image   = document.getElementById('Wheel');
-    var context = canvas.getContext("2d");
-  
-    console.log(image);
-    image.onload = function() {
-        console.log(canvas.width);
-        console.log(canvas.height);
-        
-        context.clearRect(0,0,canvas.width,canvas.height);
-        context.save();
-    
-        context.translate(canvas.width/2,canvas.height/2);
-    
-        context.rotate(0 * Math.PI / 180);
-        context.drawImage(image, -canvas.width/2,-canvas.height/2);
-    
-        context.restore();
-      };
-  }
