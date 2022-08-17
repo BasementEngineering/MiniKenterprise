@@ -39,31 +39,6 @@
               <i class="bi bi-gear text-light" style="font-size: 2rem;"></i>
           </button>
         </div>
-          <div class="popupContent" id="popupMenu">
-            LED Settings
-            <div id="LedPanel">
-              <div id="LedControlsGrid">
-                  <div id="Spacer" ></div>
-                  <select id="LedModeSelect" >
-                      <option value="0">Solid Color</option>
-                      <option value="1" selected="selected">Knight Rider</option>
-                      <option value="2">Blinking</option>
-                      <option value="3">Boat</option>
-                    </select>
-                    <button type="button" id="LedSendButton" onclick="sendLedData()">Update LEDs</button>
-                  <input type="color" id="LedColorPicker"value="#fcca03">
-              </div>
-
-          </div>
-          Control Settings
-          <div id="ModePanel">
-            <button type="button" id="Mode1Button">Mode 1</button>
-            <button type="button" id="Mode2Button">Mode 2</button>
-            <button type="button" id="Mode3Button">Mode 3</button>
-            <button type="button" id="Mode4Button">Mode 4</button>
-          </div>
-          <button type="button" onclick="showPopupMenu()">Back</button>
-          </div>
         </div>
         <div class ="sidepanel">
           <div id="RightJoystickContainer" class ="joystickContainer">
@@ -72,6 +47,41 @@
             <canvas id="RightJoystick" width="200" height="200" 
               style="position: absolute; left: 10; top: 10; z-index: 1;"></canvas>
           </div>
+        </div>
+        <div class="popupContent" id="popupMenu">
+          LED Settings
+          <div id="LedPanel">
+            <div id="LedControlsGrid">
+                <div id="Spacer" ></div>
+                <select id="LedModeSelect" >
+                    <option value="0">Solid Color</option>
+                    <option value="1" selected="selected">Knight Rider</option>
+                    <option value="2">Blinking</option>
+                    <option value="3">Boat</option>
+                  </select>
+                  <button type="button" id="LedSendButton" onclick="sendLedData()">Update LEDs</button>
+                <input type="color" id="LedColorPicker"value="#fcca03">
+            </div>
+
+        </div>
+        Control Settings
+        <div id="ModePanel">
+          <button type="button" id="Mode1Button">Mode 1</button>
+          <button type="button" id="Mode2Button">Mode 2</button>
+          <button type="button" id="Mode3Button">Mode 3</button>
+          <button type="button" id="Mode4Button">Mode 4</button>
+        </div>
+        <button type="button" onclick="showPopupMenu()">Back</button>
+        </div>
+        <div class="popupContent" id="popupError">
+          <i class="bi bi-wifi-off" style="font-size: 4rem;"></i>
+          <h1>Network Error</h1>
+          <p>
+            The connection to the boat was lost. <br>
+            The website is trying to automatically reconnect.<br><br>
+            If that does not work.<br>
+            Try to reconnect to the boats wifi through your phones wifi settings.
+          </p>
         </div>
     </div>
   

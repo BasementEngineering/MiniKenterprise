@@ -318,6 +318,11 @@ function setupJoysticks(){
 	    updateStatuIcons();
     }, 500);
 
+//Error functions
+window.setInterval(function(){
+  toggleVisibility("popupError");
+  console.log("Error");
+  }, 5000);
 //Settings functions
 function showPopupMenu() {
   toggleVisibility("popupMenu")
