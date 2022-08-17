@@ -15,17 +15,6 @@ button{
   color: rgb(255, 255, 255);
 }
 
-.MainButton{
-  background-color: rgb(71, 70, 67);
-  border-color: rgb(179, 178, 175);
-  border-style: solid;
-  border-width: 2px;
-  border-radius: 4px;
-  height: 50px;
-  width: 50px;
-  color: rgb(255, 255, 255);
-}
-
 .popupContent {
 visibility: hidden;
 background-color: rgba(0, 0, 0, 0.6);
@@ -107,14 +96,8 @@ select {
     background-color: rgb(71, 70, 67);
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 2fr;
     row-gap: 0px;
-}
-
-#BatteryVoltage{
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 #StatusPanel{
@@ -135,6 +118,29 @@ select {
 #NetworkPanel{
   width: 100%;
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.MainButtonPanel{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+}
+
+.MainButton{
+  background-color: rgb(71, 70, 67);
+  border-color: rgb(179, 178, 175);
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 4px;
+  height: 50px;
+  width: 50px;
+  color: rgb(255, 255, 255);
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 }
