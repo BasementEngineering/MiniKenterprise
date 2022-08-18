@@ -5,6 +5,9 @@
 #define DEBUG_COMMUNICATION_LOGIC
 #define DEBUG
 
+#define HEARTBEAT_INTERVAL 500
+#define HEARTBEAT_TIMEOUT 2000
+
 enum Communication_Commands {
     ControlLR = 1,
     ControlSD = 2,
@@ -66,7 +69,7 @@ void Parser_update(){
 
 void Parser_sendCommand(Command command){
   String commandString = encodeCommand(command);
-
+  Serial.print("Server->");Serial.println(commandString);
   int payloadLength = commandString.length()+1;
   char payload[payloadLength];
   commandString.toCharArray(payload,payloadLength);
@@ -75,13 +78,13 @@ void Parser_sendCommand(Command command){
 }
 
 void checkHeartBeat(){
-  if( (millis() - lastSentHeartbeat) > 100){
+  if( (millis() - lastSentHeartbeat) > HEARTBEAT_INTERVAL){
     lastSentHeartbeat = millis();
     if(parserOnline){
         sendHeartbeat();
       }
   }
-  if( (millis() - lastReceivedHeartbeat) > 500){
+  if( (millis() - lastReceivedHeartbeat) > HEARTBEAT_TIMEOUT){
     parserOnline = false;
   }
 }
@@ -116,9 +119,9 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
 
       
       #ifdef DEBUG
-      Serial.print("Received Websocket input ");
-      Serial.print("length: ");Serial.println(length);
-      Serial.print("input: "); Serial.println(String(input));
+      //Serial.print("Received Websocket input ");
+      //Serial.print("length: ");Serial.println(length);
+      //Serial.print("input: "); Serial.println(String(input));
       #endif
       
       break;
@@ -138,14 +141,13 @@ void processInput(String input){
       default: myMovementCallback(command);
       break;
     }
-    Serial.println("End of input processing");
 }
 
 Command decodeCommand(String input){
   Command command;
   #ifdef DEBUG_COMMUNICATION_LOGIC
-  Serial.print("Received input:");
-  Serial.println(input);
+  Serial.print(input);
+  Serial.println(" <-Client");
   #endif
 
   char splitChar = ' ';
@@ -154,14 +156,13 @@ Command decodeCommand(String input){
   command.id = commandId.toInt();
   input.remove(0,cutPosition+1);
 
-  #ifdef DEBUG_COMMUNICATION_LOGIC
+  /*#ifdef DEBUG_COMMUNICATION_LOGIC
   Serial.print("Input        :");Serial.println(input);
   Serial.print("id        :");Serial.println(command.id);
-  #endif
+  #endif*/
 
   if(input.length() > 0){
     command.parameterCount = extractParameters(input,command.parameters);
-    Serial.println("Still alive");
   }
   return command;
 }
@@ -177,8 +178,8 @@ String encodeCommand(Command command){
     }
   }
   #ifdef DEBUG_COMMUNICATION_LOGIC
-  Serial.print("encoded command to: ");
-  Serial.println(commandString);
+  //Serial.print("encoded command to: ");
+  //Serial.println(commandString);
   #endif
   return commandString;
 }

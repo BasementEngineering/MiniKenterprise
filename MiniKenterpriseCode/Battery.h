@@ -12,7 +12,8 @@ int readings[BATTERY_BUFFER_LENGTH];
 int readingsPosition = 0;
 
 void Battery_update(){
-  if(lastBatteryUpdate > 10){
+  if((millis()-lastBatteryUpdate) > 10){
+    lastBatteryUpdate=millis();
     int sensorValue = analogRead(A0);
     readings[readingsPosition] = sensorValue;
     readingsPosition++;
@@ -28,7 +29,7 @@ int getReadingAvg(){
   return (sum/BATTERY_BUFFER_LENGTH);
 }
 
-#define CORRECTION_FACTOR 0.9665
+#define CORRECTION_FACTOR 4.8198
 int toVoltage(int reading){
   return reading * CORRECTION_FACTOR;
 }
@@ -81,9 +82,16 @@ int toPercentage(int voltageMv){
   
 }
 
+//#define DEBUG_BATTERY
 int Battery_getPercentage(){
   int avgReading = getReadingAvg();
   int voltageMv = toVoltage(avgReading);
+  #ifdef DEBUG_BATTERY
+  Serial.println("Battery:");
+  Serial.print("avgReading: ");Serial.println(avgReading); 
+  Serial.print("voltageMv: ");Serial.println(voltageMv); 
+  Serial.print("percentage: ");Serial.println(toPercentage(voltageMv)); 
+  #endif
   return toPercentage(voltageMv);
 }
 

@@ -20,8 +20,8 @@ bool Wifi_hasClient(){
 }
 
 int Wifi_getQualityPercentage(){
-  if (WiFi.status() != WL_CONNECTED)
-    return -1;
+  //if (WiFi.status() != WL_CONNECTED)
+    //return -1;
   int dBm = WiFi.RSSI();
   if (dBm <= -100){
     return 0;

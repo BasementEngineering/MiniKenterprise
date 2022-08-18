@@ -30,8 +30,8 @@ function checkConnection(){
 }
 
 function onStatusUpdate(command){
-    var batteryPercentage = command.parameters[0];
-    var networkPercentage = command.parameters[1];
+    var batteryPercentage = parseInt(command.parameters[0]);
+    var networkPercentage = parseInt(command.parameters[1]);
     percentageToIcon(batteryPercentage,"Battery");
     percentageToIcon(networkPercentage,"Network");
 }

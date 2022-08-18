@@ -52,6 +52,7 @@ function Communication_sendCommand(command){
     //console.log(command);
 	if(socket != null){
 		if(socket.readyState === socket.OPEN){
+			console.log("Client->"+encodeCommand(command));
 			socket.send(encodeCommand(command)+"\n");
 		}
 	}
@@ -66,21 +67,21 @@ function Communication_setStatusCallback(cb){
 }
 
 function decodeCommand(input){
-	console.log("Decoding from String: ");
-	console.log(input);
+	//console.log("Decoding from String: ");
+	//console.log(input);
 
 	var command = Communication_generateEmptyCommand();
 
-    var parts = input.split(" ");
-
-    command.command = parts[0];
+	var parts = input.split(" ");
+	command.id = parseInt(parts[0]);
+    
 	parts.shift(); //remove first element
 	command.parameterCount = parts.length;
 	for(var i = 0; i < command.parameterCount ;i++){
 		command.parameters.push(parts[i]);
 	} 
-	console.log("Decoded command: ");
-	console.log(command);
+	//console.log("Decoded command: ");
+	//console.log(command);
 	return command;
 }
 
@@ -95,9 +96,6 @@ function encodeCommand(command){
 		output += String(command.parameters[i]);
 	}
 
-	console.log("Output: ");
-	console.log(output);
-
 	return output;
 }
 
@@ -110,14 +108,14 @@ function sendHeartbeat(){
 }
 
 function checkHeartbeat(){
-    if( (Date.now() - lastReceivedHeartbeat) > 500){
+    if( (Date.now() - lastReceivedHeartbeat) > 2000){
         Communication_disconnect();
         console.log("Communication timed out");
     }
 }
 //Feedback | Messages from MCU to GUI 
 function processMessage(input){
-	console.log("Processing input: "+input);
+	console.log(input+" <-Server ");
 	var command = decodeCommand(input);
     
 	switch( command.id ){
@@ -128,6 +126,7 @@ function processMessage(input){
             break;
 		case Communication_Commands.Heartbeat: 
             lastReceivedHeartbeat = Date.now();
+			console.log("Heartbeat received");
 		    break;
 		default:
 		break;
@@ -142,7 +141,7 @@ function openSocket(){
           heartbeatTimer = setInterval(() => {
             sendHeartbeat();
             checkHeartbeat();
-            }, 100);
+            }, 500);
           online = true;
           lastReceivedHeartbeat = Date.now();
 		};

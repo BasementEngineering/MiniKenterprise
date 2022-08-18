@@ -306,7 +306,7 @@ function setupJoysticks(){
     document.getElementById(elementId).style.visibility = newStyle;
   }
 
-  var simPercentage = 100;
+ /* var simPercentage = 100;
   window.setInterval(function(){
     percentageToIcon(simPercentage,"Battery");
       percentageToIcon(simPercentage,"Network");
@@ -316,7 +316,7 @@ function setupJoysticks(){
       }
       console.log(simPercentage);
 	    updateStatuIcons();
-    }, 500);
+    }, 500);*/
 
 function showErrorMessage(){
   document.getElementById("popupError").style.visibility = "visible";

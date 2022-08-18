@@ -20,10 +20,18 @@ enum State{
  State state = WIFI_STARTING;
 
 //helper function decalarations (full implementations are further down)
-void switchFrontendServer();
+void switchState(State newState){
+  Serial.println("Switching state ");
+  Serial.print(state);Serial.print(" to ");Serial.println(newState);
+  if(newState != WORKING){
+    propulsionSystem.stop();
+  }
+  state = newState;
+  showStatus(state);
+}
 
 void setup(){
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("Starting Setup");
   propulsionSystem.initPins();
   Battery_init();
@@ -60,17 +68,13 @@ void runStateMachine(){
       Wifi_setupAp();
       if(Wifi_online()){
         FrontendServer_init();
-        state = WAITING_FOR_WIFI_CLIENT;
-        showStatus(state);
-        Serial.println(state);
+        switchState(WAITING_FOR_WIFI_CLIENT);
       }
       break;
     case WAITING_FOR_WIFI_CLIENT:
       if(Wifi_hasClient()){
         setTimeout(60000);
-        state = WAITING_FOR_FRONTEND;
-        showStatus(state);
-        Serial.println(state);
+        switchState(WAITING_FOR_FRONTEND);
       }
 
       if( timoutDone() ){
@@ -79,33 +83,24 @@ void runStateMachine(){
       break;
     case WAITING_FOR_FRONTEND:
       if(Parser_online()){
-        Serial.println("Parser online");
         //FrontendServer_stop();
         resetTimeout();
-        state = WORKING;
-        showStatus(state);
-        Serial.println(state);
+        switchState(WORKING);
       }
       if(!Wifi_hasClient()){
-        Serial.println("Wifi has no client");
         FrontendServer_start();
-        state = WAITING_FOR_WIFI_CLIENT;
-        showStatus(state);
-        Serial.println(state);
+        switchState(WAITING_FOR_WIFI_CLIENT);
       }
       break;
     case WORKING:
       if(!Parser_online()){
         setTimeout(60000);
-        state = WAITING_FOR_FRONTEND;
-        showStatus(state);
-        Serial.println(state);
+        switchState(WAITING_FOR_FRONTEND);
       }
       break;
     default:
       break;
 }
-Serial.print("currentState:");Serial.println(state);
 }
 
 void showStatus(int stateCode){
@@ -170,12 +165,20 @@ void ledCallback(Command command){
 }
 
 void motorCallback(Command command){
-  Serial.println("Movement callback");
-  Serial.println("command.id");
-  Serial.println(command.id);
+  //Serial.println("Movement callback");
+  //Serial.println("command.id");
+  //Serial.println(command.id);
   switch(command.id){
+    case ControlLR: 
+      propulsionSystem.moveLeft(command.parameters[0]);
+      propulsionSystem.moveRight(command.parameters[1]);
+      break;
+    case ControlSD:
+      propulsionSystem.setSpeed(command.parameters[0]);
+      propulsionSystem.setDirection(command.parameters[1]);
+      break;
     default: 
-    Serial.println("in switch");
+    //Serial.println("in switch");
     break;
   }
 }
