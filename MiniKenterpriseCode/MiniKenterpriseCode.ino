@@ -73,11 +73,11 @@ void runStateMachine(){
       break;
     case WAITING_FOR_WIFI_CLIENT:
       if(Wifi_hasClient()){
-        setTimeout(60000);
         switchState(WAITING_FOR_FRONTEND);
       }
 
       if( timoutDone() ){
+          Serial.println("Restarting");
           ESP.restart();
       }
       break;
@@ -116,7 +116,6 @@ void showStatus(int stateCode){
     case WAITING_FOR_FRONTEND:
       lightBar.setMainColor(0,200,000);
       lightBar.setMode(BLINKING);
-      Serial.println("Setting Blinking 200 2000");
       break;
     case WORKING:
       lightBar.setMainColor(YELLOW);
@@ -160,10 +159,6 @@ void updateHardware(){
   yield();
 }
 
-void ledCallback(Command command){
-  Serial.println("LED Callback");
-}
-
 void motorCallback(Command command){
   //Serial.println("Movement callback");
   //Serial.println("command.id");
@@ -180,6 +175,14 @@ void motorCallback(Command command){
     default: 
     //Serial.println("in switch");
     break;
+  }
+}
+
+void ledCallback(Command command){
+  //Serial.println("LED Callback");
+  if(command.parameterCount == 4){
+    lightBar.setMode(command.parameters[0]);
+    lightBar.setMainColor(command.parameters[1],command.parameters[2],command.parameters[3]);
   }
 }
 

@@ -323,7 +323,7 @@ function showErrorMessage(){
 }
 
 function hideErrorMessage(){
-  document.getElementById("popupError").style.visibility = "invisible";
+  document.getElementById("popupError").style.visibility = "hidden";
 }
 
 //Settings functions

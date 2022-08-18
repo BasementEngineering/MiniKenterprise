@@ -2,37 +2,7 @@
 #define BATTERY_H
 #include "Config.h"
 
-void Battery_init(){
-  pinMode(A0, INPUT);
-}
-
-unsigned long lastBatteryUpdate = 0;
-#define BATTERY_BUFFER_LENGTH 10
-int readings[BATTERY_BUFFER_LENGTH];
-int readingsPosition = 0;
-
-void Battery_update(){
-  if((millis()-lastBatteryUpdate) > 10){
-    lastBatteryUpdate=millis();
-    int sensorValue = analogRead(A0);
-    readings[readingsPosition] = sensorValue;
-    readingsPosition++;
-    readingsPosition %= BATTERY_BUFFER_LENGTH;
-  }
-}
-
-int getReadingAvg(){
-  unsigned long sum = 0;
-  for( int i = 0; i < BATTERY_BUFFER_LENGTH; i++){
-    sum += readings[i];
-  }
-  return (sum/BATTERY_BUFFER_LENGTH);
-}
-
-#define CORRECTION_FACTOR 4.8198
-int toVoltage(int reading){
-  return reading * CORRECTION_FACTOR;
-}
+//#define DEBUG_BATTERY
 
 struct TableEntry
 {
@@ -62,6 +32,47 @@ TableEntry batteryLookUpTable[TABLE_LENGTH] = {
     { 4200, 100 }
 };
 
+void Battery_init(){
+  pinMode(A0, INPUT);
+}
+
+unsigned long lastBatteryUpdate = 0;
+#define BATTERY_BUFFER_LENGTH 10
+int readings[BATTERY_BUFFER_LENGTH];
+int readingsPosition = 0;
+
+void Battery_update(){
+  if((millis()-lastBatteryUpdate) > 50){
+    lastBatteryUpdate=millis();
+    int sensorValue = analogRead(A0);
+    readings[readingsPosition] = sensorValue;
+    readingsPosition++;
+    readingsPosition %= BATTERY_BUFFER_LENGTH;
+  }
+}
+
+int getReadingAvg(){
+  unsigned long sum = 0;
+  #ifdef DEBUG_BATTERY
+  Serial.print("[");
+  #endif
+  for( int i = 0; i < BATTERY_BUFFER_LENGTH; i++){
+    sum += readings[i];
+    #ifdef DEBUG_BATTERY
+    Serial.print(readings[i]);Serial.print(",");
+    #endif
+  }
+  #ifdef DEBUG_BATTERY
+  Serial.println("]");
+  #endif
+  return (sum/BATTERY_BUFFER_LENGTH);
+}
+
+#define CORRECTION_FACTOR 4.8198
+int toVoltage(int reading){
+  return reading * CORRECTION_FACTOR;
+}
+
 int toPercentage(int voltageMv){
   
   if(voltageMv > 4200){
@@ -82,7 +93,6 @@ int toPercentage(int voltageMv){
   
 }
 
-//#define DEBUG_BATTERY
 int Battery_getPercentage(){
   int avgReading = getReadingAvg();
   int voltageMv = toVoltage(avgReading);

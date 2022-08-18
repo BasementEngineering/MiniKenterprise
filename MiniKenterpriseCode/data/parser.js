@@ -12,6 +12,11 @@ var heartbeatTimer = -1;
 var lastReceivedHeartbeat = 0;
 
 var myStatusCallback = null;
+var onOfflineCallback = null;
+var onOnlineCallback = null;
+
+const HEARTBEAT_INTERVAL=500;
+const HEARTBEAT_TIMEOUT=2000;
 
 function Communication_generateEmptyCommand(){
 	return{
@@ -32,15 +37,23 @@ function Communication_reconnect(){
 
 
 function Communication_disconnect(){
+	online = false;
+	onOfflineCallback();
     if(socket != null){
         socket.close();
     } 
-    online = false;
     if(heartbeatTimer != -1){
         clearInterval(heartbeatTimer);
         heartbeatTimer = -1;
     }
     
+}
+
+function startHeartbeatCheck(){
+	heartbeatTimer = setInterval(() => {
+		sendHeartbeat();
+		checkHeartbeat();
+	}, HEARTBEAT_INTERVAL);
 }
 
 function Communication_online(){
@@ -52,7 +65,7 @@ function Communication_sendCommand(command){
     //console.log(command);
 	if(socket != null){
 		if(socket.readyState === socket.OPEN){
-			console.log("Client->"+encodeCommand(command));
+			//console.log("Client->"+encodeCommand(command));
 			socket.send(encodeCommand(command)+"\n");
 		}
 	}
@@ -65,6 +78,15 @@ function Communication_sendCommand(command){
 function Communication_setStatusCallback(cb){
     myStatusCallback = cb;
 }
+
+function Communication_setOnlineCallback(cb){
+    onOnlineCallback=cb;
+}
+
+function Communication_setOfflineCallback(cb){
+    onOfflineCallback=cb;
+}
+
 
 function decodeCommand(input){
 	//console.log("Decoding from String: ");
@@ -86,8 +108,8 @@ function decodeCommand(input){
 }
 
 function encodeCommand(command){
-	console.log("Encoding command: ");
-	console.log(command);
+	//console.log("Encoding command: ");
+	//console.log(command);
 
 	var output = "";
 	output += String(command.id);
@@ -108,14 +130,14 @@ function sendHeartbeat(){
 }
 
 function checkHeartbeat(){
-    if( (Date.now() - lastReceivedHeartbeat) > 2000){
+    if( (Date.now() - lastReceivedHeartbeat) > HEARTBEAT_TIMEOUT){
         Communication_disconnect();
         console.log("Communication timed out");
     }
 }
 //Feedback | Messages from MCU to GUI 
 function processMessage(input){
-	console.log(input+" <-Server ");
+	//console.log(input+" <-Server ");
 	var command = decodeCommand(input);
     
 	switch( command.id ){
@@ -125,8 +147,12 @@ function processMessage(input){
             }
             break;
 		case Communication_Commands.Heartbeat: 
+			if(!online){
+				onOnlineCallback();
+			}
+			online = true;
             lastReceivedHeartbeat = Date.now();
-			console.log("Heartbeat received");
+
 		    break;
 		default:
 		break;
@@ -138,17 +164,13 @@ function openSocket(){
 		socket = new WebSocket('ws://' + location.hostname + ':81/');
 		socket.onopen = function () {
 		  console.log("Opened socket");
-          heartbeatTimer = setInterval(() => {
-            sendHeartbeat();
-            checkHeartbeat();
-            }, 500);
-          online = true;
+		  startHeartbeatCheck();
           lastReceivedHeartbeat = Date.now();
 		};
 		socket.onerror = function (error) {
 		};
 		socket.onmessage = function (e) {
-		  console.log('Server: ', e.data);
+		  //console.log('Server: ', e.data);
 		  processMessage(e.data);
 		};
 		socket.onclose = function () {

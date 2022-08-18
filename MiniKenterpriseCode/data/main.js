@@ -1,12 +1,13 @@
 function init(){
     initUi();
+    Communication_setStatusCallback(onStatusUpdate);
+    Communication_setOnlineCallback(onOnline);
+    Communication_setOfflineCallback(onOffline);
+
     setTimeout(function(){
-        Communication_setStatusCallback(onStatusUpdate);
+        console.log("Attemptring to connect");
         Communication_connect();
-        /*setInterval(() => {
-            checkConnection();
-        }, 2000);*/
-    
+        startReconnection();
         setInterval(function(){
             updateControls();
             sendHeartbeat();
@@ -17,15 +18,31 @@ function init(){
 
 Window.onload = init();
 
-function checkConnection(){
-    if(! Communication_online()){
-        Communication_reconnect();
-        leftJoystick.reset();
-        rightJoystick.reset();
-        showErrorMessage();
-    }
-    else{
-        hideErrorMessage();
+var reconnectionTimer = -1;
+var prevConnectionState = true;
+
+function onOffline(){
+    console.log("Went offline");
+    startReconnection();
+    showErrorMessage();
+    leftJoystick.reset();
+    rightJoystick.reset();
+}
+
+function onOnline(){
+    console.log("Went back online");
+    clearInterval(reconnectionTimer);
+    reconnectionTimer = -1;
+    hideErrorMessage();
+}
+
+function startReconnection(){
+    if(reconnectionTimer == -1){
+        console.log("Setting reconnection timer");
+        reconnectionTimer = setInterval(() => {
+            console.log("Attempting reconnection");
+            Communication_reconnect();
+        }, 5000);
     }
 }
 
@@ -60,6 +77,7 @@ function sendLedData(){
     console.log(hexColor);
     var rgbColor = hexToRgb(hexColor);
 
+    var command = Communication_generateEmptyCommand();
     command.id = Communication_Commands.ControlLed;
     command.parameterCount = 4;
     command.parameters.push(ledMode);
