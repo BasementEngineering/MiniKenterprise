@@ -164,9 +164,11 @@ void motorCallback(Command command){
   //Serial.println("command.id");
   //Serial.println(command.id);
   switch(command.id){
-    case ControlLR: 
-      propulsionSystem.moveLeft(command.parameters[0]);
-      propulsionSystem.moveRight(command.parameters[1]);
+    case ControlLR:
+      int leftSpeed = (command.parameters[0]*255)/100;
+      int rightSpeed = (command.parameters[1]*255)/100;
+      propulsionSystem.moveLeft(leftSpeed);
+      propulsionSystem.moveRight(rightSpeed);
       break;
     case ControlSD:
       propulsionSystem.setSpeed(command.parameters[0]);

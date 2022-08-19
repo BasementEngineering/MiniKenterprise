@@ -1,5 +1,5 @@
 /*** Your WiFi Credentials ***/
-#define APSSID "MiniKenterprise_075L"
+#define APSSID "MiniKenterprise_TestRack"
 #define APPSK  "RowYourBoat"
 #define AP_MODE
 
@@ -17,13 +17,13 @@
 #define LED_COUNT 8*/
 
 /*** Version 3 ***/
-#define MOTOR_EN 15
-#define MOTOR_IN1 13
-#define MOTOR_IN2 12
-#define MOTOR_IN3 14
-#define MOTOR_IN4 16
+#define MOTOR_EN 15 //D8
+#define MOTOR_IN1 13 //D7
+#define MOTOR_IN2 12 //D6
+#define MOTOR_IN3 14 //D5
+#define MOTOR_IN4 16 //D0
 
-#define LED_PIN 2
+#define LED_PIN 2 //D4
 #define LED_COUNT 8
 
 /*! The Pin Markings on the WEMOS D1 Mini Board don't match the GPIO numbers !
