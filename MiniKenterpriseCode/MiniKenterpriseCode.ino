@@ -36,6 +36,9 @@ void setup(){
   propulsionSystem.initPins();
   Battery_init();
   lightBar.initLeds();
+  lightBar.setMode(SOLID);
+  lightBar.setMainColor(200,50,0);
+  Wifi_setup();
   lightBar.setMode(BLINKING);
   //lightBar.update()
 
@@ -65,7 +68,7 @@ void loop(){
 void runStateMachine(){
   switch(state){
     case WIFI_STARTING:
-      Wifi_setupAp();
+      Wifi_startAp();
       if(Wifi_online()){
         FrontendServer_init();
         switchState(WAITING_FOR_WIFI_CLIENT);
@@ -73,6 +76,7 @@ void runStateMachine(){
       break;
     case WAITING_FOR_WIFI_CLIENT:
       if(Wifi_hasClient()){
+        setTimeout(100000);
         switchState(WAITING_FOR_FRONTEND);
       }
 
@@ -163,10 +167,13 @@ void motorCallback(Command command){
   //Serial.println("Movement callback");
   //Serial.println("command.id");
   //Serial.println(command.id);
+  int leftSpeed = 0;
+  int rightSpeed = 0;
+  
   switch(command.id){
     case ControlLR:
-      int leftSpeed = (command.parameters[0]*255)/100;
-      int rightSpeed = (command.parameters[1]*255)/100;
+      leftSpeed = (command.parameters[0]*255)/100;
+      rightSpeed = (command.parameters[1]*255)/100;
       propulsionSystem.moveLeft(leftSpeed);
       propulsionSystem.moveRight(rightSpeed);
       break;

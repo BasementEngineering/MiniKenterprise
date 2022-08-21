@@ -1,6 +1,7 @@
 /*** Your WiFi Credentials ***/
-#define APSSID "MiniKenterprise_TestRack"
+#define APSSID "MiniKenterprise_X"
 #define APPSK  "RowYourBoat"
+#define MAX_WIFI_CONNECTIONS 1
 #define AP_MODE
 
 #define DEBUG

@@ -41,9 +41,9 @@ bool handleFileRead(String path);
 //...for settingup our websocket connection
 void startWebsocket();
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght);
-//...for Parsing
+
 String getSplitString(String data, char separator, int index);
-//...for led stuff
+
 
 /***           ***/
 
