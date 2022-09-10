@@ -1,8 +1,25 @@
-/*** Your WiFi Credentials ***/
-#define APSSID "MiniKenterprise_X"
+#ifndef CONFIG_H
+#define CONFIG_H
+
+/*** WiFi Config ***/
+// Access Point Settings
+//#define AP_MODE
+#define APSSID "MiniKenterprise_A"
 #define APPSK  "RowYourBoat"
 #define MAX_WIFI_CONNECTIONS 1
-#define AP_MODE
+
+//Station Settings
+#define NETWORK_SSID "testnetwork"
+#define NETWORK_PSK  "testpw"
+
+
+//Motor Settings
+#define MIN_PWM_L 40
+#define MIN_PWM_R 40
+#define MAX_PWM_L 255
+#define MAX_PWM_R 255
+
+#define TRIM 0.0F
 
 #define DEBUG
 
@@ -44,3 +61,5 @@
  * | 3.3V Out | 3V3   | 5V    | 5V In | 
  * USB Port = Bottom
  */
+
+ #endif

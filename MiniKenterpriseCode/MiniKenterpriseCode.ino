@@ -10,14 +10,13 @@ PropulsionSystem propulsionSystem(MOTOR_EN,MOTOR_IN1,MOTOR_IN2,MOTOR_IN3,MOTOR_I
 LightBar lightBar(LED_COUNT, LED_PIN);
 
 enum State{
-  WIFI_STARTING,
+  STARTING_WIFI,
   WAITING_FOR_WIFI_CLIENT,
   WAITING_FOR_FRONTEND,
-  WORKING,
-  CONNECTION_JUST_FAILED
+  WORKING
  };
 
- State state = WIFI_STARTING;
+ State state = STARTING_WIFI;
 
 //helper function decalarations (full implementations are further down)
 void switchState(State newState){
@@ -50,6 +49,7 @@ void setup(){
 
 void loop(){
   updateHardware();
+  Wifi_update();
   FrontendServer_update();
   Parser_update();
   
@@ -67,15 +67,15 @@ void loop(){
 //STATE MAchines
 void runStateMachine(){
   switch(state){
-    case WIFI_STARTING:
-      Wifi_startAp();
+    case STARTING_WIFI:
+      Wifi_start();
       if(Wifi_online()){
         FrontendServer_init();
         switchState(WAITING_FOR_WIFI_CLIENT);
       }
       break;
     case WAITING_FOR_WIFI_CLIENT:
-      if(Wifi_hasClient()){
+      if(Wifi_connected()){
         setTimeout(100000);
         switchState(WAITING_FOR_FRONTEND);
       }
@@ -91,14 +91,15 @@ void runStateMachine(){
         resetTimeout();
         switchState(WORKING);
       }
-      if(!Wifi_hasClient()){
+      if(!Wifi_connected()){
         FrontendServer_start();
-        switchState(WAITING_FOR_WIFI_CLIENT);
+        //switchState(WAITING_FOR_WIFI_CLIENT);
+        switchState(STARTING_WIFI);
       }
       break;
     case WORKING:
       if(!Parser_online()){
-        setTimeout(60000);
+        setTimeout(30000);
         switchState(WAITING_FOR_FRONTEND);
       }
       break;
@@ -109,7 +110,7 @@ void runStateMachine(){
 
 void showStatus(int stateCode){
   switch(stateCode){
-    case WIFI_STARTING:
+    case STARTING_WIFI:
       lightBar.setMainColor(0,0,255);
       lightBar.setMode(BLINKING);
       break;
@@ -172,8 +173,8 @@ void motorCallback(Command command){
   
   switch(command.id){
     case ControlLR:
-      leftSpeed = (command.parameters[0]*255)/100;
-      rightSpeed = (command.parameters[1]*255)/100;
+      leftSpeed = command.parameters[0];
+      rightSpeed = command.parameters[1];
       propulsionSystem.moveLeft(leftSpeed);
       propulsionSystem.moveRight(rightSpeed);
       break;

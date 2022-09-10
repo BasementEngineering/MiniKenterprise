@@ -11,13 +11,14 @@ class PropulsionSystem{
   void setSpeed(int newSpeed);
   void setDirection(int newDirection);
   void runTestSequence();
-  void moveLeft(int speed);
-  void moveRight(int speed);
+  void moveLeft(int speedPercentage);
+  void moveRight(int speedPercentage);
   
   
 private:
 
   void translateToMotors(int speed, int direction);
+  void moveMotor(int pin1,int pin2, int speedPercentage,int minPwm, int maxPwm);
 
   private:
     int en;

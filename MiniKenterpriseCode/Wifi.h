@@ -4,11 +4,17 @@
 #include "Config.h"
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
+#include <ESP8266mDNS.h>
 
 #define DEBUG
 
 const char *ssid = APSSID;
 const char *password = APPSK;
+
+const char *networkSsid = NETWORK_SSID;
+const char *networkPassword = NETWORK_PSK;
+
+const char* dnsName = APSSID;
 
 bool wifiOnline = false;
 unsigned long lastWifiUpdate = 0;
@@ -22,21 +28,28 @@ int myChannel = 1;
 
 // "Public" functions
 void Wifi_setupAp();
+void startMdns();
+void Wifi_update();
 bool Wifi_online();
-bool Wifi_hasClient();
+bool Wifi_connected();
 int Wifi_getQualityPercentage();
 
 //To find a good Wifi Channel
 #define CHANNEL_CNT 14
 uint8_t ap_count[CHANNEL_CNT] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 int32_t max_rssi[CHANNEL_CNT] = {-100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100};
+#define SCAN_DURATION 10000;
 
 void clearData();
 void scanWiFi();
+void processScanData(int n);
+void printWifiNetwork(int i);
 void printScanData();
 int findEmptyChannel();
 int findLowestRssiChannel();
 int getBestChannel();
+void startStation();
+void startAp();
 
 void Wifi_setup(){
   scanWiFi();
@@ -44,10 +57,41 @@ void Wifi_setup(){
   Serial.print("Best WiFi Cahnnel: ");Serial.println(myChannel);
 }
 
-void Wifi_startAp(){
+void Wifi_start(){
   if( (millis() - lastWifiUpdate) > nextWaitInterval){
     lastWifiUpdate = millis();
   #ifdef AP_MODE
+    startAp();
+  #else
+    startStation();
+  #endif
+  startMdns();
+  }
+}
+
+bool Wifi_connected(){
+  #ifdef AP_MODE
+    WiFi.softAPgetStationNum();
+  #else
+    WiFi.isConnected();
+  #endif
+}
+
+void startStation(){
+  WiFi.disconnect();
+  if(attemptCounter == 0){
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(networkSsid, networkPassword);
+    attemptCounter++;
+  }
+  if(attemptCounter > 0){
+    if(WiFi.waitForConnectResult() == WL_CONNECTED){
+       wifiOnline = true;
+    }
+   }
+}
+
+void startAp(){
     WiFi.disconnect();
     WiFi.mode(WIFI_AP);
     Serial.print("Setting soft-AP configuration ... ");
@@ -61,24 +105,19 @@ void Wifi_startAp(){
       Serial.println(WiFi.softAPIP());
     #endif
     wifiOnline = true;
-  #endif
-  #ifndef AP_MODE
-    if(attemptCounter == 0){
-      WiFi.mode(WIFI_STA);
-      WiFi.begin(ssid, password);
-      attemptCounter++;
-    }
-    if(attemptCounter > 0){
-      if(WiFi.waitForConnectResult() == WL_CONNECTED){
-        wifiOnline = true;
-      }
-      else{
-        ESP.restart();
-      }
-    }
-  #endif
+}
+
+void startMdns(){
+  if (!MDNS.begin(dnsName, WiFi.softAPIP())) {
+    Serial.println("mDNS setup failed");
+  } else {
+    Serial.println("mDNS online at http://"+String(dnsName)+".local");
+    MDNS.addService("http", "tcp", 80);
   }
-  
+}
+
+void Wifi_update(){
+  MDNS.update();
 }
 
 bool Wifi_online(){
@@ -115,34 +154,36 @@ void scanWiFi(){
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
   delay(100);
+  //unsigned long scanStartTime = millis();
+  //while( (millis() - scanStartTime) > SCAN_DURATION){
+    int n = WiFi.scanNetworks();
+    processScanData(n);
+    delay(100);
+  //}
+}
+
+void processScanData(int n){
   
-  int n = WiFi.scanNetworks();
-  if (n == 0) {
-    Serial.println("no networks found");
-  } 
-  else {
-    for (int i = 0; i < n; i++) {
-      int32_t channel = WiFi.channel(i);
-      int32_t rssi = WiFi.RSSI(i);
+  for (int i = 0; i < n; i++) {
+    int32_t channel = WiFi.channel(i);
+    int32_t rssi = WiFi.RSSI(i);
 
-      // channel stat
-      ap_count[channel - 1]++;
-      if (rssi > max_rssi[channel - 1]) {
-        max_rssi[channel - 1] = rssi;
-      }
-
-      // Print SSID, signal strengh and if not encrypted
-      Serial.print(WiFi.SSID(i));
-      Serial.print('(');
-      Serial.print(rssi);
-      Serial.print(')');
-      if (WiFi.encryptionType(i) == ENC_TYPE_NONE) {
-        Serial.print('*');
-      }
-      Serial.println();
-      delay(10);
+    ap_count[channel - 1]++;
+    if (rssi > max_rssi[channel - 1]) {
+      max_rssi[channel - 1] = rssi;
     }
-  }
+   }
+}
+
+void printWifiNetwork(int i){
+   Serial.print(WiFi.SSID(i));
+   Serial.print('(');
+   Serial.print(WiFi.RSSI(i));
+   Serial.print(')');
+   if (WiFi.encryptionType(i) == ENC_TYPE_NONE) {
+      Serial.print('*');
+    }
+    Serial.println();
 }
 
 void printScanData(){

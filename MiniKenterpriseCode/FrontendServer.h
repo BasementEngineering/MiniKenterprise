@@ -2,6 +2,7 @@
 #define FRONTEND_SERVER_H
 
 #include <ESP8266WebServer.h>
+#define DEBUG_FRONTEND_SERVER
 
 bool serverOnline = false;
 
@@ -49,7 +50,7 @@ String getContentType(String filename) { // convert the file extension to the MI
 }
 
 bool handleFileRead(String path) { // send the right file to the client (if it exists)
-  #ifdef DEBUG_BACKEND
+  #ifdef DEBUG_FRONTEND_SERVER
   Serial.println("handleFileRead: " + path);
   #endif
   if (path.endsWith("/")) path += "index.html";         // If a folder is requested, send the index file
