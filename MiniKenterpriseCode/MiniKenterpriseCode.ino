@@ -1,12 +1,17 @@
 #include "Config.h"
 #include "PropulsionSystem.h"
+#include "RudderPropulsion.h"
 #include "LightBar.h"
 #include "Battery.h"
 #include "Wifi.h"
 #include "FrontendServer.h"
 #include "Parser.h"
 
+#ifdef RUDDER_STEERING
+RudderPropulsion propulsionSystem(MOTOR_EN,MOTOR_IN1,MOTOR_IN2,MOTOR_IN3);
+#else
 PropulsionSystem propulsionSystem(MOTOR_EN,MOTOR_IN1,MOTOR_IN2,MOTOR_IN3,MOTOR_IN4);
+#endif
 LightBar lightBar(LED_COUNT, LED_PIN);
 
 enum State{
@@ -30,6 +35,7 @@ void switchState(State newState){
 }
 
 void setup(){
+  Serial.setDebugOutput(true);
   Serial.begin(115200);
   Serial.println("Starting Setup");
   propulsionSystem.initPins();
@@ -76,10 +82,10 @@ void runStateMachine(){
       break;
     case WAITING_FOR_WIFI_CLIENT:
       if(Wifi_connected()){
+        Serial.println("Wifi is connected");
         setTimeout(100000);
         switchState(WAITING_FOR_FRONTEND);
       }
-
       if( timoutDone() ){
           Serial.println("Restarting");
           ESP.restart();
@@ -180,7 +186,7 @@ void motorCallback(Command command){
       break;
     case ControlSD:
       propulsionSystem.setSpeed(command.parameters[0]);
-      propulsionSystem.setDirection(command.parameters[1]);
+      propulsionSystem.setDirection(-command.parameters[1]);
       break;
     default: 
     //Serial.println("in switch");

@@ -54,12 +54,15 @@ void startAp();
 void Wifi_setup(){
   scanWiFi();
   myChannel = getBestChannel();
+  #ifdef DEBUG
   Serial.print("Best WiFi Cahnnel: ");Serial.println(myChannel);
+  #endif
 }
 
 void Wifi_start(){
   if( (millis() - lastWifiUpdate) > nextWaitInterval){
     lastWifiUpdate = millis();
+    wifi_set_sleep_type(NONE_SLEEP_T);
   #ifdef AP_MODE
     startAp();
   #else
@@ -71,9 +74,9 @@ void Wifi_start(){
 
 bool Wifi_connected(){
   #ifdef AP_MODE
-    WiFi.softAPgetStationNum();
+    return WiFi.softAPgetStationNum();
   #else
-    WiFi.isConnected();
+    return WiFi.isConnected();
   #endif
 }
 

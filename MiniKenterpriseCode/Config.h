@@ -2,15 +2,17 @@
 #define CONFIG_H
 
 /*** WiFi Config ***/
+// Set the Mini Kenterprise up in AP Mode to use it standalone without a WiFi network
+#define AP_MODE
+
 // Access Point Settings
-//#define AP_MODE
-#define APSSID "MiniKenterprise_A"
+#define APSSID "MiniKenterprise"
 #define APPSK  "RowYourBoat"
-#define MAX_WIFI_CONNECTIONS 1
+#define MAX_WIFI_CONNECTIONS 2
 
 //Station Settings
-#define NETWORK_SSID "testnetwork"
-#define NETWORK_PSK  "testpw"
+#define NETWORK_SSID "WiFi_Network"
+#define NETWORK_PSK  "Network_Password*"
 
 
 //Motor Settings
@@ -23,18 +25,38 @@
 
 #define DEBUG
 
+//#define RUDDER_STEERING
+
+//#define VERSION1_PINS
+#define VERSION3_PINS
+//#define CUSTOM_PINS
+//#define LEGOBOAT_PINS
 /*** Your Pin Configuration ***/
 /*** Version 1 ***/
-/*#define MOTOR_EN 15
+#ifdef VERSION1_PINS
+#define MOTOR_EN 15
 #define MOTOR_IN1 13
 #define MOTOR_IN2 0
 #define MOTOR_IN3 14
 #define MOTOR_IN4 12
 
 #define LED_PIN 2
-#define LED_COUNT 8*/
+#define LED_COUNT 8
+#endif
+
+/*** Version 1 ***/
+#ifdef LEGOBOAT_PINS
+#define MOTOR_EN 12
+#define MOTOR_IN1 15
+#define MOTOR_IN2 13
+#define MOTOR_IN3 16 //Rudder
+
+#define LED_PIN 2
+#define LED_COUNT 1
+#endif
 
 /*** Version 3 ***/
+#ifdef VERSION3_PINS
 #define MOTOR_EN 15 //D8
 #define MOTOR_IN1 13 //D7
 #define MOTOR_IN2 12 //D6
@@ -42,7 +64,8 @@
 #define MOTOR_IN4 16 //D0
 
 #define LED_PIN 2 //D4
-#define LED_COUNT 8
+#define LED_COUNT 5
+#endif
 
 /*! The Pin Markings on the WEMOS D1 Mini Board don't match the GPIO numbers !
  * Do not use GPIO 0 aka. D3 as it is used for flashing programs.
