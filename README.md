@@ -2,24 +2,34 @@
 
 # MiniKenterprise
 
-## What is the Mini Kenterprise ?
+## About the Project
+### What is the Mini Kenterprise ?
 The Mini Kenterprise started as a fun little weekend project and turned into a great little drone boat with lots of options for later upgrading and customizing. Its purpose is to get anyone who is interested into the field of drone based lake and ocean exploration. As such it is great for electronics enthusiasts like me but also for students in a workshop setting. 
 The Mini Kenterprise, as its name might suggest, is a shrunk down version of a bigger boat. Its "big" sister is a self driving boat for water surveying that I documented on [Instructables](https://www.instructables.com/Building-a-Self-Driving-Boat-ArduPilot-Rover/).
-While the Mini Kenterprise looks similar to it's big sister, it is way easier and also way chaeper to build. And it uses of the shelf components and fairly common tools.
+While the Mini Kenterprise looks similar to it's big sister, it is way easier and also way cheaper to build. And it uses of the shelf components and fairly common tools.
 ![Real Boat](images/MiniKenterpriseFeatures.png)
-Building a Mini Kenterprise touches all of the areas that are important in the construction of a big drone boat. We have 3D printing, soldering, programming and even wireless communication.
+Building a Mini Kenterprise touches all areas that are important in the construction of a big drone boat. We have 3D printing, soldering, programming and even wireless communication.
 All packaged in a little RC boat that uses two regular plastic bottles to stay afloat and can be controlled with a smartphone. 
 What makes it stand out amongst other RC boats, is that you can build and program it yourself and therefore customize and expand the built that I present here.
 It offers a bunch of features, that can be seen in the graphic above.
 It is an air boat, meaning that it moves by using two propellers. It also has a couple of LEDs that can do a cool knight rider effect.
 [Here](https://user-images.githubusercontent.com/35432032/155309053-8130b957-cc9e-41b4-a569-48ad077a3d52.mp4) is a video of the first Maiden Voyage of my first working prototype.
 
-## How does it work? 
+### Project History
+Before you can start a new DIY Project from Scratch, you will have to do a lot of planning. A lot of designing, building, testing and improving.
+Luckily for you, i already did that and went through a couple of prototypes.
+So you will only have to read this if you are interested in the process.
+I started with a 3D model, that I designed in Fusion 360. Below you can see a rendering of the latest version.
+![Rendering](images/Rendering.jpg)
+The circuit diagram was done in PowerPoint. A more professional way would be to draw the circuit diagram in an E-CAD tool such as KiCAD.
+However, I prefer powerpoint, as it is much easier to understand for Non-Electronics-Experts.
+
+### How does it work? 
 The Mini Kenterprise is a "smart" device that can "talk internet". It works as seen in the graphic below. It can host its own WiFi network (Access Point Mode) or connect to an existing WiFi network (Station Mode). Through this WiFi Network it can talk to a variety of other devices, such as the smartphone, that you might have in your pocket, or the laptop, that you might read this on.
 ![Real Boat](images/MiniKenterpriseCommunication.png)
-Next to the WiFi connection the boat also has a little webserver, that can serve a companion website. This companion website is a little bit of code, that your phone can download and run, by talking to the server via HTTP. That might sound complicated, but it is simply a matter of opening a websbrowser and entering the boats IP address into the address field.
-Once this website is on your phone, it opens a two-way-tunnel to the boats controller. This is called a websocket and it allows the website to send motor control commands to the boat and the boat to send back sensor data.
-Thats basically it. The website also has a bunch of nice little buttons and text fields so the data doesn't look that bad. And it features two joysticks that allow you to take control of the boat using your touchscreeen.
+Next to the WiFi connection the boat also has a little web server, that can serve a companion website. This companion website is a bit of code, that your phone can download and run, by talking to the server via HTTP. That might sound complicated, but it is simply a matter of opening a web browser and entering the boats IP address into the address field.
+Once this website is on your phone, it opens a two-way-tunnel to the boat's controller. This is called a websocket and it allows the website to send motor control commands to the boat and the boat to send back sensor data.
+That's basically it. The website also has a bunch of nice little buttons and text fields so the data doesn't look that bad. And it features two joysticks that allow you to take control of the boat using your touchscreen.
 
 ## How Do I Build One ?
 Keep in mind that the Mini Kenterprise is not set in stone. It is not a simple of the shelf kit with instructions that tell you 100% exactly how you should build it.
@@ -30,7 +40,7 @@ This guide focusses on version 1 but I have also built other versions that can a
 
 Every variant share the same type of brain and the same code and user interface. What differs is the size, the motors and the energy source.
 
-This little guide focusses on my "Version 1". This version was built especcially for a student workshop, with parts that can be purchased from german suppliers.
+This little guide focusses on my "Version 1". This version was built especially for a student workshop, with parts that can be purchased from german suppliers.
 
 Here is a little overview of the other versions in the repository:
 
@@ -103,7 +113,7 @@ The circuit diagram shows how all of the parts have to be connected.
 ![Schematic](images/Version1/CircuitDiagram.png)
 
 #### 3.1 Assemble the power supply section
-The "power supply section" or in other words our selfmade powerbank should be assembled first. Quick sidenote, you can also use an actual powerbank. The circuit diagram for this variant can be found under /images/version1/CircuitDiagramPowerbank.png. But if you decide to use an of the shelf powerbank, the microcontroller will not be able to read the current battery voltage. Therefore the companion website can not tell you how much battery you have left.
+The "power supply section" or in other words our selfmade powerbank should be assembled first. Quick sidenote, you can also use an actual powerbank. The circuit diagram for this variant can be found under /images/version1/CircuitDiagramPowerbank.png. But if you decide to use an of the shelf powerbank, the microcontroller will not be able to read the current battery voltage. Therefore, the companion website can not tell you how much battery you have left.
 You can in theory put everything together on a breadboard.
 Howerver, I would not reccomend this when it comes to power supply components, as the potential to plug something in the wrong way and fry your whole circuit or even start a battery fire is quite big.
 Therefore all of the power supply components should be soldered togehter as seen in the following picture.
@@ -171,19 +181,12 @@ Now your boat is working properly and has a fully charged battery. Time to head 
 Make sure that the weather is not too windy and not too rainy. It is also much more fun to play around in the sunshine.
 Turn on your boat, connect your phone and take it for a spin on the water.
 Try out the 4 different driving modes and figure out which one you like the most.
-Keep an eye on the battery, if it consistently dips below 3.2V it is empty. If the voltage sinks too low, the BMS is going to disconnect the battery and leave your boat unmanouverable. Also make sure to stay in a range of about 20m and keep a long stick or a fishing line at hand, in case the boat gets stuck somewhere:D.
+Keep an eye on the battery, if it consistently dips below 3.2V it is empty. If the voltage sinks too low, the BMS is going to disconnect the battery and leave your boat unmaneuverable. Also, make sure to stay in a range of about 20m and keep a long stick or a fishing line at hand, in case the boat gets stuck somewhere:D.
 
-## Sensor Attachments
+### Sensor Attachments
 There are no attachments yet
 
-## Project History
-Before you can start a new DIY Project from Scratch, you will have to do a lot of planning. A lot of designing, building, testing and improving.
-Luckyly for you, i already did that and went through a couple of prototypes.
-So you will only have to read this if you are interested in the process.
-I started with a 3D model, that I designed in Fusion 360. Below you can see a rendering of the latest version.
-![Rendering](images/Rendering.jpg)
-The circuit diagram was done in PowerPoint. A more professional way would be to draw the circuit diagram in an E-CAD tool such as KiCAD.
-However I prefer powerpoint, as it is much easier to understand for Non-Electronics-Experts.
-
-
+## Troubleshooting
+The code does not compile.
+Make sure you are using Arduino IDE 1.x and not 2.x. My code relies on the ESP8266 sketch data upload plugin to upload the website. As of right now. This is only available for the old Arduino IDE.
 

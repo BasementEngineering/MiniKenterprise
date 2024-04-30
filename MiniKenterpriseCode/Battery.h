@@ -90,7 +90,7 @@ int toPercentage(int voltageMv){
       }
     }
   }
-  
+  return 0;
 }
 
 int Battery_getPercentage(){
