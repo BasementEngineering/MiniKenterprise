@@ -1,0 +1,54 @@
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 2rem 1rem 4rem;
+  display: flex;
+  justify-content: center;
+}
+
+main {
+  max-width: 32rem;
+  text-align: center;
+}
+
+h1 {
+  font-size: 1.75rem;
+}
+
+.hero {
+  width: 100%;
+  max-width: 24rem;
+  border-radius: 0.75rem;
+  margin: 1rem 0;
+}
+
+.steps {
+  text-align: left;
+  margin: 1.5rem auto;
+  max-width: 26rem;
+  line-height: 1.5;
+}
+
+#buttonContainer {
+  margin: 2rem 0;
+}
+
+esp-web-install-button {
+  font-size: 1.1rem;
+}
+
+.note {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+.note code {
+  background: rgba(127, 127, 127, 0.2);
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.25rem;
+}
