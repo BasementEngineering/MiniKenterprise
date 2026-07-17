@@ -15,6 +15,16 @@ button{
   color: rgb(255, 255, 255);
 }
 
+input{
+  background-color: rgb(71, 70, 67);
+  border-color: rgb(179, 178, 175);
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 4px;
+  height: 30px;
+  color: rgb(255, 255, 255);
+}
+
 .popupContent {
 visibility: hidden;
 background-color: rgba(0, 0, 0, 0.6);

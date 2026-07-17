@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Settings</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body {
+            overflow: auto;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: white;
+        }
+
+        form {
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, select {
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 4px;
+        }
+
+        .radio-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .radio-row label {
+            display: inline;
+            margin-top: 0;
+        }
+
+        #status-message {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Settings</h1>
+
+    <form id="settings-form">
+        <h2>WiFi</h2>
+
+        <div class="radio-row">
+            <input type="radio" id="ap-mode-ap" name="apMode" value="1">
+            <label for="ap-mode-ap">Access Point Mode (boat hosts its own network)</label>
+        </div>
+        <div class="radio-row">
+            <input type="radio" id="ap-mode-sta" name="apMode" value="0">
+            <label for="ap-mode-sta">Station Mode (boat joins an existing network)</label>
+        </div>
+
+        <h3>Access Point Settings</h3>
+        <label for="apSsid">AP Network Name</label>
+        <input type="text" id="apSsid" name="apSsid" placeholder="ssid">
+
+        <label for="apPassword">AP Password</label>
+        <input type="text" id="apPassword" name="apPassword" placeholder="password">
+
+        <h3>Station Settings</h3>
+        <label for="staSsid">Station Network Name</label>
+        <input type="text" id="staSsid" name="staSsid" placeholder="ssid">
+
+        <label for="staPassword">Station Password</label>
+        <input type="text" id="staPassword" name="staPassword" placeholder="password">
+
+        <h2>Pins</h2>
+
+        <label for="motorEn">Motor Enable Pin</label>
+        <input type="number" id="motorEn" name="motorEn">
+
+        <label for="motorIn1">Motor In1 Pin</label>
+        <input type="number" id="motorIn1" name="motorIn1">
+
+        <label for="motorIn2">Motor In2 Pin</label>
+        <input type="number" id="motorIn2" name="motorIn2">
+
+        <label for="motorIn3">Motor In3 Pin</label>
+        <input type="number" id="motorIn3" name="motorIn3">
+
+        <label for="motorIn4">Motor In4 Pin</label>
+        <input type="number" id="motorIn4" name="motorIn4">
+
+        <label for="ledPin">LED Pin</label>
+        <input type="number" id="ledPin" name="ledPin">
+
+        <label for="ledCount">LED Count</label>
+        <input type="number" id="ledCount" name="ledCount">
+
+        <br><br>
+        <button type="submit" id="save-settings">Save</button>
+        <p id="status-message"></p>
+    </form>
+
+    <script type="module" src="./settings.js"></script>
+</body>
+
+</html>

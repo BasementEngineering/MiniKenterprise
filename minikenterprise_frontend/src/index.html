@@ -2,13 +2,8 @@
   <head>
     <title>Mini Kenterprise</title>
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="Icons/bootstrap-icons.css">
-    
-    <script src="dataBuffer.js" charset="utf-8"></script>
-    <script src="ui.js" charset="utf-8"></script>
-    <script src="parser.js" charset="utf-8"></script>
-    
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
   </head>
   <body>
     <div id="MainGridContainer">
@@ -23,20 +18,20 @@
         <div id ="CenterGridContainer">
           <div id ="StatusPanel">
             <div id="BatteryPanel">
-              <i id="BatterySymbol" class="bi bi-battery-full" style="font-size: 4rem; color: rgb(24, 167, 19);"></i>  
+              <span id="BatterySymbol" class="iconify" data-icon="bi:battery-full" style="font-size: 4rem; color: rgb(24, 167, 19);"></span>
             </div>
             <div id="NetworkPanel">
-              <i id="NetworkSymbol" class="bi bi-wifi" style="font-size: 4rem; color: rgb(105, 237, 100);"></i>  
+              <span id="NetworkSymbol" class="iconify" data-icon="bi:wifi" style="font-size: 4rem; color: rgb(105, 237, 100);"></span>
             </div>
           </div>
 
           <div class="MainButtonPanel">
             <button type="button" class="MainButton">
-              <i class="bi bi-info text-light" style="font-size: 2rem;"></i>
+              <span class="iconify" data-icon="bi:info" style="font-size: 2rem;"></span>
             </button>
           
-          <button type="button" class="MainButton" onclick="showPopupMenu()">
-              <i class="bi bi-gear text-light" style="font-size: 2rem;"></i>
+          <button type="button" class="MainButton" id="SettingsButton">
+              <span class="iconify" data-icon="bi:gear" style="font-size: 2rem;"></span>
           </button>
         </div>
         </div>
@@ -49,32 +44,20 @@
           </div>
         </div>
         <div class="popupContent" id="popupMenu">
-          LED Settings
-          <div id="LedPanel">
-            <div id="LedControlsGrid">
-                <div id="Spacer" ></div>
-                <select id="LedModeSelect" >
-                    <option value="0">Solid Color</option>
-                    <option value="1" selected="selected">Knight Rider</option>
-                    <option value="2">Blinking</option>
-                    <option value="3">Boat</option>
-                  </select>
-                  <button type="button" id="LedSendButton" onclick="sendLedData()">Update LEDs</button>
-                <input type="color" id="LedColorPicker"value="#fcca03">
-            </div>
-
+        <div id="settingsHeader">
+          <h1>Settings</h1>
         </div>
-        Control Settings
-        <div id="ModePanel">
-          <button type="button" id="Mode1Button">Mode 1</button>
-          <button type="button" id="Mode2Button">Mode 2</button>
-          <button type="button" id="Mode3Button">Mode 3</button>
-          <button type="button" id="Mode4Button">Mode 4</button>
+        <div id="settingsNavigation">
         </div>
-        <button type="button" onclick="showPopupMenu()">Back</button>
+        <div id="settingsPage">
+        </div>
+        <form action="/settings/">
+          <input type="submit" value="Go to Settings Page" />
+        </form>
+        <button type="button" id="SettingsBackButton">Back</button>
         </div>
         <div class="popupContent" id="popupError">
-          <i class="bi bi-wifi-off" style="font-size: 4rem;"></i>
+          <span class="iconify" data-icon="bi:wifi-off" style="font-size: 4rem;"></span>
           <h1>Network Error</h1>
           <p>
             The connection to the boat was lost. <br>
@@ -86,6 +69,6 @@
     </div>
   
 
-  <script src="main.js" charset="utf-8"></script>
+    <script type="module" src="./main.js"></script>
   </body>
 </html>
