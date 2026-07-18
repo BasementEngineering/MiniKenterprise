@@ -313,10 +313,16 @@ input, select {
 }
 
 .pin-gpio {
-  fill: rgb(255, 179, 0);
+  fill: black;
   font-size: 11px;
   font-style: italic;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.pin-assignment {
+  fill: rgb(34, 139, 34);
+  font-weight: bold;
+  font-style: normal;
 }
 
 .pinout-row--reserved .pin-circle {

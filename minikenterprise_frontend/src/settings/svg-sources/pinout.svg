@@ -56,7 +56,8 @@
         .board-name { fill: rgba(255, 255, 255, 0.85); font-size: 12px; font-style: italic; font-family: Georgia, "Times New Roman", serif; }
         .pin-circle { fill: rgb(224, 224, 224); stroke: rgb(119, 119, 119); stroke-width: 1.5; }
         .pin-name { fill: white; font-size: 13px; font-weight: bold; font-family: Verdana, Geneva, Tahoma, sans-serif; }
-        .pin-gpio { fill: rgb(255, 179, 0); font-size: 11px; font-style: italic; font-family: Verdana, Geneva, Tahoma, sans-serif; }
+        .pin-gpio { fill: black; font-size: 11px; font-style: italic; font-family: Verdana, Geneva, Tahoma, sans-serif; }
+        .pin-assignment { fill: rgb(34, 139, 34); font-weight: bold; font-style: normal; }
         .pinout-row--reserved .pin-circle { fill: rgb(255, 99, 71); }
         .pinout-row--reserved .pin-name, .pinout-row--reserved .pin-gpio { fill: rgb(255, 99, 71); font-weight: bold; font-style: normal; }
         .pinout-reserved-note { fill: rgb(255, 99, 71); font-size: 11px; }

@@ -36,6 +36,52 @@ apModeToggle.addEventListener("change", () => {
 
 updateModeUI();
 
+// Live pin-assignment tags: annotate the diagram with which setting (Motor
+// Enable/In1-4, LED) currently points at each GPIO, so the diagram stays
+// useful once real values are typed in, not just as a static reference.
+const PIN_ASSIGNMENT_FIELDS = [
+    { id: "motorEn", tag: "EN" },
+    { id: "motorIn1", tag: "IN1" },
+    { id: "motorIn2", tag: "IN2" },
+    { id: "motorIn3", tag: "IN3" },
+    { id: "motorIn4", tag: "IN4" },
+    { id: "ledPin", tag: "LED" },
+];
+
+const pinRows = Array.from(document.querySelectorAll(".pinout-diagram .pinout-row[data-gpio]"));
+const basePinGpioText = new Map(
+    pinRows.map(row => [row, row.querySelector(".pin-gpio").textContent])
+);
+
+function updatePinAssignments() {
+    const tagsByGpio = new Map();
+    PIN_ASSIGNMENT_FIELDS.forEach(({ id, tag }) => {
+        const value = document.getElementById(id).value.trim();
+        if (value === "") return;
+        if (!tagsByGpio.has(value)) tagsByGpio.set(value, []);
+        tagsByGpio.get(value).push(tag);
+    });
+
+    pinRows.forEach(row => {
+        const gpioText = row.querySelector(".pin-gpio");
+        const tags = tagsByGpio.get(row.dataset.gpio);
+
+        gpioText.textContent = basePinGpioText.get(row);
+        if (tags) {
+            const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+            tspan.setAttribute("class", "pin-assignment");
+            tspan.textContent = " " + tags.join("+");
+            gpioText.appendChild(tspan);
+        }
+    });
+}
+
+PIN_ASSIGNMENT_FIELDS.forEach(({ id }) => {
+    document.getElementById(id).addEventListener("input", updatePinAssignments);
+});
+
+updatePinAssignments();
+
 function parseSettings(text) {
     const settings = {};
     text.split("\n").forEach(line => {
@@ -72,6 +118,7 @@ function loadSettings() {
         .then(text => {
             applySettingsToForm(parseSettings(text));
             updateModeUI();
+            updatePinAssignments();
         })
         .catch(error => {
             console.log(error);
