@@ -53,6 +53,22 @@ const basePinGpioText = new Map(
     pinRows.map(row => [row, row.querySelector(".pin-gpio").textContent])
 );
 
+// The diagram's own annotated pins are the canonical list of GPIOs that
+// physically exist on this board (e.g. GPIO6-11 are never broken out) -
+// reuse that instead of maintaining a second list that could drift from it.
+const validGpioNumbers = new Set(pinRows.map(row => row.dataset.gpio));
+const pinFieldIds = PIN_ASSIGNMENT_FIELDS.map(({ id }) => id);
+
+function validatePinField(input) {
+    const value = input.value.trim();
+    const isValid = value !== "" && validGpioNumbers.has(value);
+    input.setCustomValidity(isValid ? "" : translate("pinValidationMessage"));
+}
+
+function validateAllPinFields() {
+    pinFieldIds.forEach(id => validatePinField(document.getElementById(id)));
+}
+
 function updatePinAssignments() {
     const tagsByGpio = new Map();
     PIN_ASSIGNMENT_FIELDS.forEach(({ id, tag }) => {
@@ -80,7 +96,33 @@ PIN_ASSIGNMENT_FIELDS.forEach(({ id }) => {
     document.getElementById(id).addEventListener("input", updatePinAssignments);
 });
 
+pinFieldIds.forEach(id => {
+    document.getElementById(id).addEventListener("input", () => validatePinField(document.getElementById(id)));
+});
+
 updatePinAssignments();
+validateAllPinFields();
+
+// Mirrors MiniKenterpriseCode/Config.h's compile-time defaults. Keep in
+// sync manually if those ever change - there's no runtime way to ask the
+// firmware for them.
+const PIN_DEFAULTS = {
+    motorEn: "15",
+    motorIn1: "13",
+    motorIn2: "0",
+    motorIn3: "14",
+    motorIn4: "12",
+    ledPin: "2",
+    ledCount: "8",
+};
+
+document.getElementById("reset-pins-button").addEventListener("click", () => {
+    for (const [id, value] of Object.entries(PIN_DEFAULTS)) {
+        document.getElementById(id).value = value;
+    }
+    updatePinAssignments();
+    validateAllPinFields();
+});
 
 function parseSettings(text) {
     const settings = {};
@@ -119,6 +161,7 @@ function loadSettings() {
             applySettingsToForm(parseSettings(text));
             updateModeUI();
             updatePinAssignments();
+            validateAllPinFields();
         })
         .catch(error => {
             console.log(error);
@@ -128,6 +171,12 @@ function loadSettings() {
 
 function saveSettings(event) {
     event.preventDefault();
+
+    validateAllPinFields();
+    if (!form.reportValidity()) {
+        statusMessage.textContent = translate("statusInvalidPins");
+        return;
+    }
 
     const params = new URLSearchParams(new FormData(form));
 

@@ -58,6 +58,24 @@ input, select {
   margin-top: 4px;
 }
 
+input:invalid {
+  border-color: rgb(255, 99, 71);
+  background-color: rgb(90, 58, 55);
+}
+
+.secondary-button {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 10px;
+  background-color: transparent;
+  border: 2px solid rgb(179, 178, 175);
+  border-radius: 4px;
+  color: white;
+  opacity: 0.85;
+  height: auto;
+}
+
 .radio-row {
   display: flex;
   align-items: center;
