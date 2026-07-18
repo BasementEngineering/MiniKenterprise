@@ -26,7 +26,10 @@ export default defineConfig({
   //publicDir: "public",
   server: {
     hmr:
-      { overlay: false }
+      { overlay: false },
+    proxy: {
+      "/api/settings": "http://localhost:8787"
+    }
   },
   assetsInclude: [],
   esbuild: {

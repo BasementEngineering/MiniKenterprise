@@ -24,6 +24,10 @@ _Avoid_: "the website" (ambiguous with the on-device control UI served by the fi
 The on-device web app (built from `minikenterprise_frontend/`, embedded into the firmware binary as PROGMEM byte arrays) that a builder's browser loads directly from the boat over WiFi, to drive it and adjust `Settings`.
 _Avoid_: "frontend" alone — ambiguous between this and `flash-site`.
 
+**Settings stub**:
+A dev-only Node script (`minikenterprise_frontend/settings-stub.js`) that fakes the `/api/settings` GET/POST wire protocol from an in-memory object, so the Control UI's settings page can be developed and tested locally without a flashed board.
+_Avoid_: confusing with `FrontendServer` (the real on-device HTTP server) — the stub only exists on a developer's machine, never in firmware, and mirrors the protocol shape only, not EEPROM storage or restart behavior.
+
 ## Example dialogue
 
 > "Where does someone change the boat's WiFi password?"
