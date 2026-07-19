@@ -8,7 +8,6 @@ export class CommunicationManager{
 	constructor(){
 		this.socket = null;
 		this.online = false;
-		this.heartbeatTimer = -1;
 		this.lastReceivedHeartbeat = 0;
 
 		this.inputUpdateTimer = null;
@@ -97,7 +96,12 @@ export class CommunicationManager{
 	// Heartbeat Specific Stuff
 	
 	startHeartbeatCheck(){
-		this.heartbeatTimer = setInterval(() => {
+		// Give the first connection attempt a full timeout window before
+		// checkHeartbeat() can see it as stale - this runs continuously for
+		// the app's lifetime, so it can also catch a later disconnect after
+		// having been online.
+		this.lastReceivedHeartbeat = Date.now();
+		setInterval(() => {
 			this.sendHeartbeat();
 			this.checkHeartbeat();
 		}, HEARTBEAT_INTERVAL);
@@ -119,6 +123,7 @@ export class CommunicationManager{
 	// Socket Stuff
 	openSocket(){
 		try{
+			this.lastReceivedHeartbeat = Date.now();
 			//this.socket = new WebSocket('ws://' + "1.2.3.4" + ':81/');
 			this.socket = new WebSocket('ws://' + location.hostname + ':81/');
 			this.socket.onopen = function () {
@@ -156,12 +161,7 @@ export class CommunicationManager{
 		
 		if(this.socket != null){
 			this.socket.close();
-		} 
-		if(this.heartbeatTimer != -1){
-			clearInterval(this.heartbeatTimer);
-			this.heartbeatTimer = -1;
 		}
-		
 	}
 
 	// Actual command sending

@@ -2,7 +2,6 @@ import { Joystick } from "./joystick";
 import globalContext from "./dataBuffer";
 import { Menu } from "./menu";
 
-var show_errors = false;
 var my_menu = new Menu();
 
 export function initUi(sendLedDataCallback,globalContext){
@@ -114,9 +113,7 @@ function updateStatuIcons(){
 }
 
 export function showErrorMessage(){
-  if(show_errors){
-    document.getElementById("popupError").style.visibility = "visible";
-  }
+  document.getElementById("popupError").style.visibility = "visible";
 }
 
 export function hideErrorMessage(){
