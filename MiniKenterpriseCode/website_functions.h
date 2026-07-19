@@ -11,19 +11,21 @@
 void handle_index_html() { server.send_P(200, "text/html", index_html,index_html_length);}
 void handle_settings_index() { server.send_P(200, "text/html", settings_index,settings_index_length);}
 void handle_favicon_BrpTr_E7_ico() { server.send_P(200, "text/plain", favicon_BrpTr_E7_ico,favicon_BrpTr_E7_ico_length);}
-void handle_main_Cb3tGfjp_js() { server.send_P(200, "application/javascript", main_Cb3tGfjp_js,main_Cb3tGfjp_js_length);}
-void handle_settings_Do_v8t93_js() { server.send_P(200, "application/javascript", settings_Do_v8t93_js,settings_Do_v8t93_js_length);}
-void handle_style_QxcDOFYF_css() { server.send_P(200, "text/css", style_QxcDOFYF_css,style_QxcDOFYF_css_length);}
-void handle_style_ZxpFyrhj_js() { server.send_P(200, "application/javascript", style_ZxpFyrhj_js,style_ZxpFyrhj_js_length);}
+void handle_main_DiTAKUtS_js() { server.send_P(200, "application/javascript", main_DiTAKUtS_js,main_DiTAKUtS_js_length);}
+void handle_main_QxcDOFYF_css() { server.send_P(200, "text/css", main_QxcDOFYF_css,main_QxcDOFYF_css_length);}
+void handle_modulepreload_polyfill_B5Qt9EMX_js() { server.send_P(200, "application/javascript", modulepreload_polyfill_B5Qt9EMX_js,modulepreload_polyfill_B5Qt9EMX_js_length);}
+void handle_settings_BgHX5jLb_js() { server.send_P(200, "application/javascript", settings_BgHX5jLb_js,settings_BgHX5jLb_js_length);}
+void handle_settings_BmJ9NouM_css() { server.send_P(200, "text/css", settings_BmJ9NouM_css,settings_BmJ9NouM_css_length);}
 
 void setupServerFunctions() {
 server.on("/", handle_index_html);
 server.on("/settings/", handle_settings_index);
 server.on("/assets/favicon-BrpTr-E7.ico", handle_favicon_BrpTr_E7_ico);
-server.on("/assets/main-Cb3tGfjp.js", handle_main_Cb3tGfjp_js);
-server.on("/assets/settings-Do-v8t93.js", handle_settings_Do_v8t93_js);
-server.on("/assets/style-QxcDOFYF.css", handle_style_QxcDOFYF_css);
-server.on("/assets/style-ZxpFyrhj.js", handle_style_ZxpFyrhj_js);
+server.on("/assets/main-DiTAKUtS.js", handle_main_DiTAKUtS_js);
+server.on("/assets/main-QxcDOFYF.css", handle_main_QxcDOFYF_css);
+server.on("/assets/modulepreload-polyfill-B5Qt9EMX.js", handle_modulepreload_polyfill_B5Qt9EMX_js);
+server.on("/assets/settings-BgHX5jLb.js", handle_settings_BgHX5jLb_js);
+server.on("/assets/settings-BmJ9NouM.css", handle_settings_BmJ9NouM_css);
 }
 
 #endif
