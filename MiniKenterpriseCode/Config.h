@@ -20,6 +20,13 @@
 /*! The Pin Markings on the WEMOS D1 Mini Board don't match the GPIO numbers !
  * Do not use GPIO 0 aka. D3 as it is used for flashing programs.
  *
+ * GPIO16 aka. D0 lives on the RTC domain instead of the main GPIO controller
+ * (its own registers, used for deep-sleep wake), so it can't be used with
+ * attachInterrupt(). It has supported analogWrite()/PWM since the earliest
+ * ESP8266 Arduino core releases (confirmed back to 2.0.0-rc2) though, so it's
+ * fine to use for motor speed control - the "GPIO16 can't do PWM" claim
+ * floating around online is a myth.
+ *
  * Pinout Table:
  * Wifi Antenna = Top
  * | Left Side        | Right Side    |
@@ -35,12 +42,12 @@
  * USB Port = Bottom
  */
 
-// Default pins (previously "VERSION1")
-#define DEFAULT_MOTOR_EN 15
-#define DEFAULT_MOTOR_IN1 13
-#define DEFAULT_MOTOR_IN2 0
-#define DEFAULT_MOTOR_IN3 14
-#define DEFAULT_MOTOR_IN4 12
+// Default pins (previously "VERSION3")
+#define DEFAULT_MOTOR_EN 15 //D8
+#define DEFAULT_MOTOR_IN1 13 //D7
+#define DEFAULT_MOTOR_IN2 12 //D6
+#define DEFAULT_MOTOR_IN3 14 //D5
+#define DEFAULT_MOTOR_IN4 16 //D0
 
 #define DEFAULT_LED_PIN 2
 #define DEFAULT_LED_COUNT 8
