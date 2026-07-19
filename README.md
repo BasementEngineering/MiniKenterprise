@@ -93,7 +93,7 @@ No Arduino IDE required. Go to the [Mini Kenterprise flashing website](https://b
 
 If you're building "Version 1" from this guide, the default pins and WiFi settings already match your hardware, so there is nothing else to configure. If you built a different pin layout or want a different WiFi name/password, you can change those later from the boat's own settings page (see step 6) instead of editing any code.
 
-If you'd rather build the firmware yourself (e.g. to modify it), the source lives under `/MiniKenterpriseCode`, the on-device Control UI source under `/minikenterprise_frontend`, and `deployFrontend.ps1` (repo root) rebuilds the Control UI and regenerates the headers the firmware embeds it from.
+If you'd rather build the firmware yourself (e.g. to modify it), the source lives under `/MiniKenterpriseCode`, the on-device Control UI source under `/minikenterprise_frontend`, and `deployFrontend.ps1` (repo root) rebuilds the Control UI and regenerates the headers the firmware embeds it from. See [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) for the full local development workflow (frontend dev server, testing, firmware upload, running the flashing site locally).
 
 ### 6. Put the boat into operation
 After being turned on the boat acts as a WiFi Access Point that devices can connect to.
