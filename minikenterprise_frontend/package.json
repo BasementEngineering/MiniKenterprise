@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "settings-stub": "node settings-stub.js",
+    "dev-stub": "node dev-stub.js",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -15,7 +15,8 @@
     "vite": "^5.3.3",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-purge-icons": "^0.10.0",
-    "vite-plugin-singlefile": "^2.0.2"
+    "vite-plugin-singlefile": "^2.0.2",
+    "ws": "^8.18.0"
   },
   "dependencies": {
     "@iconify/iconify": "^3.1.1"
