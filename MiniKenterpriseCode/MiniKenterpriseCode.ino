@@ -37,6 +37,7 @@ void setup(){
   Serial.begin(115200);
   Serial.println("Starting Setup");
   Settings_load();
+  Serial.println("Motor pins: en=" + String(settings.motorEn) + " in1=" + String(settings.motorIn1) + " in2=" + String(settings.motorIn2) + " in3=" + String(settings.motorIn3) + " in4=" + String(settings.motorIn4));
   propulsionSystem = new PropulsionSystem(settings.motorEn, settings.motorIn1, settings.motorIn2, settings.motorIn3, settings.motorIn4);
   lightBar = new LightBar(settings.ledCount, settings.ledPin);
   propulsionSystem->initPins();
@@ -170,6 +171,7 @@ bool timoutDone(){
 void updateHardware(){
   Battery_update();
   lightBar->update();
+  propulsionSystem->update();
   yield();
 }
 

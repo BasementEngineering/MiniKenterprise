@@ -2,62 +2,37 @@
 #include <Arduino.h>
 #include "Config.h"
 
-//#define DEBUG_PROPULSION
+#define DEBUG_PROPULSION
 
-PropulsionSystem::PropulsionSystem(int _en, int _in1, int _in2, int _in3, int _in4){
-  en = _en;
-  in1 = _in1;
-  in2 = _in2;
-  in3 = _in3;
-  in4 = _in4;
+PropulsionSystem::PropulsionSystem(int _en, int _in1, int _in2, int _in3, int _in4)
+  : leftMotor(_en, _in1, _in2, MIN_PWM_L, MAX_PWM_L),
+    rightMotor(_en, _in3, _in4, MIN_PWM_R, MAX_PWM_R){
 }
 
 void PropulsionSystem::initPins(){
-  pinMode(en,OUTPUT);
-  
-  pinMode(in1,OUTPUT);
-  pinMode(in2,OUTPUT);
-  pinMode(in3,OUTPUT);
-  pinMode(in4,OUTPUT);
+  leftMotor.initPins();
+  rightMotor.initPins();
+}
 
-  stop();
+void PropulsionSystem::update(){
+  leftMotor.update();
+  rightMotor.update();
 }
 
 void PropulsionSystem::moveLeft(int speedPercentage){
-  moveMotor(in1,in2,speedPercentage,MIN_PWM_L,MAX_PWM_L);
+  leftMotor.enable();
+  leftMotor.setPower(speedPercentage);
 }
 
 void PropulsionSystem::moveRight(int speedPercentage){
-  moveMotor(in3,in4,speedPercentage,MIN_PWM_R,MAX_PWM_R);
-}
-
-void PropulsionSystem::moveMotor(int pin1,int pin2, int speedPercentage,int minPwm, int maxPwm){
-  digitalWrite(en,HIGH);
-  uint8_t pwm = 0;
-  if(speedPercentage == 0){
-    pwm=0;
-    digitalWrite(pin1,LOW);
-    analogWrite(pin2,LOW);
-  }
-  else if(speedPercentage > 0){
-    pwm = ((maxPwm-minPwm)*speedPercentage)/100;
-    digitalWrite(pin1,LOW);
-    analogWrite(pin2,pwm);
-  }
-  else if(speedPercentage < 0){
-    pwm = ((maxPwm-minPwm)*(-speedPercentage))/100;
-    digitalWrite(pin1,pwm);
-    analogWrite(pin2,LOW);
-  }
+  rightMotor.enable();
+  rightMotor.setPower(speedPercentage);
 }
 
 void PropulsionSystem::stop(){
-  digitalWrite(en,LOW);
-  
-  digitalWrite(in1,LOW);
-  digitalWrite(in2,LOW);
-  digitalWrite(in3,LOW);
-  digitalWrite(in4,LOW);
+  leftMotor.stop();
+  rightMotor.stop();
+  leftMotor.disable(); // en is shared between both motors
 }
 
 void PropulsionSystem::setSpeed(int newSpeed){
@@ -78,7 +53,7 @@ void PropulsionSystem::translateToMotors(int speedPercentage, int direction){
 
   int leftSpeed = 0;
   int rightSpeed = 0;
-  
+
   if(speedPercentage == 0){
     stop();
   }
@@ -88,12 +63,12 @@ void PropulsionSystem::translateToMotors(int speedPercentage, int direction){
       rightSpeed = speedPercentage;
     }
     if(direction < 0){ //Turning Right
-      leftSpeed = ((100+direction)*speedPercentage)/100;
-      rightSpeed = speedPercentage;
+      rightSpeed = ((100+direction)*speedPercentage)/100;
+      leftSpeed = speedPercentage;
     }
     else if(direction > 0){
-      leftSpeed = speedPercentage;
-      rightSpeed = ((100-direction)*speedPercentage)/100;
+      rightSpeed = speedPercentage;
+      leftSpeed = ((100-direction)*speedPercentage)/100;
     }
     #ifdef DEBUG_PROPULSION
     Serial.print("Left Speed: ");Serial.println(leftSpeed);
@@ -103,46 +78,5 @@ void PropulsionSystem::translateToMotors(int speedPercentage, int direction){
     moveLeft(leftSpeed);
     moveRight(rightSpeed);
   }
-  
-}
 
-void PropulsionSystem::runTestSequence(){
-  Serial.println("Testing Left");
-  for( int i = 0; i<255; i++){
-      Serial.print("Left Forward: ");
-      Serial.println(i);
-      moveLeft(i);
-      delay(50);
-  }
-  delay(1000);
-  moveLeft(0);
-  delay(1000);
-  for( int i = 0; i>-255; i--){
-    Serial.print("Left Reverse: ");
-    Serial.println(i);
-    moveLeft(i);
-    delay(50);
-  }
-  delay(1000);
-  moveLeft(0);
-  delay(1000);
-
-    for( int i = 0; i<255; i++){
-      Serial.print("Right Forward: ");
-      Serial.println(i);
-      moveRight(i);
-      delay(50);
-  }
-  delay(1000);
-  moveRight(0);
-  delay(1000);
-  for( int i = 0; i>-255; i--){
-    Serial.print("Right Reverse: ");
-    Serial.println(i);
-    moveRight(i);
-    delay(50);
-  }
-  delay(1000);
-  moveRight(0);
-  delay(1000);
 }
