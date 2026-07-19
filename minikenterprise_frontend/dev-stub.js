@@ -28,9 +28,9 @@ let settings = {
     staPassword: "",
     motorEn: "15",
     motorIn1: "13",
-    motorIn2: "0",
+    motorIn2: "12",
     motorIn3: "14",
-    motorIn4: "12",
+    motorIn4: "16",
     ledPin: "2",
     ledCount: "8",
 };
