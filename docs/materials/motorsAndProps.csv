@@ -1,0 +1,6 @@
+motor, motor diameter, type, available prop diameters, note
+N20, 12 mm, Permanent Magnet DC Motor, 55 mm,
+716, 7 mm, Coreless DC Motor, 45 mm and 55 mm,
+720, 7 mm, Coreless DC Motor, 55 mm,
+8520, 8.5 mm, Coreless DC Motor, 55 mm, High Current
+N30, 12 mm, Permanent Magnet DC Motor, 75 mm, High Current

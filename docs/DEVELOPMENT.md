@@ -60,9 +60,9 @@ Re-run the frontend build/embed step above first if you changed anything under `
 
 ## Distribution page (flash-site): running it locally
 
-`flash-site/` is a plain static page (no build step) that lets anyone flash a prebuilt `.bin` straight from the browser via Web Serial — see `flash-site/README.md` for the full release process. To preview it locally:
+`flash-site/` is a plain static site (no build step) with two paths from its home page: flashing a prebuilt `.bin` straight from the browser via Web Serial (`flash.html`), and configuring a new build — picking a bottle/driver/motor/prop Variant to get the right BOM and STL downloads (`configure.html`) — see `flash-site/README.md` for the full release process for each. To preview either locally:
 ```
 cd flash-site
 python -m http.server 8080
 ```
-Open http://localhost:8080 — Web Serial requires a secure context, and `localhost` counts as one, so this works without HTTPS. Actually flashing still needs a real board plugged in over USB, in Chrome or Edge.
+Open http://localhost:8080 — Web Serial requires a secure context, and `localhost` counts as one, so this works without HTTPS. Actually flashing still needs a real board plugged in over USB, in Chrome or Edge. `configure.html` needs no hardware, but its STL download links only resolve after running `.\deployConfiguratorAssets.ps1` (repo root) at least once.
