@@ -4,14 +4,7 @@ $repoRoot = $PSScriptRoot
 $sourceFolders = @("05l_Bottle", "075l_Bottle", "1l_Bottle") | ForEach-Object {
   Join-Path -Path (Join-Path -Path $repoRoot -ChildPath "3dFiles") -ChildPath $_
 }
-$flashSiteFolder = Join-Path -Path $repoRoot -ChildPath "flash-site"
-$manifestPath = Join-Path -Path $flashSiteFolder -ChildPath "js\data\stl-manifest.json"
-$downloadsFolder = Join-Path -Path $flashSiteFolder -ChildPath "downloads"
-$componentImagesSource = Join-Path -Path $repoRoot -ChildPath "docs\materials\images"
-$componentImagesDest = Join-Path -Path $flashSiteFolder -ChildPath "img\components"
-$componentImageExtensions = @("*.jpg", "*.jpeg", "*.png", "*.gif", "*.webp")
-$variantImagesSource = Join-Path -Path $repoRoot -ChildPath "images"
-$variantImagesDest = Join-Path -Path $flashSiteFolder -ChildPath "img\variants"
+$manifestPath = Join-Path -Path $repoRoot -ChildPath "docs\js\data\stl-manifest.json"
 
 Write-Host "Scanning 3dFiles bottle folders for STL files"
 $stlFiles = $sourceFolders | Where-Object { Test-Path $_ } | ForEach-Object {
@@ -33,51 +26,55 @@ $manifestJson = $manifestPaths | ConvertTo-Json
 # parsers (e.g. Node's JSON.parse). Write plain UTF-8 without a BOM instead.
 [System.IO.File]::WriteAllText($manifestPath, $manifestJson, [System.Text.UTF8Encoding]::new($false))
 
-Write-Host "Resetting flash-site/downloads"
-if (Test-Path $downloadsFolder) {
-  Remove-Item -Path $downloadsFolder -Recurse -Force
+Write-Host "Done. Commit docs/js/data/stl-manifest.json before pushing."
+
+# --- Gallery banner manifest ---
+# Scans docs/images/gallery/ for photos and (re)writes gallery-manifest.json, preserving any
+# hand-edited caption/location/year already in the manifest (keyed by filename) so reruns don't
+# clobber them. New photos get a caption derived from their filename, and no location/year (never
+# guessed - better blank than wrong). Edit gallery-manifest.json directly to add or improve any of
+# the three; location and year are optional and only show in the banner when present. Entries for
+# photos no longer in the folder are dropped.
+$galleryFolder = Join-Path -Path $repoRoot -ChildPath "docs\images\gallery"
+$galleryManifestPath = Join-Path -Path $repoRoot -ChildPath "docs\js\data\gallery-manifest.json"
+$galleryImageExtensions = @("*.jpg", "*.jpeg", "*.png", "*.gif", "*.webp")
+
+function New-DefaultCaption([string]$fileName) {
+  $base = [System.IO.Path]::GetFileNameWithoutExtension($fileName)
+  ($base -replace "[_-]", " ") -replace "\s+", " "
 }
-New-Item -ItemType Directory -Path $downloadsFolder | Out-Null
 
-$totalBytes = 0
-foreach ($file in $stlFiles) {
-  $relativeToThreeDFiles = $file.FullName.Substring((Join-Path -Path $repoRoot -ChildPath "3dFiles").Length + 1)
-  $destination = Join-Path -Path $downloadsFolder -ChildPath $relativeToThreeDFiles
-  New-Item -ItemType Directory -Path (Split-Path -Path $destination -Parent) -Force | Out-Null
-  Copy-Item -Path $file.FullName -Destination $destination -Force
-  $totalBytes += $file.Length
+Write-Host "Scanning docs/images/gallery for banner photos"
+$galleryFiles = Get-ChildItem -Path (Join-Path -Path $galleryFolder -ChildPath "*") -Include $galleryImageExtensions -File
+
+if (-not $galleryFiles) {
+  throw "No images found under docs/images/gallery - refusing to write an empty gallery manifest."
 }
 
-Write-Host "Copied $($stlFiles.Count) STL files ($([math]::Round($totalBytes / 1MB, 2)) MB) into flash-site/downloads"
-
-# Component photos live in docs/materials/images (shared with the workshop docs) and get
-# mirrored wholesale into flash-site/img/components - variants.js's `image` fields reference
-# them by filename under that folder. Raster formats only (skips e.g. the .xcf source file).
-Write-Host "Syncing component images"
-if (Test-Path $componentImagesDest) {
-  Remove-Item -Path $componentImagesDest -Recurse -Force
+$existingEntriesByFile = @{}
+if (Test-Path $galleryManifestPath) {
+  $existingEntries = Get-Content -Path $galleryManifestPath -Raw | ConvertFrom-Json
+  foreach ($entry in $existingEntries) {
+    $existingEntriesByFile[$entry.file] = $entry
+  }
 }
-New-Item -ItemType Directory -Path $componentImagesDest | Out-Null
 
-$componentImages = Get-ChildItem -Path (Join-Path -Path $componentImagesSource -ChildPath "*") -Include $componentImageExtensions -File
-foreach ($image in $componentImages) {
-  Copy-Item -Path $image.FullName -Destination (Join-Path -Path $componentImagesDest -ChildPath $image.Name) -Force
-}
-Write-Host "Copied $($componentImages.Count) component image(s) into flash-site/img/components"
+$galleryEntries = $galleryFiles | ForEach-Object {
+  $existing = $existingEntriesByFile[$_.Name]
+  $caption = if ($existing) { $existing.caption } else { $null }
+  if (-not $caption) {
+    $caption = New-DefaultCaption $_.Name
+  }
+  [PSCustomObject]@{
+    file     = $_.Name
+    caption  = $caption
+    location = if ($existing) { $existing.location } else { $null }
+    year     = if ($existing) { $existing.year } else { $null }
+  }
+} | Sort-Object -Property file
 
-# Preset/variant hero photos live in the repo-root images/ folder and are matched by the
-# "<Name>_Variant_<year>.<ext>" naming convention (e.g. Vorarlberg_Variant_2024.JPG) that
-# variants.js's preset `image` fields expect - name new preset photos that way.
-Write-Host "Syncing variant preset images"
-if (Test-Path $variantImagesDest) {
-  Remove-Item -Path $variantImagesDest -Recurse -Force
-}
-New-Item -ItemType Directory -Path $variantImagesDest | Out-Null
+Write-Host "Writing gallery-manifest.json ($($galleryEntries.Count) photos)"
+$galleryManifestJson = $galleryEntries | ConvertTo-Json
+[System.IO.File]::WriteAllText($galleryManifestPath, $galleryManifestJson, [System.Text.UTF8Encoding]::new($false))
 
-$variantImages = Get-ChildItem -Path (Join-Path -Path $variantImagesSource -ChildPath "*_Variant_*") -File
-foreach ($image in $variantImages) {
-  Copy-Item -Path $image.FullName -Destination (Join-Path -Path $variantImagesDest -ChildPath $image.Name) -Force
-}
-Write-Host "Copied $($variantImages.Count) variant preset image(s) into flash-site/img/variants"
-
-Write-Host "Done. Commit flash-site/js/data/stl-manifest.json, flash-site/downloads, flash-site/img/components and flash-site/img/variants before pushing."
+Write-Host "Done. Commit docs/js/data/gallery-manifest.json before pushing - hand-edit caption/location/year there as you like."

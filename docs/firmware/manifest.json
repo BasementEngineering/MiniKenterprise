@@ -1,0 +1,13 @@
+{
+  "name": "Mini Kenterprise Firmware",
+  "version": "0.0.0-dev",
+  "new_install_prompt_erase": false,
+  "builds": [
+    {
+      "chipFamily": "ESP8266",
+      "parts": [
+        { "path": "esp8266.bin", "offset": 0 }
+      ]
+    }
+  ]
+}

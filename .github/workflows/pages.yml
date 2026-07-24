@@ -1,9 +1,9 @@
-name: Deploy flash-site to GitHub Pages
+name: Deploy docs site to GitHub Pages
 
 on:
   push:
     branches: [main]
-    paths: [flash-site/**]
+    paths: [docs/**]
   workflow_dispatch:
 
 permissions:
@@ -26,6 +26,6 @@ jobs:
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: flash-site
+          path: docs
       - id: deployment
         uses: actions/deploy-pages@v4
