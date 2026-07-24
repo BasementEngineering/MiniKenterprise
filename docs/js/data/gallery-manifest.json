@@ -1,0 +1,26 @@
+[
+    {
+        "file":  "KnightRiderEffect.gif",
+        "caption":  "Knight Rider LED effect",
+        "location":  null,
+        "year":  null
+    },
+    {
+        "file":  "MakerFaire_2024.jpg",
+        "caption":  "Maker Faire",
+        "location":  null,
+        "year":  2024
+    },
+    {
+        "file":  "Vorarlberg_Variant_2024.JPG",
+        "caption":  "Vorarlberg Workshop",
+        "location":  "Vorarlberg",
+        "year":  2024
+    },
+    {
+        "file":  "Wilhelmshaven_Variant_2022.jpg",
+        "caption":  "Wilhelmshaven Workshop",
+        "location":  "Wilhelmshaven",
+        "year":  2022
+    }
+]
