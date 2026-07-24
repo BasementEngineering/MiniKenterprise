@@ -12,7 +12,7 @@ In the meantime:
 
 ### 1. Get the electronics
 Below you can see a picture of the electronics required to build a Mini Kenterprise.
-![Components](../images/build/vorarlberg/ComponentOverview.jpg)
+![Components](../images/build/Vorarlberg/ComponentOverview.jpg)
 The exact parts might change, depending on availability and i am trying to keep an updated document with the bill of materials in the configurator. The cost of building a Mini Kenterprise in Germany are currently (2024) around 35€.
 The configurator will also give you the correct 3D files to download for printing.
 
@@ -38,7 +38,7 @@ Start the slicing process and export the file to an SD card, a USB drive, whatev
 ### 4. Assemble the electronics
 While the print is in progress you can prepare the interesting part of the boat (coming from an electrical engineer :D), the electronics.
 The circuit diagram shows how all of the parts have to be connected.
-![Wiring diagram](../images/build/vorarlberg/WirignDiagram.jpg).
+![Wiring diagram](../images/build/Vorarlberg/WirignDiagram.jpg).
 
 #### 4.1 Assemble the power supply section
 The "power supply section" or in other words our selfmade powerbank should be assembled first. 
