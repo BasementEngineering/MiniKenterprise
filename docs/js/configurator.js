@@ -67,7 +67,8 @@ function renderPresets() {
     button.type = "button";
     button.className = "preset-option" + (selectionsMatch(selection, preset.selection) ? " selected" : "");
     const imageHtml = preset.image ? `<img class="preset-thumb" src="./${preset.image}" alt="">` : "";
-    button.innerHTML = `${imageHtml}<strong>${preset.label}</strong><span>${preset.description}</span>`;
+    const badgeHtml = preset.recommended ? `<span class="recommended-badge">Recommended</span>` : "";
+    button.innerHTML = `${imageHtml}<strong>${preset.label}</strong>${badgeHtml}<span>${preset.description}</span>`;
     button.addEventListener("click", () => {
       selection = { ...preset.selection };
       render();
@@ -92,11 +93,14 @@ function renderBom() {
       const thumbHtml = part.image
         ? `<img class="bom-thumb" src="./${part.image}" alt="">`
         : `<span class="bom-thumb bom-thumb-placeholder"></span>`;
+      const buyHtml = part.links?.length
+        ? part.links.map((link) => `<a href="${link.url}" target="_blank" rel="noopener">${link.label}</a>`).join(" ")
+        : "";
       const row = document.createElement("tr");
-      row.innerHTML = `<td>${thumbHtml}${part.name}</td><td>${part.qty}x</td>`;
+      row.innerHTML = `<td>${thumbHtml}${part.name}</td><td>${part.qty}x</td><td class="bom-buy">${buyHtml}</td>`;
       if (part.note) {
         const noteRow = document.createElement("tr");
-        noteRow.innerHTML = `<td colspan="2" class="bom-note">${part.note}</td>`;
+        noteRow.innerHTML = `<td colspan="3" class="bom-note">${part.note}</td>`;
         table.appendChild(row);
         table.appendChild(noteRow);
         continue;
@@ -122,7 +126,7 @@ function renderStlDownloads() {
   for (const entry of entries) {
     const item = document.createElement("li");
     if (entry.file) {
-      const downloadPath = "./downloads/" + entry.file.replace(/^3dFiles\//, "");
+      const downloadPath = `https://raw.githubusercontent.com/BasementEngineering/MiniKenterprise/main/${entry.file}`;
       item.innerHTML = `<a href="${downloadPath}">${entry.label} (print ${entry.qty}x)</a>`;
     } else {
       item.textContent = `${entry.label}: not available yet for this combination.`;

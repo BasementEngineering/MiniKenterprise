@@ -23,14 +23,15 @@ export const VARIANT_DATA = {
       id: "vorarlberg-05l",
       label: "Vorarlberg Workshop",
       description: "0.5L bottle, DRV8833, 720 motor, 55mm prop.",
-      image: "img/variants/Vorarlberg_Variant_2024.JPG",
+      image: "images/gallery/Vorarlberg_Variant_2024.JPG",
       selection: { bottle: "05L", driver: "drv8833", motor: "720", prop: "55mm" },
+      recommended: true,
     },
     {
       id: "wilhelmshaven-1l",
       label: "Wilhelmshaven Workshop",
-      description: "1L bottle, L9110, N20 motor, 55mm prop.",
-      image: "img/variants/Wilhelmshaven_Variant_2022.jpg",
+      description: "1L bottle, L9110, N20 motor, 55mm prop. A real, previously-built example - not the recommended starting point.",
+      image: "images/gallery/Wilhelmshaven_Variant_2022.jpg",
       selection: { bottle: "1L", driver: "l9110", motor: "N20", prop: "55mm" },
     },
   ],
@@ -72,32 +73,33 @@ export const VARIANT_DATA = {
     drv8833: {
       label: "DRV8833",
       recommended: true,
-      image: "img/components/MotorDriver_DRV8833.jpeg",
+      image: "images/components/MotorDriver_DRV8833.jpeg",
       description: "Compact dual H-bridge driver board. Matches this firmware's default pin wiring.",
       pinSummary: "Uses a shared enable pin (EN) plus IN1-IN4, matching Config.h's DEFAULT_MOTOR_EN/IN1-IN4 exactly.",
       wiringHtml:
-        "<p>DRV8833 wiring matches the firmware defaults directly: connect EN to <code>DEFAULT_MOTOR_EN</code> " +
-        "(GPIO15/D8), and IN1-IN4 to <code>DEFAULT_MOTOR_IN1</code>-<code>DEFAULT_MOTOR_IN4</code> " +
-        "(GPIO13/D7, GPIO12/D6, GPIO14/D5, GPIO16/D0) as defined in <code>MiniKenterpriseCode/Config.h</code>. " +
+        "<p>DRV8833 wiring matches the firmware defaults directly: connect <code>EN</code> to <code>DEFAULT_MOTOR_EN</code> " +
+        "(<code>GPIO15</code>/<code>D8</code>), and <code>IN1</code>-<code>IN4</code> to <code>DEFAULT_MOTOR_IN1</code>-<code>DEFAULT_MOTOR_IN4</code> " +
+        "(<code>GPIO13</code>/<code>D7</code>, <code>GPIO12</code>/<code>D6</code>, <code>GPIO14</code>/<code>D5</code>, <code>GPIO16</code>/<code>D0</code>) as defined in <code>MiniKenterpriseCode/Config.h</code>. " +
         "No settings changes needed after flashing.</p>",
       parts: [
         {
           id: "driver-drv8833",
           name: "DRV8833 Dual H-Bridge motor driver board",
           qty: 1,
-          image: "img/components/MotorDriver_DRV8833.jpeg",
+          image: "images/components/MotorDriver_DRV8833.jpeg",
+          links: [{ label: "Amazon", url: "https://amzn.eu/d/0hsXaoIG" },{ label: "AliExpress", url: "https://de.aliexpress.com/item/1005009044264044.html" }]
         },
       ],
     },
     l9110: {
       label: "L9110",
       recommended: false,
-      image: "img/components/MotorDriver_L9110.jpeg",
+      image: "images/components/MotorDriver_L9110.jpeg",
       description: "Often sold bundled with a fan+prop module - easier to source in Germany.",
       pinSummary: "No shared enable pin - each motor channel is driven by two logic pins directly.",
       wiringHtml:
         "<p><strong>L9110 wiring differs from the DRV8833 default.</strong> The L9110 has no enable pin " +
-        "equivalent to the DRV8833's EN - each motor channel is just two logic inputs (A-IA/A-IB per " +
+        "equivalent to the DRV8833's <code>EN</code> - each motor channel is just two logic inputs (<code>A-IA</code>/<code>A-IB</code> per " +
         "channel). This firmware's <code>Motor</code>/<code>PropulsionSystem</code> classes " +
         "(<code>MiniKenterpriseCode/Motor.h</code>, <code>PropulsionSystem.h</code>) assume a DRV8833-shaped " +
         "layout with a shared enable pin. Wire the L9110's two input pins per motor to the " +
@@ -110,7 +112,8 @@ export const VARIANT_DATA = {
           id: "driver-l9110",
           name: "L9110 fan+motor+prop module",
           qty: 1,
-          image: "img/components/MotorDriver_L9110.jpeg",
+          image: "images/components/MotorDriver_L9110.jpeg",
+          links: [{ label: "reichelt", url: "https://www.reichelt.de/entwicklerboards-luefter-mit-propeller-modul-l9110-debo-fan-l9110-p282643.html" }],
         },
       ],
     },
@@ -135,7 +138,7 @@ export const VARIANT_DATA = {
       highCurrent: false,
       recommended: false,
       validProps: ["45mm", "55mm"],
-      parts: [{ id: "motor-716", name: "716 coreless motor", qty: 1 }],
+      parts: [{ id: "motor-716", name: "716 coreless motor", qty: 1, links: [{ label: "Amazon", url: "https://amzn.eu/d/0aft2ixm" }] }],
     },
     "720": {
       label: "720",
@@ -144,7 +147,7 @@ export const VARIANT_DATA = {
       highCurrent: false,
       recommended: true,
       validProps: ["55mm"],
-      parts: [{ id: "motor-720", name: "720 coreless motor", qty: 1 }],
+      parts: [{ id: "motor-720", name: "720 coreless motor", qty: 1, links: [{ label: "Amazon", url: "https://amzn.eu/d/003OHyOD" }] }],
     },
     "8520": {
       label: "8520",
@@ -158,7 +161,7 @@ export const VARIANT_DATA = {
           id: "motor-8520",
           name: "8520 coreless motor",
           qty: 1,
-          image: "img/components/MotorAndPropeller_8520.jpeg",
+          image: "images/components/MotorAndPropeller_8520.jpeg",
           note: "High current draw - needs the separate high-current BMS setup below, not the all-in-one board.",
         },
       ],
@@ -214,18 +217,25 @@ export const VARIANT_DATA = {
           qty: 1,
           // Filename says "TP4065" but this is the TP4056 board this project actually uses -
           // looks like a typo in the source photo's filename.
-          image: "img/components/BMS_TP4065.jpg",
+          image: "images/components/BMS_TP4065.jpg",
+          links: [{ label: "reichelt", url: "https://www.reichelt.de/entwicklerboards-ladeplatine-fuer-3-7v-li-akkus-micro-usb-1a-debo2-3-7li-1-0a-p291400.html" }],
         },
       ],
     },
     highCurrent: {
       label: "Separate charger + high-current BMS",
       parts: [
-        { id: "power-tp4056-chargeonly", name: "TP4056 charger-only board (no BMS)", qty: 1 },
+        {
+          id: "power-tp4056-chargeonly",
+          name: "TP4056 charger-only board (no BMS)",
+          qty: 1,
+          links: [{ label: "reichelt", url: "https://www.reichelt.de/entwicklerboards-ladeplatine-fuer-3-7v-li-akkus-micro-usb-1a-debo2-3-7li-1-0a-p291400.html" }],
+        },
         {
           id: "power-bms-highcurrent",
           name: "Separate 1S high-current BMS board (2+ MOSFETs)",
           qty: 1,
+          links: [{ label: "AliExpress", url: "https://de.aliexpress.com/item/4001010955646.html" }],
         },
       ],
     },
@@ -235,19 +245,74 @@ export const VARIANT_DATA = {
   // docs/materials/images - jumper-wires uses SolidCoreWire.jpg as a best-guess match for
   // "stiff" jumper wire (as opposed to FlexibleWire.jpg); battery-holder has no dedicated photo.
   commonElectronicsParts: [
-    { id: "mcu-d1mini", name: "Wemos D1 Mini microcontroller", qty: 1, image: "img/components/Microcontroller_WemosD1Mini.jpg" },
-    { id: "battery-18650", name: "18650 Li-Ion cell", qty: 1, image: "img/components/Battery_18650WithConnector.jpg" },
-    { id: "battery-holder", name: "18650 battery holder", qty: 1 },
-    { id: "switch-toggle", name: "2-pin toggle switch", qty: 1, image: "img/components/Switch.jpg" },
-    { id: "voltage-booster", name: "5V voltage booster/step-up module", qty: 1, image: "img/components/StepUpConverter_Small.jpeg" },
-    { id: "breadboard", name: "Mini breadboard (400 dots)", qty: 1, image: "img/components/Breadboard.jpg" },
-    { id: "jumper-wires", name: "Stiff jumper wires", qty: 1, image: "img/components/SolidCoreWire.jpg" },
-    { id: "pin-headers", name: "Male pin headers", qty: 20, image: "img/components/PinHeader.jpg" },
-    { id: "led-strip-ws2812b", name: "WS2812B Neopixel RGB LED strip", qty: 6, image: "img/components/Lights_WS2812BStrip.jpg" },
-    { id: "resistor-180k", name: "180 kOhm resistor", qty: 1, image: "img/components/Resistor180k.jpg" },
+    {
+      id: "mcu-d1mini",
+      name: "Wemos D1 Mini microcontroller",
+      qty: 1,
+      image: "images/components/Microcontroller_WemosD1Mini.jpg",
+      links: [
+        { label: "AZ-Delivery", url: "https://www.az-delivery.de/products/d1-mini" },
+        { label: "AliExpress", url: "https://de.aliexpress.com/item/32831353752.html" },
+      ],
+    },
+    {
+      id: "battery-18650",
+      name: "18650 Li-Ion cell",
+      qty: 1,
+      image: "images/components/Battery_18650WithConnector.jpg",
+      links: [{ label: "reichelt", url: "https://www.reichelt.de/industriezelle-18650-3-6-v-2850-mah-ungeschuetzt-1er-pack-sam-18650-29e-s-p278089.html" }],
+    },
+    {
+      id: "battery-holder",
+      name: "18650 battery holder",
+      qty: 1,
+      links: [{ label: "reichelt", url: "https://www.reichelt.de/batteriehalter-fuer-1-18650-zelle-pin-halter-ha-1x18650-p141630.html" }],
+    },
+    { id: "switch-toggle", name: "2-pin toggle switch", qty: 1, image: "images/components/Switch.jpg" },
+    {
+      id: "voltage-booster",
+      name: "5V voltage booster/step-up module",
+      qty: 1,
+      image: "images/components/StepUpConverter_Small.jpeg",
+      links: [{ label: "Amazon", url: "https://www.amazon.de/DollaTek-multifunktionales-DC-Lithium-Batterie-Boost-Modul-Step-Up-Board-Wandler-Spannungsregler/dp/B08HQQ32M2" }],
+    },
+    {
+      id: "breadboard",
+      name: "Mini breadboard (400 dots)",
+      qty: 1,
+      image: "images/components/Breadboard.jpg",
+      links: [{ label: "AZ-Delivery", url: "https://www.az-delivery.de/products/mini-breadboard" }],
+    },
+    {
+      id: "jumper-wires",
+      name: "Stiff jumper wires",
+      qty: 1,
+      image: "images/components/SolidCoreWire.jpg",
+      links: [{ label: "reichelt", url: "https://www.reichelt.de/steckbruecken-drahtbruecken-set-140-teilig-steckboard-dbs-p79056.html" }],
+    },
+    { id: "pin-headers", name: "Male pin headers", qty: 20, image: "images/components/PinHeader.jpg" },
+    {
+      id: "led-strip-ws2812b",
+      name: "WS2812B Neopixel RGB LED strip",
+      qty: 6,
+      image: "images/components/Lights_WS2812BStrip.jpg",
+      links: [{ label: "reichelt", url: "https://www.reichelt.de/entwicklerboards-flora-rgb-smart-neopixel-4er-pack-ws2811-debo-np-f-rgb-p235471.html" }],
+    },
+    {
+      id: "resistor-180k",
+      name: "180 kOhm resistor",
+      qty: 1,
+      image: "images/components/Resistor180k.jpg",
+      links: [{ label: "reichelt", url: "https://www.reichelt.de/widerstand-metalloxyd-180-kohm-0207-1-0-w-5--1w-180k-p1791.html" }],
+    },
   ],
   commonHardwareParts: [
     { id: "ziptie", name: "Ziptie, 200mm x 4.3mm", qty: 6 },
-    { id: "lunchbox-container", name: "Mini lunch box / plastic container", qty: 1 },
+    {
+      id: "lunchbox-container",
+      name: "Mini lunch box / plastic container",
+      qty: 1,
+      note: "Minimum internal dimensions: 85mm x 56mm x 40mm - the electronics enclosure needs to fit inside.",
+    },
   ],
 };
