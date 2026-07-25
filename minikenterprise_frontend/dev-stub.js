@@ -82,7 +82,14 @@ function driftPercentage(value, step) {
     return Math.min(100, Math.max(0, next));
 }
 
-const simulated = { battery: 80, network: 90 };
+function driftValue(value, min, max, step) {
+    const next = value + (Math.random() * 2 - 1) * step;
+    return Math.min(max, Math.max(min, next));
+}
+
+// batteryVoltageMv drifts within a plausible single-cell Li-Ion range (matches
+// MiniKenterpriseCode/Battery.h's lookup table: 2500mV empty - 4200mV full).
+const simulated = { battery: 80, network: 90, batteryVoltageMv: 3900 };
 
 function logIncoming(raw) {
     const command = parser.decodeCommand(raw);
@@ -114,11 +121,12 @@ controlServer.on("connection", socket => {
 setInterval(() => {
     simulated.battery = driftPercentage(simulated.battery, 2);
     simulated.network = driftPercentage(simulated.network, 5);
+    simulated.batteryVoltageMv = driftValue(simulated.batteryVoltageMv, 2500, 4200, 60);
 
     const status = parser.generateEmptyCommand();
     status.id = Communication_Commands.Status;
-    status.parameterCount = 2;
-    status.parameters.push(Math.round(simulated.battery), Math.round(simulated.network));
+    status.parameterCount = 3;
+    status.parameters.push(Math.round(simulated.battery), Math.round(simulated.network), Math.round(simulated.batteryVoltageMv));
     const encoded = parser.encodeCommand(status);
 
     for (const socket of controlServer.clients) {

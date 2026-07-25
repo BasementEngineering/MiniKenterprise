@@ -18,7 +18,10 @@
         <div id ="CenterGridContainer">
           <div id ="StatusPanel">
             <div id="BatteryPanel">
-              <span id="BatterySymbol" class="iconify" data-icon="bi:battery-full" style="font-size: 4rem; color: rgb(24, 167, 19);"></span>
+              <div class="batteryIconWrapper">
+                <span id="BatterySymbol" class="iconify" data-icon="bi:battery-full" style="font-size: 4rem; color: rgb(24, 167, 19);"></span>
+                <span id="BatteryVoltage" class="batteryVoltageOverlay"></span>
+              </div>
             </div>
             <div id="NetworkPanel">
               <span id="NetworkSymbol" class="iconify" data-icon="bi:wifi" style="font-size: 4rem; color: rgb(105, 237, 100);"></span>

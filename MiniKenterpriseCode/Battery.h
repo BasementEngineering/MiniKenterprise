@@ -98,11 +98,15 @@ int Battery_getPercentage(){
   int voltageMv = toVoltage(avgReading);
   #ifdef DEBUG_BATTERY
   Serial.println("Battery:");
-  Serial.print("avgReading: ");Serial.println(avgReading); 
-  Serial.print("voltageMv: ");Serial.println(voltageMv); 
-  Serial.print("percentage: ");Serial.println(toPercentage(voltageMv)); 
+  Serial.print("avgReading: ");Serial.println(avgReading);
+  Serial.print("voltageMv: ");Serial.println(voltageMv);
+  Serial.print("percentage: ");Serial.println(toPercentage(voltageMv));
   #endif
   return toPercentage(voltageMv);
+}
+
+int Battery_getVoltageMv(){
+  return toVoltage(getReadingAvg());
 }
 
 bool Battery_isCritical(){

@@ -69,6 +69,13 @@ function onStatusUpdate(command){
     var networkPercentage = parseInt(command.parameters[1]);
     percentageToIcon(batteryPercentage,"Battery");
     percentageToIcon(networkPercentage,"Network");
+
+    // Older firmware only sends 2 status parameters (no voltage) - guard so this
+    // doesn't break against a board that hasn't been reflashed with this change yet.
+    if(command.parameters.length > 2){
+        var voltageV = (parseInt(command.parameters[2]) / 1000).toFixed(1);
+        document.getElementById("BatteryVoltage").textContent = voltageV + "V";
+    }
 }
 
 /*function updateControls(){
