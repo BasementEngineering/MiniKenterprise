@@ -67,7 +67,7 @@ def file_to_progmem_array_string(file_path: str, filename: str, artifact_name: s
         arduino_string += f"const uint16_t {artifact_name}_length = {array_length};\n"
         arduino_string += f"const char {artifact_name}[] PROGMEM = {{ \n{encoded_content} }};\n"
 
-    return arduino_string
+    return arduino_string, array_length
 
 
 ### Functional Encoding ###
@@ -138,17 +138,25 @@ def create_functions_file(dist_folder_path):
 
 def create_content_file(dist_folder_path):
     content = ""
+    total_bytes = 0
+    file_count = 0
 
     # Index
     filename = 'index.html'
     file_path = os.path.join(dist_folder_path, filename)
-    content += file_to_progmem_array_string(file_path, filename)
+    file_content, array_length = file_to_progmem_array_string(file_path, filename)
+    content += file_content
+    total_bytes += array_length
+    file_count += 1
 
     # Settings
     folder_name = 'settings'
     filename = 'index.html'
     file_path = os.path.join(dist_folder_path, folder_name, filename)
-    content += file_to_progmem_array_string(file_path, filename, 'settings_index')
+    file_content, array_length = file_to_progmem_array_string(file_path, filename, 'settings_index')
+    content += file_content
+    total_bytes += array_length
+    file_count += 1
 
     # Assets
     folder_name = 'assets'
@@ -157,7 +165,10 @@ def create_content_file(dist_folder_path):
 
     for filename in asset_filenames:
         file_path = os.path.join(assets_path, filename)
-        content += file_to_progmem_array_string(file_path, filename)
+        file_content, array_length = file_to_progmem_array_string(file_path, filename)
+        content += file_content
+        total_bytes += array_length
+        file_count += 1
 
     file_path = os.path.join(dist_folder_path, 'website_content.h')
     file_definition = "WEBSITE_CONTENT_H"
@@ -171,6 +182,8 @@ def create_content_file(dist_folder_path):
         file.write(content)
         file.write("\n")
         file.write("#endif\n")
+
+    print(f"Total embedded size: {total_bytes} bytes across {file_count} files")
 
 
 ### HELPER FUNCTIONS ###
