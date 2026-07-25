@@ -110,6 +110,16 @@ export class Joystick{
         this.drawBackground();
         this.reset();
     }
+
+    // Call after the canvas element's width/height attributes have been changed externally
+    // (e.g. on window resize/orientation change) - resizing a canvas clears its contents and
+    // this instance's cached sidelenght would otherwise go stale, misaligning all the
+    // position math in calculatePercentage()/drawThumb() with the new actual size.
+    resize(){
+        this.sidelenght = document.getElementById(this.name).width;
+        this.drawBackground();
+        this.reset();
+    }
   
     setStickyness(newStickyness){
         this.sticky = newStickyness;

@@ -10,6 +10,12 @@ export function initUi(sendLedDataCallback,globalContext){
   setupJoysticks();
 
   setMode(1);
+
+  // Neither event alone is fully reliable: 'resize' doesn't fire on every iOS rotation in a
+  // timely way, and immediately after 'orientationchange' iOS can briefly report stale
+  // window.innerWidth/innerHeight values (settling a moment later) - the short delay covers that.
+  window.addEventListener('resize', scaleItems);
+  window.addEventListener('orientationchange', () => setTimeout(scaleItems, 100));
 }
 
 export function resetControls(){
@@ -23,6 +29,15 @@ function scaleItems(){
   var joystickWidth = width * 0.22;
   setJoystickSize("LeftJoystick",joystickWidth);
   setJoystickSize("RightJoystick",joystickWidth);
+
+  // On the very first call (from initUi, before setupJoysticks has run) these don't exist yet -
+  // setJoystickSize above already sized the canvases correctly for that initial render.
+  if(globalContext.leftJoystick){
+    globalContext.leftJoystick.resize();
+  }
+  if(globalContext.rightJoystick){
+    globalContext.rightJoystick.resize();
+  }
 }
 
 function setJoystickSize(name,size){
