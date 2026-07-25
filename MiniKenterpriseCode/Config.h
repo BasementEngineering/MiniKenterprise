@@ -54,11 +54,11 @@
 // don't assign GPIO2 to anything else above.
 #define DEFAULT_LED_COUNT 8
 
-// The DRV8833 thermally shuts off after ~45s at full throttle (as little as 10s if already
-// warm) - regular driving is capped at a percentage of max PWM, with a timed "boost" button
-// temporarily lifting the cap. Defaults: normal driving at 75% of max, boost at 100% (actual max).
-#define DEFAULT_REGULAR_PWM_LIMIT_PERCENT 75
-#define DEFAULT_BOOST_PWM_LIMIT_PERCENT 100
+// Fallback PWM limits used when voltageBasedPwmLimitEnabled is turned off in Settings (see
+// PropulsionSystem::getCurrentPwmLimitBand()) - matches the previous static defaults from
+// before voltage-based limiting existed.
+#define DEFAULT_MANUAL_REGULAR_PWM_LIMIT_PERCENT 75
+#define DEFAULT_MANUAL_BOOST_PWM_LIMIT_PERCENT 100
 
 //Motor Settings (not runtime-configurable - tune per hardware and reflash)
 #define MIN_PWM_L 30
@@ -66,8 +66,31 @@
 #define MAX_PWM_L 255
 #define MAX_PWM_R 255
 
+// The DRV8833 thermally shuts off after ~45s at full throttle (as little as 10s if already
+// warm) - and field testing showed the real driver is battery voltage: at a fresher/higher
+// voltage the same PWM% delivers more current and heats it much faster (boosting 50%->75% at
+// 4.1V overheated within 1s). So the PWM ceiling is looked up from the battery's last known
+// no-load (rested) voltage - not the live/loaded reading, which sags under motor current and
+// doesn't reflect true state of charge - via PropulsionSystem. Bands are ordered highest-
+// voltage-first; the first one whose minNoLoadVoltageMv is <= the current reading wins.
+struct PwmLimitBand {
+  int minNoLoadVoltageMv;
+  uint8_t regularPercent;
+  uint8_t boostPercent;
+};
+#define PWM_LIMIT_BAND_COUNT 3
+// static: Config.h is included from more than one .cpp translation unit (the .ino and
+// PropulsionSystem.cpp) - without internal linkage this array would be multiply defined at
+// link time. Everything else in this file is a preprocessor macro, so this didn't matter until
+// now, this is the first actual variable definition living in this header.
+static PwmLimitBand pwmLimitBands[PWM_LIMIT_BAND_COUNT] = {
+  { 4000, 50, 60 },  // 4.0-4.2V (fresh battery) - lowest ceiling, hottest per-% behavior
+  { 3700, 55, 75 },  // 3.7-4.0V
+  {    0, 75, 100 }, // below 3.7V
+};
+
 // Boost window and mandatory cooldown before it can be used again (see PropulsionSystem).
-#define BOOST_DURATION_MS 10000
+#define BOOST_DURATION_MS 5000
 #define BOOST_COOLDOWN_MS 30000
 
 #define TRIM 0.0F

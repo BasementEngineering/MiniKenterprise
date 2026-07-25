@@ -2,6 +2,7 @@
 #define PROPULSIONSYSTEM_H
 
 #include "Motor.h"
+#include "Config.h" // PwmLimitBand
 
 enum BoostState{BOOST_READY, BOOST_ACTIVE, BOOST_COOLDOWN};
 
@@ -25,6 +26,11 @@ class PropulsionSystem{
   BoostState getBoostState();
   int getBoostSecondsRemaining();
 
+  // True only when both motors are confirmed to be delivering exactly zero power right now
+  // (post soft-start/stop ramp, not just commanded to stop) - used to gate when a battery
+  // reading is trustworthy as a no-load (rested) voltage sample. See Battery.h.
+  bool isIdle();
+
 
 private:
 
@@ -34,6 +40,10 @@ private:
   // commanded speed against it - otherwise the motors would keep driving at the stale
   // pre-change PWM until the next incoming control packet happens to arrive.
   void applyPwmLimit(uint8_t percent);
+
+  // Looks up the PWM-limit band (regular/boost percentages) matching the battery's current
+  // no-load voltage - see Config.h's pwmLimitBands.
+  PwmLimitBand getCurrentPwmLimitBand();
 
   private:
     Motor leftMotor;

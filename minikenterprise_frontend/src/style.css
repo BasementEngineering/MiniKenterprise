@@ -191,6 +191,16 @@ select {
   pointer-events: none;
 }
 
+/* Rested (no-load) voltage above the icon, live (loaded) voltage below - the two would
+   otherwise overlap in the icon's center. */
+.batteryVoltageOverlay--top{
+  top: -4px;
+}
+
+.batteryVoltageOverlay--bottom{
+  bottom: -4px;
+}
+
 #NetworkPanel{
   width: 100%;
   display: flex;

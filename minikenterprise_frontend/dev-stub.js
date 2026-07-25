@@ -32,8 +32,9 @@ let settings = {
     motorIn3: "14",
     motorIn4: "16",
     ledCount: "8",
-    regularPwmLimitPercent: "75",
-    boostPwmLimitPercent: "100",
+    voltageBasedPwmLimitEnabled: "1",
+    manualRegularPwmLimitPercent: "75",
+    manualBoostPwmLimitPercent: "100",
 };
 
 function readBody(request) {
@@ -95,7 +96,7 @@ const simulated = { battery: 80, network: 90, batteryVoltageMv: 3900 };
 // Mirrors PropulsionSystem's boost state machine (MiniKenterpriseCode/Config.h's
 // BOOST_DURATION_MS/BOOST_COOLDOWN_MS) so local dev testing shows the same READY -> ACTIVE ->
 // COOLDOWN -> READY cycle the real firmware would, without real hardware.
-const BOOST_DURATION_MS = 10000;
+const BOOST_DURATION_MS = 5000;
 const BOOST_COOLDOWN_MS = 30000;
 const BoostState = { READY: 0, ACTIVE: 1, COOLDOWN: 2 };
 let boostState = BoostState.READY;
@@ -172,13 +173,16 @@ setInterval(() => {
 
     const status = parser.generateEmptyCommand();
     status.id = Communication_Commands.Status;
-    status.parameterCount = 5;
+    status.parameterCount = 6;
     status.parameters.push(
         Math.round(simulated.battery),
         Math.round(simulated.network),
         Math.round(simulated.batteryVoltageMv),
         boostState,
-        getBoostSecondsRemaining()
+        getBoostSecondsRemaining(),
+        // No real motor-load physics to fake sag with here, so the mock just mirrors the live
+        // voltage as the "no-load" reading too - good enough for exercising the protocol/UI.
+        Math.round(simulated.batteryVoltageMv)
     );
     const encoded = parser.encodeCommand(status);
 

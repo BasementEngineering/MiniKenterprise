@@ -11,21 +11,21 @@
 void handle_index_html() { server.send_P(200, "text/html", index_html,index_html_length);}
 void handle_settings_index() { server.send_P(200, "text/html", settings_index,settings_index_length);}
 void handle_favicon_BrpTr_E7_ico() { server.send_P(200, "text/plain", favicon_BrpTr_E7_ico,favicon_BrpTr_E7_ico_length);}
-void handle_main_BRP3L69s_css() { server.send_P(200, "text/css", main_BRP3L69s_css,main_BRP3L69s_css_length);}
-void handle_main_fWVRbj_G_js() { server.send_P(200, "application/javascript", main_fWVRbj_G_js,main_fWVRbj_G_js_length);}
+void handle_main_C09uSGtF_css() { server.send_P(200, "text/css", main_C09uSGtF_css,main_C09uSGtF_css_length);}
+void handle_main_C_8Pq7y8_js() { server.send_P(200, "application/javascript", main_C_8Pq7y8_js,main_C_8Pq7y8_js_length);}
 void handle_modulepreload_polyfill_B5Qt9EMX_js() { server.send_P(200, "application/javascript", modulepreload_polyfill_B5Qt9EMX_js,modulepreload_polyfill_B5Qt9EMX_js_length);}
+void handle_settings_0tOsLu8G_js() { server.send_P(200, "application/javascript", settings_0tOsLu8G_js,settings_0tOsLu8G_js_length);}
 void handle_settings_BmJ9NouM_css() { server.send_P(200, "text/css", settings_BmJ9NouM_css,settings_BmJ9NouM_css_length);}
-void handle_settings_DzHC8hrd_js() { server.send_P(200, "application/javascript", settings_DzHC8hrd_js,settings_DzHC8hrd_js_length);}
 
 void setupServerFunctions() {
 server.on("/", handle_index_html);
 server.on("/settings/", handle_settings_index);
 server.on("/assets/favicon-BrpTr-E7.ico", handle_favicon_BrpTr_E7_ico);
-server.on("/assets/main-BRP3L69s.css", handle_main_BRP3L69s_css);
-server.on("/assets/main-fWVRbj_G.js", handle_main_fWVRbj_G_js);
+server.on("/assets/main-C09uSGtF.css", handle_main_C09uSGtF_css);
+server.on("/assets/main-C_8Pq7y8.js", handle_main_C_8Pq7y8_js);
 server.on("/assets/modulepreload-polyfill-B5Qt9EMX.js", handle_modulepreload_polyfill_B5Qt9EMX_js);
+server.on("/assets/settings-0tOsLu8G.js", handle_settings_0tOsLu8G_js);
 server.on("/assets/settings-BmJ9NouM.css", handle_settings_BmJ9NouM_css);
-server.on("/assets/settings-DzHC8hrd.js", handle_settings_DzHC8hrd_js);
 }
 
 #endif
