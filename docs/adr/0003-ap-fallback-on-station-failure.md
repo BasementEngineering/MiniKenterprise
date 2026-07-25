@@ -1,0 +1,3 @@
+# Automatic fallback to AP mode when Station-mode connection fails
+
+WiFi mode (AP vs. Station) and credentials are now runtime-editable instead of compile-time constants, which means a builder can enter a wrong password or move out of range of the configured network. Without a recovery path, that would strand a non-technical builder with no way to reach the boat to fix it short of reflashing. We instead have the firmware time out a failed Station-mode connection attempt at boot and automatically fall back to hosting its own AP with the last-known AP credentials, so the device is always reachable to correct its settings.

@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  Editable copy of the ESP8266 pinout diagram from settings/index.html.
+  Self-contained (styles embedded below) so it opens correctly in Inkscape,
+  Illustrator, Affinity, etc. This file is NOT loaded by the app - after
+  editing, copy the shapes back into the <svg class="pinout-diagram"> block
+  in ../index.html, keeping the class="..." attributes (pinout-board,
+  pin-circle, pin-name, pin-gpio, etc.) so ../settings.css keeps styling it.
+-->
+
+<svg
+   viewBox="0 0 400 460"
+   width="400"
+   height="460"
+   version="1.1"
+   id="svg39"
+   sodipodi:docname="pinout.svg"
+   inkscape:version="1.4.4 (dcaf3e7, 2026-05-05)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs39" />
+  <sodipodi:namedview
+     id="namedview39"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.7543478"
+     inkscape:cx="-70.111524"
+     inkscape:cy="235.13011"
+     inkscape:window-width="2560"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg39" />
+  <title
+     id="title1">ESP8266 (Wemos D1 Mini) pin reference</title>
+  <style
+     id="style1"><![CDATA[
+        .board-pcb { fill: rgb(15, 92, 140); stroke: rgb(8, 58, 88); stroke-width: 2; }
+        .antenna-housing { fill: rgb(28, 28, 28); }
+        .antenna-trace { fill: none; stroke: rgb(201, 146, 42); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+        .wifi-module { fill: rgb(58, 42, 32); stroke: rgb(20, 14, 10); stroke-width: 1.5; }
+        .wifi-module-text { fill: white; font-size: 11px; font-weight: bold; font-family: Verdana, Geneva, Tahoma, sans-serif; }
+        .wifi-module-subtext { fill: rgb(201, 146, 42); font-size: 9px; font-style: italic; font-family: Verdana, Geneva, Tahoma, sans-serif; }
+        .reset-button { fill: rgb(192, 57, 43); stroke: rgb(123, 36, 28); stroke-width: 1.5; }
+        .usb-port { fill: rgb(176, 176, 176); stroke: rgb(119, 119, 119); stroke-width: 1; }
+        .board-silk { fill: rgba(255, 255, 255, 0.85); font-size: 8px; letter-spacing: 0.5px; font-family: Verdana, Geneva, Tahoma, sans-serif; }
+        .board-name { fill: rgba(255, 255, 255, 0.85); font-size: 12px; font-style: italic; font-family: Georgia, "Times New Roman", serif; }
+        .pin-circle { fill: rgb(224, 224, 224); stroke: rgb(119, 119, 119); stroke-width: 1.5; }
+        .pin-name { fill: white; font-size: 13px; font-weight: bold; font-family: Verdana, Geneva, Tahoma, sans-serif; }
+        .pin-gpio { fill: black; font-size: 11px; font-style: italic; font-family: Verdana, Geneva, Tahoma, sans-serif; }
+        .pin-assignment { fill: rgb(34, 139, 34); font-weight: bold; font-style: normal; }
+        .pinout-row--reserved .pin-circle { fill: rgb(255, 99, 71); }
+        .pinout-row--reserved .pin-name, .pinout-row--reserved .pin-gpio { fill: rgb(255, 99, 71); font-weight: bold; font-style: normal; }
+        .pinout-reserved-note { fill: rgb(255, 99, 71); font-size: 11px; }
+    ]]></style>
+  <!-- Board -->
+  <rect
+     x="92.053444"
+     y="30.814299"
+     width="217.03313"
+     height="379.51144"
+     rx="24.803785"
+     class="board-pcb"
+     id="rect1" />
+  <!-- Antenna trace -->
+  <rect
+     x="144.34944"
+     y="29.370508"
+     width="113.01115"
+     height="48.520447"
+     rx="7.5340767"
+     class="antenna-housing"
+     id="rect2"
+     style="stroke-width:1.80662" />
+  <path
+     d="M 156.03416,68.77625 178.58461,36.775065 201.13506,68.77625 223.68551,36.775065 246.23597,68.77625"
+     class="antenna-trace"
+     id="path2" />
+  <!-- ESP8266 module can -->
+  <rect
+     x="143.18369"
+     y="77.054817"
+     width="116.48268"
+     height="158.30423"
+     rx="8.7362013"
+     class="wifi-module"
+     id="rect3"
+     style="fill:#e1d3c8;fill-opacity:1" />
+  <text
+     x="201.71004"
+     y="156.48203"
+     text-anchor="middle"
+     class="wifi-module-text"
+     id="text3">ESP8266</text>
+  <text
+     x="201.71004"
+     y="195.99257"
+     text-anchor="middle"
+     class="wifi-module-subtext"
+     id="text4">WiFi</text>
+  <!-- Reset button + USB port + board name -->
+  <circle
+     cx="96.288727"
+     cy="385.41016"
+     r="9"
+     class="reset-button"
+     id="circle4" />
+  <text
+     x="124.21934"
+     y="388.45972"
+     text-anchor="middle"
+     class="board-silk"
+     id="text5">RESET</text>
+  <rect
+     x="178.77715"
+     y="369.45749"
+     width="53.784004"
+     height="43.174339"
+     rx="2.6892004"
+     class="usb-port"
+     id="rect5" />
+  <text
+     x="204.34944"
+     y="307.89838"
+     text-anchor="middle"
+     class="board-name"
+     id="text6"><tspan
+       sodipodi:role="line"
+       id="tspan39"
+       x="204.34944"
+       y="307.89838">WEMOS</tspan><tspan
+       sodipodi:role="line"
+       id="tspan40"
+       x="204.34944"
+       y="322.89838">D1 mini</tspan></text>
+  <!-- Left side pins -->
+  <g
+     class="pinout-row"
+     id="g8"
+     transform="translate(13.110285)">
+    <circle
+       cx="80.128876"
+       cy="99.429993"
+       r="5"
+       class="pin-circle"
+       id="circle6" />
+    <text
+       x="116"
+       y="104"
+       text-anchor="end"
+       class="pin-name"
+       id="text7">RST</text>
+    <text
+       x="72"
+       y="104"
+       text-anchor="end"
+       class="pin-gpio"
+       id="text8">(RST)</text>
+  </g>
+  <g
+     class="pinout-row"
+     id="g10">
+    <circle
+       cx="91.84375"
+       cy="135.63152"
+       r="5"
+       class="pin-circle"
+       id="circle8" />
+    <text
+       x="120"
+       y="140"
+       text-anchor="end"
+       class="pin-name"
+       id="text9">A0</text>
+    <text
+       x="84"
+       y="140"
+       text-anchor="end"
+       class="pin-gpio"
+       id="text10">(ADC0)</text>
+  </g>
+  <g
+     class="pinout-row"
+     id="g12">
+    <circle
+       cx="92"
+       cy="171.00764"
+       r="5"
+       class="pin-circle"
+       id="circle10" />
+    <text
+       x="120"
+       y="176"
+       text-anchor="end"
+       class="pin-name"
+       id="text11">D0</text>
+    <text
+       x="84"
+       y="174"
+       text-anchor="end"
+       class="pin-gpio"
+       id="text12">(GPIO16)</text>
+  </g>
+  <g
+     class="pinout-row"
+     id="g14">
+    <circle
+       cx="92"
+       cy="208"
+       r="5"
+       class="pin-circle"
+       id="circle12" />
+    <text
+       x="122"
+       y="212"
+       text-anchor="end"
+       class="pin-name"
+       id="text13">D5</text>
+    <text
+       x="84"
+       y="212"
+       text-anchor="end"
+       class="pin-gpio"
+       id="text14">(GPIO14)</text>
+  </g>
+  <g
+     class="pinout-row"
+     id="g16">
+    <circle
+       cx="92"
+       cy="244"
+       r="5"
+       class="pin-circle"
+       id="circle14" />
+    <text
+       x="122"
+       y="248"
+       text-anchor="end"
+       class="pin-name"
+       id="text15">D6</text>
+    <text
+       x="84"
+       y="248"
+       text-anchor="end"
+       class="pin-gpio"
+       id="text16">(GPIO12)</text>
+  </g>
+  <g
+     class="pinout-row"
+     id="g18">
+    <circle
+       cx="92"
+       cy="280"
+       r="5"
+       class="pin-circle"
+       id="circle16" />
+    <text
+       x="120"
+       y="284"
+       text-anchor="end"
+       class="pin-name"
+       id="text17">D7</text>
+    <text
+       x="82.20153"
+       y="284"
+       text-anchor="end"
+       class="pin-gpio"
+       id="text18">(GPIO13)</text>
+  </g>
+  <g
+     class="pinout-row"
+     id="g20">
+    <circle
+       cx="92"
+       cy="316"
+       r="5"
+       class="pin-circle"
+       id="circle18" />
+    <text
+       x="122"
+       y="320"
+       text-anchor="end"
+       class="pin-name"
+       id="text19">D8</text>
+    <text
+       x="84"
+       y="320"
+       text-anchor="end"
+       class="pin-gpio"
+       id="text20">(GPIO15)</text>
+  </g>
+  <g
+     class="pinout-row"
+     id="g22"
+     transform="translate(12)">
+    <circle
+       cx="79.50515"
+       cy="352"
+       r="5"
+       class="pin-circle"
+       id="circle20" />
+    <text
+       x="118"
+       y="356"
+       text-anchor="end"
+       class="pin-name"
+       id="text21">3V3</text>
+    <text
+       x="72"
+       y="356"
+       text-anchor="end"
+       class="pin-gpio"
+       id="text22">(3.3V Out)</text>
+  </g>
+  <!-- Right side pins -->
+  <g
+     class="pinout-row"
+     id="g24"
+     transform="translate(6)">
+    <circle
+       cx="304"
+       cy="100"
+       r="5"
+       class="pin-circle"
+       id="circle22" />
+    <text
+       x="276"
+       y="104"
+       class="pin-name"
+       id="text23">TX</text>
+    <text
+       x="312"
+       y="104"
+       class="pin-gpio"
+       id="text24">(GPIO1)</text>
+  </g>
+  <g
+     class="pinout-row"
+     id="g26"
+     transform="translate(6)">
+    <circle
+       cx="304"
+       cy="136"
+       r="5"
+       class="pin-circle"
+       id="circle24" />
+    <text
+       x="276"
+       y="140"
+       class="pin-name"
+       id="text25">RX</text>
+    <text
+       x="312"
+       y="140"
+       class="pin-gpio"
+       id="text26">(GPIO3)</text>
+  </g>
+  <g
+     class="pinout-row"
+     id="g28">
+    <circle
+       cx="310"
+       cy="172"
+       r="5"
+       class="pin-circle"
+       id="circle26" />
+    <text
+       x="282"
+       y="176"
+       class="pin-name"
+       id="text27">D1</text>
+    <text
+       x="318"
+       y="176"
+       class="pin-gpio"
+       id="text28">(GPIO5)</text>
+  </g>
+  <g
+     class="pinout-row"
+     id="g30">
+    <circle
+       cx="310"
+       cy="208"
+       r="5"
+       class="pin-circle"
+       id="circle28" />
+    <text
+       x="282"
+       y="212"
+       class="pin-name"
+       id="text29">D2</text>
+    <text
+       x="318"
+       y="212"
+       class="pin-gpio"
+       id="text30">(GPIO4)</text>
+  </g>
+  <g
+     class="pinout-row pinout-row--reserved"
+     id="g32">
+    <circle
+       cx="310"
+       cy="244"
+       r="5"
+       class="pin-circle"
+       id="circle30" />
+    <text
+       x="282"
+       y="248"
+       class="pin-name"
+       id="text31">D3</text>
+    <text
+       x="318"
+       y="248"
+       class="pin-gpio"
+       id="text32">(GPIO0)</text>
+  </g>
+  <g
+     class="pinout-row"
+     id="g34">
+    <circle
+       cx="310"
+       cy="280"
+       r="5"
+       class="pin-circle"
+       id="circle32" />
+    <text
+       x="282"
+       y="284"
+       class="pin-name"
+       id="text33">D4</text>
+    <text
+       x="318"
+       y="284"
+       class="pin-gpio"
+       id="text34">(GPIO2)</text>
+  </g>
+  <g
+     class="pinout-row"
+     id="g36">
+    <circle
+       cx="310"
+       cy="316"
+       r="5"
+       class="pin-circle"
+       id="circle34" />
+    <text
+       x="292"
+       y="320"
+       class="pin-name"
+       id="text35">G</text>
+    <text
+       x="318"
+       y="320"
+       class="pin-gpio"
+       id="text36">(GND)</text>
+  </g>
+  <g
+     class="pinout-row"
+     id="g38">
+    <circle
+       cx="310"
+       cy="352"
+       r="5"
+       class="pin-circle"
+       id="circle36" />
+    <text
+       x="284"
+       y="356"
+       class="pin-name"
+       id="text37">5V</text>
+    <text
+       x="318"
+       y="356"
+       class="pin-gpio"
+       id="text38">(5V In)</text>
+  </g>
+  <text
+     x="200"
+     y="440"
+     text-anchor="middle"
+     class="pinout-reserved-note"
+     id="text39">D3 / GPIO0 is used for flashing - avoid assigning it</text>
+  <ellipse
+     style="fill:#e1d3c8;fill-opacity:1"
+     id="path40"
+     cx="283.6532"
+     cy="100.36185"
+     rx="0.10076491"
+     ry="0.40305963" />
+</svg>

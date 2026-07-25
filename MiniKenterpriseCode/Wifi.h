@@ -2,24 +2,25 @@
 #define WIFI_H
 
 #include "Config.h"
+#include "Settings.h"
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266mDNS.h>
 
 #define DEBUG
 
-const char *ssid = APSSID;
-const char *password = APPSK;
-
-const char *networkSsid = NETWORK_SSID;
-const char *networkPassword = NETWORK_PSK;
-
-const char* dnsName = APSSID;
+// How long a Station-mode connection attempt gets before falling back to AP mode
+#define STATION_CONNECT_TIMEOUT 15000
 
 bool wifiOnline = false;
 unsigned long lastWifiUpdate = 0;
 int nextWaitInterval = 1000;
 int attemptCounter = 0;
+unsigned long stationAttemptStart = 0;
+
+// Reflects the mode actually running right now, which can differ from
+// settings.apMode after a Station-connect-timeout fallback to AP.
+bool apModeActive = true;
 
 IPAddress local_IP(1,2,3,4);
 IPAddress gateway(1,2,3,4);
@@ -57,41 +58,55 @@ void Wifi_setup(){
   #ifdef DEBUG
   Serial.print("Best WiFi Cahnnel: ");Serial.println(myChannel);
   #endif
+  apModeActive = settings.apMode;
 }
 
 void Wifi_start(){
   if( (millis() - lastWifiUpdate) > nextWaitInterval){
     lastWifiUpdate = millis();
+    // wifi_set_sleep_type(NONE_SLEEP_T) fixes websocket disconnects in station mode -
+    // the modem-sleep power saving the ESP8266 SDK defaults to otherwise interferes
+    // with keeping a live connection.
     wifi_set_sleep_type(NONE_SLEEP_T);
-  #ifdef AP_MODE
-    startAp();
-  #else
-    startStation();
-  #endif
-  startMdns();
+    if(settings.apMode){
+      startAp();
+    }
+    else{
+      startStation();
+    }
+  //startMdns();
   }
 }
 
 bool Wifi_connected(){
-  #ifdef AP_MODE
+  if(apModeActive){
     return WiFi.softAPgetStationNum();
-  #else
+  }
+  else{
     return WiFi.isConnected();
-  #endif
+  }
 }
 
 void startStation(){
-  WiFi.disconnect();
   if(attemptCounter == 0){
+    WiFi.disconnect();
     WiFi.mode(WIFI_STA);
-    WiFi.begin(networkSsid, networkPassword);
+    WiFi.begin(settings.staSsid, settings.staPassword);
     attemptCounter++;
+    stationAttemptStart = millis();
   }
-  if(attemptCounter > 0){
-    if(WiFi.waitForConnectResult() == WL_CONNECTED){
-       wifiOnline = true;
-    }
-   }
+
+  if(WiFi.status() == WL_CONNECTED){
+    apModeActive = false;
+    wifiOnline = true;
+    return;
+  }
+
+  if( (millis() - stationAttemptStart) > STATION_CONNECT_TIMEOUT){
+    Serial.println("Station connect timed out, falling back to AP mode");
+    attemptCounter = 0;
+    startAp();
+  }
 }
 
 void startAp(){
@@ -99,22 +114,23 @@ void startAp(){
     WiFi.mode(WIFI_AP);
     Serial.print("Setting soft-AP configuration ... ");
     Serial.println(WiFi.softAPConfig(local_IP, gateway, subnet) ? "Ready" : "Failed!");
-    WiFi.softAP(ssid, password,myChannel,false,MAX_WIFI_CONNECTIONS);
+    WiFi.softAP(settings.apSsid, settings.apPassword, myChannel, false, MAX_WIFI_CONNECTIONS);
     #ifdef DEBUG
       Serial.print("Access Point \"");
-      Serial.print(ssid);
+      Serial.print(settings.apSsid);
       Serial.println("\" started");
       Serial.print("IP address:\t");
       Serial.println(WiFi.softAPIP());
     #endif
+    apModeActive = true;
     wifiOnline = true;
 }
 
 void startMdns(){
-  if (!MDNS.begin(dnsName, WiFi.softAPIP())) {
+  if (!MDNS.begin(settings.apSsid, WiFi.softAPIP())) {
     Serial.println("mDNS setup failed");
   } else {
-    Serial.println("mDNS online at http://"+String(dnsName)+".local");
+    Serial.println("mDNS online at http://"+String(settings.apSsid)+".local");
     MDNS.addService("http", "tcp", 80);
   }
 }

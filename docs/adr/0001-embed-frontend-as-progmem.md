@@ -1,0 +1,3 @@
+# Embed the Control UI as PROGMEM byte arrays instead of a filesystem
+
+The Control UI used to be served from SPIFFS, which required a separate "ESP8266 Sketch Data Upload" step only supported by Arduino IDE 1.x — the main friction point in getting a Mini Kenterprise running. We're instead building the frontend with Vite and baking the output directly into the firmware as `PROGMEM` byte arrays (ported from the Duck project's `encodeInArduino.py`), so flashing the firmware is the only step. The trade-off is a larger firmware binary and an extra build step before compiling, but it removes the filesystem entirely and works with any Arduino toolchain (including IDE 2.x and `arduino-cli`).

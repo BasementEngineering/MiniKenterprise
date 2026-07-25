@@ -1,75 +1,32 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-/*** WiFi Config ***/
-// Set the Mini Kenterprise up in AP Mode to use it standalone without a WiFi network
-#define AP_MODE
+/*** Compile-time defaults ***
+ * These are only used once, to seed Settings (see Settings.h) the first time
+ * the device boots (or after a factory reset). Everything below is
+ * runtime-editable afterwards from the on-device settings page - changing a
+ * value here only changes what a *fresh* device starts out with.
+ */
 
-// Access Point Settings
-#define APSSID "MiniKenterprise"
-#define APPSK  "RowYourBoat"
-#define MAX_WIFI_CONNECTIONS 2
+// Default Access Point credentials (the boat's own network)
+#define DEFAULT_AP_SSID "MiniKenterprise_1"
+#define DEFAULT_AP_PASSWORD "RowYourBoat"
+#define MAX_WIFI_CONNECTIONS 1
 
-//Station Settings
-#define NETWORK_SSID "WiFi_Network"
-#define NETWORK_PSK  "Network_Password*"
-
-
-//Motor Settings
-#define MIN_PWM_L 40
-#define MIN_PWM_R 40
-#define MAX_PWM_L 255
-#define MAX_PWM_R 255
-
-#define TRIM 0.0F
-
-#define DEBUG
-
-//#define RUDDER_STEERING
-
-//#define VERSION1_PINS
-#define VERSION3_PINS
-//#define CUSTOM_PINS
-//#define LEGOBOAT_PINS
-/*** Your Pin Configuration ***/
-/*** Version 1 ***/
-#ifdef VERSION1_PINS
-#define MOTOR_EN 15
-#define MOTOR_IN1 13
-#define MOTOR_IN2 0
-#define MOTOR_IN3 14
-#define MOTOR_IN4 12
-
-#define LED_PIN 2
-#define LED_COUNT 8
-#endif
-
-/*** Version 1 ***/
-#ifdef LEGOBOAT_PINS
-#define MOTOR_EN 12
-#define MOTOR_IN1 15
-#define MOTOR_IN2 13
-#define MOTOR_IN3 16 //Rudder
-
-#define LED_PIN 2
-#define LED_COUNT 1
-#endif
-
-/*** Version 3 ***/
-#ifdef VERSION3_PINS
-#define MOTOR_EN 15 //D8
-#define MOTOR_IN1 13 //D7
-#define MOTOR_IN2 12 //D6
-#define MOTOR_IN3 14 //D5
-#define MOTOR_IN4 16 //D0
-
-#define LED_PIN 2 //D4
-#define LED_COUNT 5
-#endif
+// Default Station credentials - left blank; join a network from the settings page
+#define DEFAULT_STA_SSID ""
+#define DEFAULT_STA_PASSWORD ""
 
 /*! The Pin Markings on the WEMOS D1 Mini Board don't match the GPIO numbers !
  * Do not use GPIO 0 aka. D3 as it is used for flashing programs.
- * 
+ *
+ * GPIO16 aka. D0 lives on the RTC domain instead of the main GPIO controller
+ * (its own registers, used for deep-sleep wake), so it can't be used with
+ * attachInterrupt(). It has supported analogWrite()/PWM since the earliest
+ * ESP8266 Arduino core releases (confirmed back to 2.0.0-rc2) though, so it's
+ * fine to use for motor speed control - the "GPIO16 can't do PWM" claim
+ * floating around online is a myth.
+ *
  * Pinout Table:
  * Wifi Antenna = Top
  * | Left Side        | Right Side    |
@@ -81,8 +38,28 @@
  * | GPIO12   | D6    | D3    | GPIO0 |
  * | GPIO13   | D7    | D4    | GPIO2 |
  * | GPIO15   | D8    | G     | GND   |
- * | 3.3V Out | 3V3   | 5V    | 5V In | 
+ * | 3.3V Out | 3V3   | 5V    | 5V In |
  * USB Port = Bottom
  */
 
- #endif
+// Default pins (previously "VERSION3")
+#define DEFAULT_MOTOR_EN 15 //D8
+#define DEFAULT_MOTOR_IN1 13 //D7
+#define DEFAULT_MOTOR_IN2 12 //D6
+#define DEFAULT_MOTOR_IN3 14 //D5
+#define DEFAULT_MOTOR_IN4 16 //D0
+
+#define DEFAULT_LED_PIN 2
+#define DEFAULT_LED_COUNT 8
+
+//Motor Settings (not runtime-configurable - tune per hardware and reflash)
+#define MIN_PWM_L 30
+#define MIN_PWM_R 30
+#define MAX_PWM_L 255
+#define MAX_PWM_R 255
+
+#define TRIM 0.0F
+
+#define DEBUG
+
+#endif

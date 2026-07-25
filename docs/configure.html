@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Configure your Mini Kenterprise</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="light-page">
+  <main class="configurator">
+    <p class="back-link"><a href="./index.html">&larr; Back</a></p>
+    <h1>Configure your Mini Kenterprise</h1>
+    <p class="note">
+      Pick a workshop setup below to get its BOM and 3D-printable parts - each is a real,
+      previously-built example, but only one is the recommended starting point. Want a
+      different bottle, driver, motor or prop? Use "Customize your setup" to pick each yourself.
+    </p>
+
+    <section class="preset-section">
+      <h2>Workshop setups</h2>
+      <div id="presetPicker" class="preset-options"></div>
+    </section>
+
+    <section class="customize-section">
+      <button type="button" id="toggleCustomize" class="customize-toggle">Customize your setup &#9656;</button>
+      <div id="customizeOptions" class="customize-options" hidden>
+        <p class="note">
+          Options with no printed parts available yet are disabled. Your pick is reflected in the
+          page URL, so you can bookmark or share it.
+        </p>
+
+        <div class="picker-group">
+          <h2>Bottle size</h2>
+          <div id="bottlePicker" class="picker-options"></div>
+        </div>
+
+        <div class="picker-group">
+          <h2>Motor driver</h2>
+          <div id="driverPicker" class="picker-options"></div>
+        </div>
+
+        <div class="picker-group">
+          <h2>Motor</h2>
+          <div id="motorPicker" class="picker-options"></div>
+        </div>
+
+        <div class="picker-group">
+          <h2>Propeller</h2>
+          <div id="propPicker" class="picker-options"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wiring-section">
+      <h2>Wiring notes for your driver</h2>
+      <div id="wiringNotes"></div>
+    </section>
+
+    <section class="stl-section">
+      <h2>3D-printable parts</h2>
+      <ul id="stlDownloads"></ul>
+    </section>
+
+    <section class="bom-section">
+      <h2>Bill of materials</h2>
+      <div id="bomOutput"></div>
+    </section>
+  </main>
+
+  <script type="module" src="./js/configurator.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Build Guide - Mini Kenterprise</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body class="light-page">
+  <main class="build-guide">
+    <p class="back-link"><a href="../index.html">&larr; Back</a></p>
+    <nav class="guide-switcher" aria-label="Build guide version">
+      <a href="./" data-guide="vorarlberg">Vorarlberg (recommended)</a>
+      <a href="./?guide=wilhelmshaven" data-guide="wilhelmshaven">Wilhelmshaven (archived)</a>
+    </nav>
+    <div id="buildGuideContent" class="markdown-body">
+      <p class="note">Loading build guide...</p>
+    </div>
+  </main>
+
+  <script type="module">
+    import { marked } from "https://unpkg.com/marked@12/lib/marked.esm.js";
+
+    // Alternate guides, keyed by the ?guide= query param (same query-string-as-state pattern
+    // configure.html's urlState.js uses). Anything unrecognized falls back to the default.
+    const GUIDES = {
+      wilhelmshaven: "BuildGuide_Wilhelmshaven.md",
+    };
+    const DEFAULT_GUIDE_KEY = "vorarlberg";
+    const DEFAULT_GUIDE_FILE = "BuildGuide.md";
+
+    async function loadGuide() {
+      const container = document.getElementById("buildGuideContent");
+      const key = new URLSearchParams(window.location.search).get("guide");
+      const file = GUIDES[key] ?? DEFAULT_GUIDE_FILE;
+      const activeKey = GUIDES[key] ? key : DEFAULT_GUIDE_KEY;
+
+      document.querySelectorAll(".guide-switcher a").forEach((link) => {
+        link.classList.toggle("active", link.dataset.guide === activeKey);
+      });
+
+      try {
+        const response = await fetch(`./${file}`);
+        if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+        const markdown = await response.text();
+        container.innerHTML = marked.parse(markdown);
+      } catch (err) {
+        container.innerHTML = '<p class="note">Could not load the build guide - try refreshing.</p>';
+        console.warn(`Could not load docs/build/${file}`, err);
+      }
+    }
+
+    loadGuide();
+  </script>
+</body>
+</html>

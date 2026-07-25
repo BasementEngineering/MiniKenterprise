@@ -1,0 +1,409 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 16px 16px 96px;
+  background-color: rgb(255, 204, 0);
+  color: white;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+h1 {
+  color: white;
+  text-align: center;
+}
+
+h2, h3 {
+  color: white;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.back-button {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 4px;
+}
+
+.lang-toggle {
+  background-color: rgb(71, 70, 67);
+  border: 2px solid rgb(179, 178, 175);
+  border-radius: 4px;
+  color: white;
+  padding: 6px 12px;
+  font-weight: bold;
+}
+
+form {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto 30px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+}
+
+input, select {
+  width: 100%;
+  background-color: rgb(71, 70, 67);
+  border: 2px solid rgb(179, 178, 175);
+  border-radius: 4px;
+  color: white;
+  height: 36px;
+  box-sizing: border-box;
+  margin-top: 4px;
+}
+
+input:invalid {
+  border-color: rgb(255, 99, 71);
+  background-color: rgb(90, 58, 55);
+}
+
+.secondary-button {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 10px;
+  background-color: transparent;
+  border: 2px solid rgb(179, 178, 175);
+  border-radius: 4px;
+  color: white;
+  opacity: 0.85;
+  height: auto;
+}
+
+.radio-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.radio-row label {
+  display: inline;
+  margin-top: 0;
+}
+
+.mode-toggle-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: 10px;
+  margin-top: 14px;
+}
+
+.mode-toggle-label {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  text-align: right;
+}
+
+.mode-toggle-row > .mode-toggle-label:last-child {
+  text-align: left;
+}
+
+.mode-switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 26px;
+  margin-top: 0;
+}
+
+.mode-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.mode-switch-track {
+  position: absolute;
+  inset: 0;
+  background-color: rgb(71, 70, 67);
+  border: 2px solid rgb(179, 178, 175);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.mode-switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: white;
+  transition: transform 0.2s ease;
+}
+
+.mode-switch input:checked + .mode-switch-track {
+  background-color: rgb(34, 139, 34);
+}
+
+.mode-switch input:checked + .mode-switch-track .mode-switch-thumb {
+  transform: translateX(20px);
+}
+
+.fallback-note {
+  display: none;
+  font-style: italic;
+  opacity: 0.75;
+  font-size: 0.9em;
+}
+
+.fallback-note.visible {
+  display: inline;
+}
+
+.settings-group {
+  transition: opacity 0.2s ease;
+}
+
+.settings-group--inactive {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.settings-group--inactive input {
+  cursor: not-allowed;
+}
+
+.mode-pictogram {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  margin: 10px auto 0;
+}
+
+.pictogram-device {
+  fill: rgb(224, 224, 224);
+  stroke: rgb(119, 119, 119);
+  stroke-width: 1.5;
+}
+
+.pictogram-device-detail {
+  fill: rgb(119, 119, 119);
+  stroke: rgb(119, 119, 119);
+  stroke-width: 1.5;
+}
+
+.pictogram-wifi-arc {
+  fill: none;
+  stroke: rgb(255, 179, 0);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.pictogram-router-icon {
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+}
+
+.pictogram-direct-line {
+  fill: none;
+  stroke: rgb(34, 139, 34);
+  stroke-width: 2.5;
+  stroke-dasharray: 4 3;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.pictogram-router-line {
+  fill: none;
+  stroke: rgb(34, 139, 34);
+  stroke-width: 2.5;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.mode-pictogram.mode-station .pictogram-router-icon {
+  opacity: 1;
+}
+
+.mode-pictogram.mode-station .pictogram-direct-line {
+  opacity: 0;
+}
+
+.mode-pictogram.mode-station .pictogram-router-line {
+  opacity: 1;
+}
+
+.mode-explanation {
+  font-size: 0.85rem;
+  text-align: center;
+  opacity: 0.9;
+  margin: 8px 0 4px;
+}
+
+.pinout {
+  margin: 16px 0;
+  text-align: center;
+}
+
+.pinout-diagram {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+}
+
+.board-pcb {
+  fill: rgb(15, 92, 140);
+  stroke: rgb(8, 58, 88);
+  stroke-width: 2;
+}
+
+.antenna-housing {
+  fill: rgb(28, 28, 28);
+}
+
+.antenna-trace {
+  fill: none;
+  stroke: rgb(201, 146, 42);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.wifi-module {
+  fill: rgb(58, 42, 32);
+  stroke: rgb(20, 14, 10);
+  stroke-width: 1.5;
+}
+
+.wifi-module-text {
+  fill: white;
+  font-size: 11px;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.wifi-module-subtext {
+  fill: rgb(201, 146, 42);
+  font-size: 9px;
+  font-style: italic;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.reset-button {
+  fill: rgb(192, 57, 43);
+  stroke: rgb(123, 36, 28);
+  stroke-width: 1.5;
+}
+
+.usb-port {
+  fill: rgb(176, 176, 176);
+  stroke: rgb(119, 119, 119);
+  stroke-width: 1;
+}
+
+.board-silk {
+  fill: rgba(255, 255, 255, 0.85);
+  font-size: 8px;
+  letter-spacing: 0.5px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.board-name {
+  fill: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  font-style: italic;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.pin-circle {
+  fill: rgb(224, 224, 224);
+  stroke: rgb(119, 119, 119);
+  stroke-width: 1.5;
+}
+
+.pin-name {
+  fill: white;
+  font-size: 13px;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.pin-gpio {
+  fill: black;
+  font-size: 11px;
+  font-style: italic;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.pin-assignment {
+  fill: rgb(34, 139, 34);
+  font-weight: bold;
+  font-style: normal;
+}
+
+.pinout-row--reserved .pin-circle {
+  fill: rgb(255, 99, 71);
+}
+
+.pinout-row--reserved .pin-name,
+.pinout-row--reserved .pin-gpio {
+  fill: rgb(255, 99, 71);
+  font-weight: bold;
+  font-style: normal;
+}
+
+.pinout-reserved-note {
+  fill: rgb(255, 99, 71);
+  font-size: 11px;
+}
+
+.pinout figcaption {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-top: 6px;
+}
+
+#status-message {
+  font-weight: bold;
+  margin: 0 0 8px;
+  text-align: center;
+}
+
+.save-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  background-color: rgba(0, 0, 0, 0.45);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+}
+
+#save-settings {
+  width: auto;
+  min-width: 200px;
+  height: auto;
+  padding: 14px 32px;
+  font-size: 1.05rem;
+  font-weight: bold;
+  background-color: rgb(34, 139, 34);
+  border: 2px solid rgb(46, 179, 46);
+  border-radius: 8px;
+  color: white;
+}
+
+@media (min-width: 600px) {
+  body {
+    padding-bottom: 110px;
+  }
+}

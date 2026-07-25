@@ -1,4 +1,5 @@
 #include "Config.h"
+#include "Settings.h"
 #include "PropulsionSystem.h"
 #include "RudderPropulsion.h"
 #include "LightBar.h"
@@ -7,12 +8,16 @@
 #include "FrontendServer.h"
 #include "Parser.h"
 
-#ifdef RUDDER_STEERING
-RudderPropulsion propulsionSystem(MOTOR_EN,MOTOR_IN1,MOTOR_IN2,MOTOR_IN3);
-#else
-PropulsionSystem propulsionSystem(MOTOR_EN,MOTOR_IN1,MOTOR_IN2,MOTOR_IN3,MOTOR_IN4);
-#endif
-LightBar lightBar(LED_COUNT, LED_PIN);
+// Constructed in setup(), once Settings_load() has read the pin assignments -
+// global objects can't take these as constructor args since Settings isn't
+// loaded yet when global initializers run.
+//
+// RudderPropulsion (rudder-steered boat variant, from origin/main) is included
+// above but not yet wired in here - it assumes a compile-time pin scheme this
+// firmware doesn't use anymore (pins are runtime-configurable via Settings).
+// Revisit if/when rudder steering becomes a selectable Settings-driven mode.
+PropulsionSystem* propulsionSystem;
+LightBar* lightBar;
 
 enum State{
   STARTING_WIFI,
@@ -28,7 +33,7 @@ void switchState(State newState){
   Serial.println("Switching state ");
   Serial.print(state);Serial.print(" to ");Serial.println(newState);
   if(newState != WORKING){
-    propulsionSystem.stop();
+    propulsionSystem->stop();
   }
   state = newState;
   showStatus(state);
@@ -38,13 +43,17 @@ void setup(){
   Serial.setDebugOutput(true);
   Serial.begin(115200);
   Serial.println("Starting Setup");
-  propulsionSystem.initPins();
+  Settings_load();
+  Serial.println("Motor pins: en=" + String(settings.motorEn) + " in1=" + String(settings.motorIn1) + " in2=" + String(settings.motorIn2) + " in3=" + String(settings.motorIn3) + " in4=" + String(settings.motorIn4));
+  propulsionSystem = new PropulsionSystem(settings.motorEn, settings.motorIn1, settings.motorIn2, settings.motorIn3, settings.motorIn4);
+  lightBar = new LightBar(settings.ledCount, settings.ledPin);
+  propulsionSystem->initPins();
   Battery_init();
-  lightBar.initLeds();
-  lightBar.setMode(SOLID);
-  lightBar.setMainColor(200,50,0);
+  lightBar->initLeds();
+  lightBar->setMode(SOLID);
+  lightBar->setMainColor(200,50,0);
   Wifi_setup();
-  lightBar.setMode(BLINKING);
+  lightBar->setMode(BLINKING);
   //lightBar.update()
 
   Serial.println("Starting Backend");
@@ -84,12 +93,14 @@ void runStateMachine(){
       if(Wifi_connected()){
         Serial.println("Wifi is connected");
         setTimeout(100000);
+        Serial.println("SetTimeout done");
         switchState(WAITING_FOR_FRONTEND);
       }
       if( timoutDone() ){
           Serial.println("Restarting");
           ESP.restart();
       }
+      //Serial.println("Waiting for wifi client doen");
       break;
     case WAITING_FOR_FRONTEND:
       if(Parser_online()){
@@ -117,20 +128,20 @@ void runStateMachine(){
 void showStatus(int stateCode){
   switch(stateCode){
     case STARTING_WIFI:
-      lightBar.setMainColor(0,0,255);
-      lightBar.setMode(BLINKING);
+      lightBar->setMainColor(0,0,255);
+      lightBar->setMode(BLINKING);
       break;
     case WAITING_FOR_WIFI_CLIENT:
-      lightBar.setMainColor(0,0,255);
-      lightBar.setMode(BLINKING);
+      lightBar->setMainColor(0,0,255);
+      lightBar->setMode(BLINKING);
       break;
     case WAITING_FOR_FRONTEND:
-      lightBar.setMainColor(0,200,000);
-      lightBar.setMode(BLINKING);
+      lightBar->setMainColor(0,200,000);
+      lightBar->setMode(BLINKING);
       break;
     case WORKING:
-      lightBar.setMainColor(YELLOW);
-      lightBar.setMode(KNIGHT_RIDER);
+      lightBar->setMainColor(YELLOW);
+      lightBar->setMode(KNIGHT_RIDER);
       break;
     default:
       break;
@@ -166,7 +177,8 @@ bool timoutDone(){
 //Regular Update helpers
 void updateHardware(){
   Battery_update();
-  lightBar.update();
+  lightBar->update();
+  propulsionSystem->update();
   yield();
 }
 
@@ -181,12 +193,12 @@ void motorCallback(Command command){
     case ControlLR:
       leftSpeed = command.parameters[0];
       rightSpeed = command.parameters[1];
-      propulsionSystem.moveLeft(leftSpeed);
-      propulsionSystem.moveRight(rightSpeed);
+      propulsionSystem->moveLeft(leftSpeed);
+      propulsionSystem->moveRight(rightSpeed);
       break;
     case ControlSD:
-      propulsionSystem.setSpeed(command.parameters[0]);
-      propulsionSystem.setDirection(-command.parameters[1]);
+      propulsionSystem->setSpeed(command.parameters[0]);
+      propulsionSystem->setDirection(command.parameters[1]);
       break;
     default: 
     //Serial.println("in switch");
@@ -197,8 +209,8 @@ void motorCallback(Command command){
 void ledCallback(Command command){
   //Serial.println("LED Callback");
   if(command.parameterCount == 4){
-    lightBar.setMode(command.parameters[0]);
-    lightBar.setMainColor(command.parameters[1],command.parameters[2],command.parameters[3]);
+    lightBar->setMode(command.parameters[0]);
+    lightBar->setMainColor(command.parameters[1],command.parameters[2],command.parameters[3]);
   }
 }
 

@@ -89,8 +89,8 @@ int toPercentage(int voltageMv){
         return batteryLookUpTable[i].percentage;
       }
     }
+    return 0;
   }
-  return 0;
 }
 
 int Battery_getPercentage(){

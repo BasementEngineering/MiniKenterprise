@@ -1,0 +1,51 @@
+<!--
+  Editable copy of the AP/Station mode pictogram from settings/index.html.
+  Self-contained (styles embedded below) so it opens correctly in Inkscape,
+  Illustrator, Affinity, etc.
+
+  This one is NOT a simple copy-paste-back: in the live page, settings.js
+  toggles a "mode-station" class on the <svg id="mode-pictogram"> root to
+  switch between the two states (see .mode-station rules below - add that
+  class to the root element yourself to preview the Station-mode look).
+  Most GUI editors flatten classes into inline style="" attributes on save,
+  which would silently break that JS toggle. After editing, hand the result
+  back rather than pasting it straight into index.html, so the class names
+  (pictogram-router-icon, pictogram-direct-line, pictogram-router-line) and
+  the id="mode-pictogram" can be re-wired correctly.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" id="mode-pictogram" viewBox="0 0 240 70" width="240" height="70">
+    <title>How the phone and boat connect</title>
+    <style><![CDATA[
+        .pictogram-device { fill: rgb(224, 224, 224); stroke: rgb(119, 119, 119); stroke-width: 1.5; }
+        .pictogram-device-detail { fill: rgb(119, 119, 119); stroke: rgb(119, 119, 119); stroke-width: 1.5; }
+        .pictogram-wifi-arc { fill: none; stroke: rgb(255, 179, 0); stroke-width: 2; stroke-linecap: round; }
+        .pictogram-router-icon { opacity: 0.3; }
+        .pictogram-direct-line { fill: none; stroke: rgb(34, 139, 34); stroke-width: 2.5; stroke-dasharray: 4 3; opacity: 1; }
+        .pictogram-router-line { fill: none; stroke: rgb(34, 139, 34); stroke-width: 2.5; opacity: 0; }
+        /* Add class="mode-station" to the root svg element to preview Station mode */
+        .mode-station .pictogram-router-icon { opacity: 1; }
+        .mode-station .pictogram-direct-line { opacity: 0; }
+        .mode-station .pictogram-router-line { opacity: 1; }
+    ]]></style>
+
+    <!-- phone -->
+    <rect x="13" y="15" width="14" height="26" rx="3" class="pictogram-device"></rect>
+    <circle cx="20" cy="37" r="1.5" class="pictogram-device-detail"></circle>
+
+    <!-- router -->
+    <g class="pictogram-router-icon">
+        <rect x="112" y="26" width="16" height="10" rx="2" class="pictogram-device"></rect>
+        <path d="M114,26 Q120,18 126,26" class="pictogram-wifi-arc"></path>
+        <path d="M110,26 Q120,12 130,26" class="pictogram-wifi-arc"></path>
+    </g>
+
+    <!-- boat -->
+    <path d="M195,50 Q210,58 225,50 L221,44 L199,44 Z" class="pictogram-device"></path>
+    <line x1="210" y1="44" x2="210" y2="28" class="pictogram-device-detail"></line>
+    <path d="M210,28 L218,32 L210,36 Z" class="pictogram-device"></path>
+
+    <!-- connections -->
+    <path d="M27,37 Q120,58 196,47" class="pictogram-direct-line"></path>
+    <path d="M27,37 L112,31" class="pictogram-router-line"></path>
+    <path d="M128,31 L196,47" class="pictogram-router-line"></path>
+</svg>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flash your Mini Kenterprise</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="light-page">
+  <main>
+    <p class="back-link"><a href="./index.html">&larr; Back</a></p>
+    <h1>Flash your Mini Kenterprise</h1>
+    <img src="./images/gallery/Wilhelmshaven_Variant_2022.jpg" alt="A Mini Kenterprise RC boat" class="hero">
+
+    <ol class="steps">
+      <li>Plug your Mini Kenterprise into this computer via USB.</li>
+      <li>Use Google Chrome or Microsoft Edge (Web Serial is required - Firefox and Safari won't work).</li>
+      <li>Click the button below and pick the right serial port.</li>
+    </ol>
+
+    <div id="buttonContainer"></div>
+
+    <p class="note">
+      This installs the latest firmware straight from your browser - no Arduino IDE required.
+      Once it's done, connect to the boat's own WiFi network (default name
+      <code>MiniKenterprise_1</code>) and open <a href="http://1.2.3.4">http://1.2.3.4</a> to drive it
+      and change settings (WiFi credentials, pins) later on.
+    </p>
+  </main>
+
+  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js"></script>
+  <script type="module">
+    const button = document.createElement('esp-web-install-button');
+    button.setAttribute('manifest', './firmware/manifest.json');
+    document.getElementById('buttonContainer').appendChild(button);
+  </script>
+</body>
+</html>

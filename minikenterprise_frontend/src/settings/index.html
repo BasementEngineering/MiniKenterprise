@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Settings</title>
+    <link rel="stylesheet" href="./settings.css">
+</head>
+
+<body>
+    <div class="top-bar">
+        <a href="/" class="back-button" id="back-button" data-i18n="backButton">&larr; Back</a>
+        <button type="button" id="lang-toggle" class="lang-toggle">DE</button>
+    </div>
+
+    <h1 data-i18n="pageTitle">Settings</h1>
+
+    <form id="settings-form">
+        <h2 data-i18n="wifiHeading">WiFi</h2>
+
+        <input type="hidden" id="apMode" name="apMode" value="1">
+
+        <div class="mode-toggle-row">
+            <span class="mode-toggle-label">
+                <span data-i18n="apModeSwitchLabel">Access Point</span><span id="ap-fallback-note" class="fallback-note" data-i18n="apFallbackNote"> (fallback)</span>
+            </span>
+            <label class="mode-switch">
+                <input type="checkbox" id="ap-mode-toggle">
+                <span class="mode-switch-track"><span class="mode-switch-thumb"></span></span>
+            </label>
+            <span class="mode-toggle-label" data-i18n="staModeSwitchLabel">Station</span>
+        </div>
+
+        <svg id="mode-pictogram" class="mode-pictogram" viewBox="0 0 240 70" role="img" aria-hidden="true">
+            <title>How the phone and boat connect</title>
+
+            <!-- phone -->
+            <rect x="13" y="15" width="14" height="26" rx="3" class="pictogram-device"></rect>
+            <circle cx="20" cy="37" r="1.5" class="pictogram-device-detail"></circle>
+
+            <!-- router -->
+            <g class="pictogram-router-icon">
+                <rect x="112" y="26" width="16" height="10" rx="2" class="pictogram-device"></rect>
+                <path d="M114,26 Q120,18 126,26" class="pictogram-wifi-arc"></path>
+                <path d="M110,26 Q120,12 130,26" class="pictogram-wifi-arc"></path>
+            </g>
+
+            <!-- boat -->
+            <path d="M195,50 Q210,58 225,50 L221,44 L199,44 Z" class="pictogram-device"></path>
+            <line x1="210" y1="44" x2="210" y2="28" class="pictogram-device-detail"></line>
+            <path d="M210,28 L218,32 L210,36 Z" class="pictogram-device"></path>
+
+            <!-- connections -->
+            <path d="M27,37 Q120,58 196,47" class="pictogram-direct-line"></path>
+            <path d="M27,37 L112,31" class="pictogram-router-line"></path>
+            <path d="M128,31 L196,47" class="pictogram-router-line"></path>
+        </svg>
+
+        <p id="mode-explanation" class="mode-explanation" data-i18n="apModeExplanation">Your phone connects straight to the boat's own WiFi network - no router needed. Best when you're away from home, with no WiFi around.</p>
+
+        <h3 data-i18n="apSettingsHeading">Access Point Settings</h3>
+        <label for="apSsid" data-i18n="apSsidLabel">Boat WiFi Name (AP Mode)</label>
+        <input type="text" id="apSsid" name="apSsid" placeholder="ssid" data-i18n-placeholder="ssidPlaceholder">
+
+        <label for="apPassword" data-i18n="apPasswordLabel">Boat WiFi Password (AP Mode)</label>
+        <input type="text" id="apPassword" name="apPassword" placeholder="password" data-i18n-placeholder="passwordPlaceholder">
+
+        <div id="station-fields" class="settings-group settings-group--inactive">
+            <h3 data-i18n="staSettingsHeading">Station Settings</h3>
+            <label for="staSsid" data-i18n="staSsidLabel">WiFi Network Name (Station Mode)</label>
+            <input type="text" id="staSsid" name="staSsid" placeholder="ssid" data-i18n-placeholder="ssidPlaceholder" disabled>
+
+            <label for="staPassword" data-i18n="staPasswordLabel">WiFi Network Password (Station Mode)</label>
+            <input type="text" id="staPassword" name="staPassword" placeholder="password" data-i18n-placeholder="passwordPlaceholder" disabled>
+        </div>
+
+        <h2 data-i18n="pinsHeading">Pins</h2>
+
+        <figure class="pinout">
+            <svg class="pinout-diagram" viewBox="0 0 400 460" role="img" aria-labelledby="pinout-title">
+                <title id="pinout-title">ESP8266 (Wemos D1 Mini) pin reference</title>
+
+                <!-- Board -->
+                <rect x="92.05" y="30.81" width="217.03" height="379.51" rx="24.8" class="board-pcb"></rect>
+
+                <!-- Antenna trace -->
+                <rect x="144.35" y="29.37" width="113.01" height="48.52" rx="7.53" class="antenna-housing"></rect>
+                <path d="M156.03,68.78 178.58,36.78 201.14,68.78 223.69,36.78 246.24,68.78" class="antenna-trace"></path>
+
+                <!-- ESP8266 module can -->
+                <rect x="143.18" y="77.05" width="116.48" height="158.3" rx="8.74" class="wifi-module" style="fill:#e1d3c8"></rect>
+                <text x="201.71" y="156.48" text-anchor="middle" class="wifi-module-text">ESP8266</text>
+                <text x="201.71" y="195.99" text-anchor="middle" class="wifi-module-subtext">WiFi</text>
+
+                <!-- Reset button + USB port + board name -->
+                <circle cx="96.29" cy="385.41" r="9" class="reset-button"></circle>
+                <text x="124.22" y="388.46" text-anchor="middle" class="board-silk">RESET</text>
+                <rect x="178.78" y="369.46" width="53.78" height="43.17" rx="2.69" class="usb-port"></rect>
+                <text x="204.35" y="307.9" text-anchor="middle" class="board-name"><tspan x="204.35" y="307.9">WEMOS</tspan><tspan x="204.35" y="322.9">D1 mini</tspan></text>
+
+                <!-- Left side pins -->
+                <g class="pinout-row"><circle cx="93.24" cy="99.43" r="5" class="pin-circle"></circle><text x="129.11" y="104" text-anchor="end" class="pin-name">RST</text><text x="85.11" y="104" text-anchor="end" class="pin-gpio">(RST)</text></g>
+                <g class="pinout-row"><circle cx="91.84" cy="135.63" r="5" class="pin-circle"></circle><text x="120" y="140" text-anchor="end" class="pin-name">A0</text><text x="84" y="140" text-anchor="end" class="pin-gpio">(ADC0)</text></g>
+                <g class="pinout-row" data-gpio="16"><circle cx="92" cy="171.01" r="5" class="pin-circle"></circle><text x="120" y="176" text-anchor="end" class="pin-name">D0</text><text x="84" y="174" text-anchor="end" class="pin-gpio">(GPIO16)</text></g>
+                <g class="pinout-row" data-gpio="14"><circle cx="92" cy="208" r="5" class="pin-circle"></circle><text x="122" y="212" text-anchor="end" class="pin-name">D5</text><text x="84" y="212" text-anchor="end" class="pin-gpio">(GPIO14)</text></g>
+                <g class="pinout-row" data-gpio="12"><circle cx="92" cy="244" r="5" class="pin-circle"></circle><text x="122" y="248" text-anchor="end" class="pin-name">D6</text><text x="84" y="248" text-anchor="end" class="pin-gpio">(GPIO12)</text></g>
+                <g class="pinout-row" data-gpio="13"><circle cx="92" cy="280" r="5" class="pin-circle"></circle><text x="120" y="284" text-anchor="end" class="pin-name">D7</text><text x="82.2" y="284" text-anchor="end" class="pin-gpio">(GPIO13)</text></g>
+                <g class="pinout-row" data-gpio="15"><circle cx="92" cy="316" r="5" class="pin-circle"></circle><text x="122" y="320" text-anchor="end" class="pin-name">D8</text><text x="84" y="320" text-anchor="end" class="pin-gpio">(GPIO15)</text></g>
+                <g class="pinout-row"><circle cx="91.51" cy="352" r="5" class="pin-circle"></circle><text x="130" y="356" text-anchor="end" class="pin-name">3V3</text><text x="84" y="356" text-anchor="end" class="pin-gpio">(3.3V Out)</text></g>
+
+                <!-- Right side pins -->
+                <g class="pinout-row" data-gpio="1"><circle cx="310" cy="100" r="5" class="pin-circle"></circle><text x="282" y="104" class="pin-name">TX</text><text x="318" y="104" class="pin-gpio">(GPIO1)</text></g>
+                <g class="pinout-row" data-gpio="3"><circle cx="310" cy="136" r="5" class="pin-circle"></circle><text x="282" y="140" class="pin-name">RX</text><text x="318" y="140" class="pin-gpio">(GPIO3)</text></g>
+                <g class="pinout-row" data-gpio="5"><circle cx="310" cy="172" r="5" class="pin-circle"></circle><text x="282" y="176" class="pin-name">D1</text><text x="318" y="176" class="pin-gpio">(GPIO5)</text></g>
+                <g class="pinout-row" data-gpio="4"><circle cx="310" cy="208" r="5" class="pin-circle"></circle><text x="282" y="212" class="pin-name">D2</text><text x="318" y="212" class="pin-gpio">(GPIO4)</text></g>
+                <g class="pinout-row pinout-row--reserved" data-gpio="0"><circle cx="310" cy="244" r="5" class="pin-circle"></circle><text x="282" y="248" class="pin-name">D3</text><text x="318" y="248" class="pin-gpio">(GPIO0)</text></g>
+                <g class="pinout-row" data-gpio="2"><circle cx="310" cy="280" r="5" class="pin-circle"></circle><text x="282" y="284" class="pin-name">D4</text><text x="318" y="284" class="pin-gpio">(GPIO2)</text></g>
+                <g class="pinout-row"><circle cx="310" cy="316" r="5" class="pin-circle"></circle><text x="292" y="320" class="pin-name">G</text><text x="318" y="320" class="pin-gpio">(GND)</text></g>
+                <g class="pinout-row"><circle cx="310" cy="352" r="5" class="pin-circle"></circle><text x="284" y="356" class="pin-name">5V</text><text x="318" y="356" class="pin-gpio">(5V In)</text></g>
+
+                <text x="200" y="440" text-anchor="middle" class="pinout-reserved-note" data-i18n="pinoutReservedNote">D3 / GPIO0 is used for flashing &ndash; avoid assigning it</text>
+            </svg>
+            <figcaption data-i18n="pinoutCaption">D-pin silkscreen label &rarr; GPIO number. Use the GPIO number in the fields below.</figcaption>
+        </figure>
+
+        <label for="motorEn" data-i18n="motorEnLabel">Motor Enable Pin</label>
+        <input type="number" id="motorEn" name="motorEn">
+
+        <label for="motorIn1" data-i18n="motorIn1Label">Motor In1 Pin</label>
+        <input type="number" id="motorIn1" name="motorIn1">
+
+        <label for="motorIn2" data-i18n="motorIn2Label">Motor In2 Pin</label>
+        <input type="number" id="motorIn2" name="motorIn2">
+
+        <label for="motorIn3" data-i18n="motorIn3Label">Motor In3 Pin</label>
+        <input type="number" id="motorIn3" name="motorIn3">
+
+        <label for="motorIn4" data-i18n="motorIn4Label">Motor In4 Pin</label>
+        <input type="number" id="motorIn4" name="motorIn4">
+
+        <label for="ledPin" data-i18n="ledPinLabel">LED Pin</label>
+        <input type="number" id="ledPin" name="ledPin">
+
+        <label for="ledCount" data-i18n="ledCountLabel">LED Count</label>
+        <input type="number" id="ledCount" name="ledCount">
+
+        <button type="button" id="reset-pins-button" class="secondary-button" data-i18n="resetPinsButton">Reset Pins to Defaults</button>
+    </form>
+
+    <div class="save-bar">
+        <p id="status-message"></p>
+        <button type="submit" form="settings-form" id="save-settings" data-i18n="saveButton">Save</button>
+    </div>
+
+    <script type="module" src="./settings.js"></script>
+</body>
+
+</html>
