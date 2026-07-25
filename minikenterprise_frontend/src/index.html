@@ -50,17 +50,21 @@
           </div>
         </div>
         <div class="popupContent" id="popupMenu">
-        <div id="settingsHeader">
-          <h1>Settings</h1>
-        </div>
-        <div id="settingsNavigation">
-        </div>
-        <div id="settingsPage">
-        </div>
-        <form action="/settings/">
-          <input type="submit" value="Go to Settings Page" />
-        </form>
-        <button type="button" id="SettingsBackButton">Back</button>
+          <div id="settingsDialog">
+            <div id="settingsHeader">
+              <h1>Settings</h1>
+            </div>
+            <div id="settingsNavigation">
+            </div>
+            <div id="settingsPage">
+            </div>
+            <div id="settingsFooter">
+              <form action="/settings/" id="advancedSetupForm">
+                <button type="submit" class="settingsFooterButton">Advanced Setup</button>
+              </form>
+              <button type="button" id="SettingsBackButton" class="settingsFooterButton">Close</button>
+            </div>
+          </div>
         </div>
         <div class="popupContent" id="popupError">
           <span class="iconify" data-icon="bi:wifi-off" style="font-size: 4rem;"></span>
