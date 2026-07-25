@@ -10,13 +10,18 @@
 #define DEBUG
 
 // How long a Station-mode connection attempt gets before falling back to AP mode
-#define STATION_CONNECT_TIMEOUT 15000
+#define STATION_CONNECT_TIMEOUT 30000
+
+// How often to leave a fallback AP session and try Station mode again, in case the
+// home network that failed to answer earlier has since come back
+#define STATION_RETRY_INTERVAL 30000
 
 bool wifiOnline = false;
 unsigned long lastWifiUpdate = 0;
 int nextWaitInterval = 1000;
 int attemptCounter = 0;
 unsigned long stationAttemptStart = 0;
+unsigned long lastStationRetryCheck = 0;
 
 // Reflects the mode actually running right now, which can differ from
 // settings.apMode after a Station-connect-timeout fallback to AP.
@@ -33,6 +38,10 @@ void startMdns();
 void Wifi_update();
 bool Wifi_online();
 bool Wifi_connected();
+bool Wifi_hasClient();
+bool Wifi_isApMode();
+bool Wifi_shouldRetryStation();
+void Wifi_resetStationAttempt();
 int Wifi_getQualityPercentage();
 
 //To find a good Wifi Channel
@@ -124,6 +133,36 @@ void startAp(){
     #endif
     apModeActive = true;
     wifiOnline = true;
+    // Restart the retry countdown from here, whether this is the initial fallback or a
+    // failed retry that landed back in AP mode - either way the next retry is a full
+    // STATION_RETRY_INTERVAL away.
+    lastStationRetryCheck = millis();
+}
+
+// Call when (re-)entering the Station-connect attempt, so a fresh WiFi.begin() actually
+// happens instead of immediately hitting a stale stationAttemptStart left over from a
+// previous cycle (which would time out on the very next check without ever retrying).
+void Wifi_resetStationAttempt(){
+  attemptCounter = 0;
+  apModeActive = settings.apMode;
+}
+
+bool Wifi_isApMode(){
+  return apModeActive;
+}
+
+// Whether it's time to leave a fallback AP session and try Station mode again. Only true
+// when the user actually wants Station mode (settings.apMode false) but we're currently
+// running AP as a fallback, and nobody is connected through that AP right now - retrying
+// tears the AP down (WiFi.mode(WIFI_STA) in startStation()), which would disconnect anyone
+// currently controlling the boat through it.
+bool Wifi_shouldRetryStation(){
+  if(settings.apMode) return false;
+  if(!apModeActive) return false;
+  if(Wifi_hasClient()) return false;
+  if( (millis() - lastStationRetryCheck) < STATION_RETRY_INTERVAL) return false;
+  lastStationRetryCheck = millis();
+  return true;
 }
 
 void startMdns(){
