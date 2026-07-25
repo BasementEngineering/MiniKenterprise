@@ -2,6 +2,45 @@ html, body{
   overscroll-behavior: none;
 }
 
+/* Network error / reconnecting popup */
+
+@keyframes networkErrorPulse{
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+#NetworkErrorIcon{
+  display: inline-block;
+  animation: networkErrorPulse 1.4s ease-in-out infinite;
+}
+
+#reconnectStatusText{
+  margin-bottom: 0.5rem;
+}
+
+.reconnectProgressTrack{
+  width: 240px;
+  max-width: 80vw;
+  height: 8px;
+  margin: 0 auto;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.reconnectProgressFill{
+  height: 100%;
+  width: 100%;
+  background-color: rgb(255, 204, 0);
+  transition: width 0.25s linear;
+}
+
+.reconnectEscalationText{
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
 body{
   background-color: rgb(255, 204, 0);
   color:white;
