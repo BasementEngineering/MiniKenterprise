@@ -35,6 +35,11 @@ void switchState(State newState){
   if(newState != WORKING){
     propulsionSystem->stop();
   }
+  if(newState == STARTING_WIFI){
+    // Always start a fresh Station-connect attempt here - covers the initial boot attempt,
+    // losing an established Station connection, and the periodic retry from AP mode below.
+    Wifi_resetStationAttempt();
+  }
   state = newState;
   showStatus(state);
 }
@@ -46,7 +51,7 @@ void setup(){
   Settings_load();
   Serial.println("Motor pins: en=" + String(settings.motorEn) + " in1=" + String(settings.motorIn1) + " in2=" + String(settings.motorIn2) + " in3=" + String(settings.motorIn3) + " in4=" + String(settings.motorIn4));
   propulsionSystem = new PropulsionSystem(settings.motorEn, settings.motorIn1, settings.motorIn2, settings.motorIn3, settings.motorIn4);
-  lightBar = new LightBar(settings.ledCount, settings.ledPin);
+  lightBar = new LightBar(settings.ledCount);
   propulsionSystem->initPins();
   Battery_init();
   lightBar->initLeds();
@@ -67,7 +72,7 @@ void loop(){
   Wifi_update();
   FrontendServer_update();
   Parser_update();
-  
+
   if(Battery_isCritical()){
 
   }
@@ -75,12 +80,66 @@ void loop(){
   if(Parser_online()){
    refreshStatus();
   }
-  
+
   runStateMachine();
+  checkWifiWedge();
+  logDiagnostics();
+}
+
+// --- WiFi/AP wedge watchdog ---
+// Observed in the field: the soft-AP can silently stop broadcasting (it vanishes from a phone's
+// WiFi scan) while the rest of the firmware keeps running normally (state machine, LEDs, main
+// loop all unaffected) - the crash is isolated to the WiFi/RF subsystem. Re-calling
+// WiFi.softAP()/WiFi.begin() from software doesn't reliably clear whatever internal state caused
+// that, so once we've had a working connection and it doesn't come back within a generous grace
+// period, a full restart is the only recovery that's actually reachable for a boat out on the
+// water (nobody's there to power-cycle it by hand).
+#define WIFI_WEDGE_RESTART_TIMEOUT 90000
+bool everHadWifiClient = false;
+unsigned long lastWifiClientTime = 0;
+
+void checkWifiWedge(){
+  if(Wifi_connected()){
+    everHadWifiClient = true;
+    lastWifiClientTime = millis();
+  }
+  else if(everHadWifiClient && (millis() - lastWifiClientTime) > WIFI_WEDGE_RESTART_TIMEOUT){
+    Serial.println("No WiFi client for " + String(WIFI_WEDGE_RESTART_TIMEOUT/1000) + "s after a previous connection - restarting (possible AP/radio hang)");
+    propulsionSystem->stop();
+    ESP.restart();
+  }
+}
+
+// --- Heap diagnostics ---
+// Logged periodically over Serial so a bench/tethered test run can show whether heap
+// fragmentation builds up over a session - a candidate contributor to the same WiFi/AP
+// instability, alongside the NeoPixel interrupt-blackout issue above.
+#define DIAGNOSTICS_LOG_INTERVAL 5000
+unsigned long lastDiagnosticsLog = 0;
+
+void logDiagnostics(){
+  if( (millis() - lastDiagnosticsLog) > DIAGNOSTICS_LOG_INTERVAL){
+    lastDiagnosticsLog = millis();
+    Serial.print("Heap: free=");
+    Serial.print(ESP.getFreeHeap());
+    Serial.print(" maxFreeBlock=");
+    Serial.print(ESP.getMaxFreeBlockSize());
+    Serial.print(" fragmentation=");
+    Serial.print(ESP.getHeapFragmentation());
+    Serial.println("%");
+  }
 }
 
 //STATE MAchines
 void runStateMachine(){
+  // Running AP mode only as a fallback (the user actually wants Station mode) - periodically
+  // check whether the home network is reachable again, as long as nobody is currently
+  // connected/driving through the AP. Skipped while already (re-)attempting Station mode.
+  if(state != STARTING_WIFI && Wifi_shouldRetryStation()){
+    Serial.println("Retrying Station mode after fallback to AP");
+    switchState(STARTING_WIFI);
+  }
+
   switch(state){
     case STARTING_WIFI:
       Wifi_start();
@@ -128,11 +187,16 @@ void runStateMachine(){
 void showStatus(int stateCode){
   switch(stateCode){
     case STARTING_WIFI:
-      lightBar->setMainColor(0,0,255);
-      lightBar->setMode(BLINKING);
-      break;
     case WAITING_FOR_WIFI_CLIENT:
-      lightBar->setMainColor(0,0,255);
+      // Blue = trying to join/connected to the home network (Station mode).
+      // Magenta = broadcasting the boat's own network (AP mode, whether by choice or
+      // fallback) - lets you tell at a glance which network to look for on your phone.
+      if(Wifi_isApMode()){
+        lightBar->setMainColor(200,0,200);
+      }
+      else{
+        lightBar->setMainColor(0,0,255);
+      }
       lightBar->setMode(BLINKING);
       break;
     case WAITING_FOR_FRONTEND:
@@ -200,9 +264,16 @@ void motorCallback(Command command){
       propulsionSystem->setSpeed(command.parameters[0]);
       propulsionSystem->setDirection(command.parameters[1]);
       break;
-    default: 
+    default:
     //Serial.println("in switch");
     break;
+  }
+
+  // Boost-requested flag, appended as a 3rd parameter to the periodic ControlLR/ControlSD
+  // command - guarded by parameterCount so older frontend builds that don't send it are
+  // unaffected. Applies regardless of which command id carried it (both funnel through here).
+  if(command.parameterCount > 2 && command.parameters[2] == 1){
+    propulsionSystem->requestBoost();
   }
 }
 
@@ -220,10 +291,12 @@ void refreshStatus(){
     lastStatusUpdate = millis();
     Command command;
     command.id = Status;
-    command.parameterCount = 3;
+    command.parameterCount = 5;
     command.parameters[0] = Battery_getPercentage();
     command.parameters[1] = Wifi_getQualityPercentage();
     command.parameters[2] = Battery_getVoltageMv();
+    command.parameters[3] = propulsionSystem->getBoostState();
+    command.parameters[4] = propulsionSystem->getBoostSecondsRemaining();
     Parser_sendCommand(command);
   }
 }

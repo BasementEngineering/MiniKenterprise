@@ -8,7 +8,8 @@ const globalContext = {
     rightJoystick: null,
     mode: 1,
     trimValue: 0,
-    batteryVoltage: 3.99
+    batteryVoltage: 3.99,
+    boostRequested: false
 };
 
 export default globalContext;

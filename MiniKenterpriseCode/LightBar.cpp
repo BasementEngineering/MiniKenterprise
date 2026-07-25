@@ -1,17 +1,17 @@
 #include "LightBar.h"
 
-LightBar::LightBar(uint8_t count, uint8_t pin):
-ledStrip(count, pin, NEO_GRB + NEO_KHZ800)
+LightBar::LightBar(uint8_t count):
+ledStrip(count)
 {
   userColor = YELLOW;
 }
 
 void LightBar::initLeds(){
-  ledStrip.begin();
-  ledStrip.show();
-  ledStrip.setBrightness(50);
-  ledStrip.fill(userColor);
-  ledStrip.show();
+  ledStrip.Begin();
+  ledStrip.Show();
+  ledStrip.SetBrightness(50);
+  ledStrip.ClearTo(RgbColor(HtmlColor(userColor)));
+  ledStrip.Show();
 }
 
 void LightBar::update(){
@@ -19,11 +19,11 @@ void LightBar::update(){
     updateRequired = true;
     lastUpdated = millis();
   }
-  
+
   if(updateRequired){
     switch(mode){
       case SOLID:
-        ledStrip.fill(userColor);
+        ledStrip.ClearTo(RgbColor(HtmlColor(userColor)));
         break;
       case KNIGHT_RIDER:
         updateKnightRider();
@@ -34,7 +34,7 @@ void LightBar::update(){
       default: break;
     }
     updateRequired = false;
-    ledStrip.show();
+    ledStrip.Show();
   }
 }
 
@@ -44,10 +44,10 @@ void LightBar::setMainColor(uint32_t color){
 }
 
 void LightBar::setMainColor(uint8_t r,uint8_t g,uint8_t b){
-  userColor = ledStrip.Color(r,g,b);
+  userColor = ((uint32_t)r << 16) | ((uint32_t)g << 8) | b;
   updateRequired = true;
 }
-    
+
 void LightBar::setMode(uint8_t newMode){
   mode = newMode;
   if(mode == SOLID){
@@ -68,25 +68,21 @@ void LightBar::updateKnightRider(){
     currentStep = MAX_STEPS - (effectCounter - MAX_STEPS);
    }
   else{
-    currentStep = effectCounter; 
+    currentStep = effectCounter;
   }
 
-  for(int i = 0; i < ledStrip.numPixels(); i++){
+  for(int i = 0; i < ledStrip.PixelCount(); i++){
           int x = 0;
           if(i > 0){
-            x = ((float)MAX_STEPS/ledStrip.numPixels()) * (float)i;
+            x = ((float)MAX_STEPS/ledStrip.PixelCount()) * (float)i;
           }
-          //Serial.print("currentStep");Serial.print(": ");Serial.println(currentStep);
-          //Serial.print("x");Serial.print(": ");Serial.println(x);
           float value =  (-0.002*((x-currentStep)*(x-currentStep))) + 1.0 ;
-          //Serial.print(i);Serial.print(":");Serial.println(value);
           if(value < 0){
             value = 0;
           }
-          //Serial.print(i);Serial.print(":");Serial.println(value);
-          ledStrip.setPixelColor(i,dimColor(userColor,value));
+          ledStrip.SetPixelColor(i,RgbColor(HtmlColor(dimColor(userColor,value))));
         }
-        
+
    effectCounter++;
 }
 
@@ -96,12 +92,12 @@ void LightBar::updateBlinking(){
   effectCounter %= MAX_STEPS;
 
   if(effectCounter > MAX_STEPS/2){
-    ledStrip.fill(userColor);
+    ledStrip.ClearTo(RgbColor(HtmlColor(userColor)));
   }
   else{
-    ledStrip.fill(0);
+    ledStrip.ClearTo(RgbColor(0,0,0));
   }
-  ledStrip.show();
+  ledStrip.Show();
 
    effectCounter++;
 }
@@ -110,12 +106,5 @@ uint32_t LightBar::dimColor(uint32_t color, float factor){
   uint8_t red = (color>>16)*factor;
   uint8_t green = ((color>>8) & 255) *factor;
   uint8_t blue = ((color>>0) & 255)*factor;
-  /*Serial.println("Factor");
-  Serial.println(factor);
-  Serial.println("Colors");
-  Serial.println(red);
-  Serial.println(green);
-  Serial.println(blue);
-*/
-  return ledStrip.Color(red,green,blue);
+  return ((uint32_t)red << 16) | ((uint32_t)green << 8) | blue;
 }

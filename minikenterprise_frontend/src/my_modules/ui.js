@@ -8,6 +8,7 @@ export function initUi(sendLedDataCallback,globalContext){
   scaleItems();
   my_menu.init(sendLedDataCallback,setMode,globalContext);
   setupJoysticks();
+  setupBoostButton();
 
   setMode(1);
 
@@ -57,6 +58,25 @@ function setupJoysticks(){
   document.getElementById("Mode2Button").addEventListener("click", e => setMode(2) );
   document.getElementById("Mode3Button").addEventListener("click", e => setMode(3) );
   document.getElementById("Mode4Button").addEventListener("click", e => setMode(4) );*/
+}
+
+// Boost is a press-and-hold signal to the firmware (globalContext.boostRequested), which is
+// only meaningful while the firmware's own boost state machine is BOOST_READY - the button's
+// disabled attribute (toggled by updateBoostButton() from the server-authoritative Status
+// message) already blocks presses during an active boost/cooldown, so no local state-guarding
+// is needed here. Mirrors joystick.js's mousedown/touchstart press-tracking pattern.
+function setupBoostButton(){
+  var button = document.getElementById("BoostButton");
+
+  var press = () => { globalContext.boostRequested = true; };
+  var release = () => { globalContext.boostRequested = false; };
+
+  button.addEventListener('mousedown', press);
+  button.addEventListener('mouseup', release);
+  button.addEventListener('mouseleave', release);
+
+  button.addEventListener('touchstart', event => { event.preventDefault(); press(); }, { passive: false });
+  button.addEventListener('touchend', event => { event.preventDefault(); release(); }, { passive: false });
 }
 
   function toggleVisibility(elementId){
@@ -153,6 +173,33 @@ export function updateReconnectStatus(secondsLeft, attemptCount, reconnectInterv
   document.getElementById("reconnectProgressFill").style.width = progressPercent + "%";
 
   document.getElementById("reconnectEscalationText").hidden = !escalate;
+}
+
+// Boost state codes, matching PropulsionSystem.h's BoostState enum on the firmware side.
+var BOOST_READY = 0;
+var BOOST_ACTIVE = 1;
+
+/**
+ * Renders the boost button's ready/active/cooldown state. The firmware is the sole timing
+ * authority (PropulsionSystem's boost state machine) - this just renders whatever state/
+ * secondsRemaining the latest Status message reported, the same pattern as
+ * updateReconnectStatus() above.
+ *
+ * Solid yellow when ready to press, flashing yellow while boost is active, flashing gray
+ * (much slower) during the cooldown that follows.
+ */
+export function updateBoostButton(state, secondsRemaining){
+  var button = document.getElementById("BoostButton");
+  var overlay = document.getElementById("BoostCountdown");
+
+  var isReady = (state === BOOST_READY);
+  var isActive = (state === BOOST_ACTIVE);
+
+  button.disabled = !isReady;
+  button.classList.toggle("boostReady", isReady);
+  button.classList.toggle("boostActive", isActive);
+  button.classList.toggle("boostCooldown", !isReady && !isActive);
+  overlay.textContent = isReady ? "" : (secondsRemaining + "s");
 }
 
 //Settings functions

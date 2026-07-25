@@ -64,7 +64,7 @@ export class CommunicationManager{
 			{
 				command.id = Communication_Commands.ControlLR;
 			}
-			command.parameterCount = 2;
+			command.parameterCount = 3;
 			command.parameters.push(this.leftJoystick.getPercentage());
 
 			//Adding trim to steering
@@ -76,7 +76,8 @@ export class CommunicationManager{
 			else{
 				command.parameters.push(this.rightJoystick.getPercentage());
 			}
-			this.sendCommand(command);	
+			command.parameters.push(globalContext.boostRequested ? 1 : 0);
+			this.sendCommand(command);
 		}
 
 	}

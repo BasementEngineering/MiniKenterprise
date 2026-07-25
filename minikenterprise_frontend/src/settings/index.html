@@ -115,11 +115,11 @@
                 <g class="pinout-row" data-gpio="5"><circle cx="310" cy="172" r="5" class="pin-circle"></circle><text x="282" y="176" class="pin-name">D1</text><text x="318" y="176" class="pin-gpio">(GPIO5)</text></g>
                 <g class="pinout-row" data-gpio="4"><circle cx="310" cy="208" r="5" class="pin-circle"></circle><text x="282" y="212" class="pin-name">D2</text><text x="318" y="212" class="pin-gpio">(GPIO4)</text></g>
                 <g class="pinout-row pinout-row--reserved" data-gpio="0"><circle cx="310" cy="244" r="5" class="pin-circle"></circle><text x="282" y="248" class="pin-name">D3</text><text x="318" y="248" class="pin-gpio">(GPIO0)</text></g>
-                <g class="pinout-row" data-gpio="2"><circle cx="310" cy="280" r="5" class="pin-circle"></circle><text x="282" y="284" class="pin-name">D4</text><text x="318" y="284" class="pin-gpio">(GPIO2)</text></g>
+                <g class="pinout-row pinout-row--reserved" data-gpio="2"><circle cx="310" cy="280" r="5" class="pin-circle"></circle><text x="282" y="284" class="pin-name">D4</text><text x="318" y="284" class="pin-gpio">(GPIO2)</text></g>
                 <g class="pinout-row"><circle cx="310" cy="316" r="5" class="pin-circle"></circle><text x="292" y="320" class="pin-name">G</text><text x="318" y="320" class="pin-gpio">(GND)</text></g>
                 <g class="pinout-row"><circle cx="310" cy="352" r="5" class="pin-circle"></circle><text x="284" y="356" class="pin-name">5V</text><text x="318" y="356" class="pin-gpio">(5V In)</text></g>
 
-                <text x="200" y="440" text-anchor="middle" class="pinout-reserved-note" data-i18n="pinoutReservedNote">D3 / GPIO0 is used for flashing &ndash; avoid assigning it</text>
+                <text x="200" y="440" text-anchor="middle" class="pinout-reserved-note" data-i18n="pinoutReservedNote">D3 / GPIO0 is used for flashing, D4 / GPIO2 drives the LED strip &ndash; avoid assigning either</text>
             </svg>
             <figcaption data-i18n="pinoutCaption">D-pin silkscreen label &rarr; GPIO number. Use the GPIO number in the fields below.</figcaption>
         </figure>
@@ -139,11 +139,14 @@
         <label for="motorIn4" data-i18n="motorIn4Label">Motor In4 Pin</label>
         <input type="number" id="motorIn4" name="motorIn4">
 
-        <label for="ledPin" data-i18n="ledPinLabel">LED Pin</label>
-        <input type="number" id="ledPin" name="ledPin">
-
         <label for="ledCount" data-i18n="ledCountLabel">LED Count</label>
         <input type="number" id="ledCount" name="ledCount">
+
+        <label for="regularPwmLimitPercent" data-i18n="regularPwmLimitPercentLabel">Normal Speed Limit (%)</label>
+        <input type="number" id="regularPwmLimitPercent" name="regularPwmLimitPercent" min="0" max="100">
+
+        <label for="boostPwmLimitPercent" data-i18n="boostPwmLimitPercentLabel">Boost Speed Limit (%)</label>
+        <input type="number" id="boostPwmLimitPercent" name="boostPwmLimitPercent" min="0" max="100">
 
         <button type="button" id="reset-pins-button" class="secondary-button" data-i18n="resetPinsButton">Reset Pins to Defaults</button>
     </form>
