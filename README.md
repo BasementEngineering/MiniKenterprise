@@ -47,7 +47,7 @@ However I prefer powerpoint, as it is much easier to understand for Non-Electron
 ## Hardware Versions So Far
 Every variant shares the same type of brain and the same code and user interface. What differs is the size, the motors and the energy source.
 
-This little guide focusses on my "Version 1". This version was built especcially for a student workshop, with parts that can be purchased from german suppliers.
+This little guide focusses on my "Version 1". This version was built especially for a student workshop, with parts that can be purchased from german suppliers.
 
 Here is a little overview of the other versions in the repository:
 
