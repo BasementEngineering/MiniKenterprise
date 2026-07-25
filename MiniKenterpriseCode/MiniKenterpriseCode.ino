@@ -52,8 +52,11 @@ void setup(){
   Serial.println("Motor pins: en=" + String(settings.motorEn) + " in1=" + String(settings.motorIn1) + " in2=" + String(settings.motorIn2) + " in3=" + String(settings.motorIn3) + " in4=" + String(settings.motorIn4));
   propulsionSystem = new PropulsionSystem(settings.motorEn, settings.motorIn1, settings.motorIn2, settings.motorIn3, settings.motorIn4);
   lightBar = new LightBar(settings.ledCount);
-  propulsionSystem->initPins();
+  // Battery_init() must run before propulsionSystem->initPins() - initPins() does the first
+  // PWM-limit-band lookup (see PropulsionSystem::getCurrentPwmLimitBand()) using the no-load
+  // voltage reading immediately, which Battery_init() is what seeds with a real sample.
   Battery_init();
+  propulsionSystem->initPins();
   lightBar->initLeds();
   lightBar->setMode(SOLID);
   lightBar->setMainColor(200,50,0);
@@ -240,7 +243,7 @@ bool timoutDone(){
 
 //Regular Update helpers
 void updateHardware(){
-  Battery_update();
+  Battery_update(propulsionSystem->isIdle());
   lightBar->update();
   propulsionSystem->update();
   yield();
@@ -291,12 +294,13 @@ void refreshStatus(){
     lastStatusUpdate = millis();
     Command command;
     command.id = Status;
-    command.parameterCount = 5;
+    command.parameterCount = 6;
     command.parameters[0] = Battery_getPercentage();
     command.parameters[1] = Wifi_getQualityPercentage();
     command.parameters[2] = Battery_getVoltageMv();
     command.parameters[3] = propulsionSystem->getBoostState();
     command.parameters[4] = propulsionSystem->getBoostSecondsRemaining();
+    command.parameters[5] = Battery_getNoLoadVoltageMv();
     Parser_sendCommand(command);
   }
 }

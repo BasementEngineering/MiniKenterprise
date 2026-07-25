@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define SETTINGS_MAGIC 0x4B33 // bump when the struct layout below changes
+#define SETTINGS_MAGIC 0x4B35 // bump when the struct layout below changes
 #define SSID_MAX_LEN 32
 #define PASSWORD_MAX_LEN 64
 
@@ -20,8 +20,13 @@ struct Settings {
   uint8_t motorIn3;
   uint8_t motorIn4;
   uint8_t ledCount;
-  uint8_t regularPwmLimitPercent; // % of max PWM for normal driving (DRV8833 overheat protection)
-  uint8_t boostPwmLimitPercent; // % of max PWM during a boost window
+
+  // PWM limiting (DRV8833 overheat protection - see PropulsionSystem::getCurrentPwmLimitBand()).
+  // Default (true) looks the limit up from the battery's no-load voltage via Config.h's
+  // pwmLimitBands - turning this off falls back to the two fixed manual percentages instead.
+  bool voltageBasedPwmLimitEnabled;
+  uint8_t manualRegularPwmLimitPercent;
+  uint8_t manualBoostPwmLimitPercent;
 };
 
 extern Settings settings;

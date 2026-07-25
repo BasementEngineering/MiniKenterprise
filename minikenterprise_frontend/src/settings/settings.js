@@ -11,6 +11,12 @@ const stationFields = document.getElementById("station-fields");
 const staSsidInput = document.getElementById("staSsid");
 const staPasswordInput = document.getElementById("staPassword");
 
+const voltageBasedPwmLimitHidden = document.getElementById("voltageBasedPwmLimitEnabled");
+const pwmLimitToggle = document.getElementById("pwm-limit-toggle");
+const manualPwmFields = document.getElementById("manual-pwm-fields");
+const manualRegularPwmLimitInput = document.getElementById("manualRegularPwmLimitPercent");
+const manualBoostPwmLimitInput = document.getElementById("manualBoostPwmLimitPercent");
+
 // apModeHidden.value is the source of truth ("1" = AP, "0" = Station); the
 // checkbox, pictogram, explanation text and Station fields are all just
 // views onto it. AP settings stay editable in both modes since AP is also
@@ -35,6 +41,24 @@ apModeToggle.addEventListener("change", () => {
 });
 
 updateModeUI();
+
+// voltageBasedPwmLimitHidden.value is the source of truth ("1" = voltage-based/automatic,
+// "0" = manual) - the checkbox and manual fields are just views onto it, same pattern as the
+// AP/Station toggle above.
+function updatePwmLimitUI() {
+    const isManual = voltageBasedPwmLimitHidden.value === "0";
+    pwmLimitToggle.checked = isManual;
+    manualPwmFields.classList.toggle("settings-group--inactive", !isManual);
+    manualRegularPwmLimitInput.disabled = !isManual;
+    manualBoostPwmLimitInput.disabled = !isManual;
+}
+
+pwmLimitToggle.addEventListener("change", () => {
+    voltageBasedPwmLimitHidden.value = pwmLimitToggle.checked ? "0" : "1";
+    updatePwmLimitUI();
+});
+
+updatePwmLimitUI();
 
 // Live pin-assignment tags: annotate the diagram with which setting (Motor
 // Enable/In1-4, LED) currently points at each GPIO, so the diagram stays
@@ -158,6 +182,7 @@ function loadSettings() {
         .then(text => {
             applySettingsToForm(parseSettings(text));
             updateModeUI();
+            updatePwmLimitUI();
             updatePinAssignments();
             validateAllPinFields();
         })

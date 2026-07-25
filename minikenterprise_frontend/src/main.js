@@ -109,6 +109,16 @@ function onStatusUpdate(command){
         var boostSecondsRemaining = parseInt(command.parameters[4]);
         updateBoostButton(boostState, boostSecondsRemaining);
     }
+
+    // Same backward-compat guard for the no-load (rested) battery voltage - the firmware's
+    // PWM-limit-band lookup input (PropulsionSystem::getCurrentPwmLimitBand()). Also drives the
+    // battery icon (percentageToIcon above), since the firmware's percentage is now based on
+    // this reading, not the live/loaded one.
+    if(command.parameters.length > 5){
+        var noLoadVoltageV = (parseInt(command.parameters[5]) / 1000).toFixed(1);
+        globalContext.noLoadBatteryVoltage = parseFloat(noLoadVoltageV);
+        document.getElementById("BatteryNoLoadVoltage").textContent = "R " + noLoadVoltageV + "V";
+    }
 }
 
 /*function updateControls(){

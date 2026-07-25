@@ -9,6 +9,7 @@ const globalContext = {
     mode: 1,
     trimValue: 0,
     batteryVoltage: 3.99,
+    noLoadBatteryVoltage: 4.2,
     boostRequested: false
 };
 
