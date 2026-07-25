@@ -1,3 +1,46 @@
+html, body{
+  overscroll-behavior: none;
+}
+
+/* Network error / reconnecting popup */
+
+@keyframes networkErrorPulse{
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+#NetworkErrorIcon{
+  display: inline-block;
+  animation: networkErrorPulse 1.4s ease-in-out infinite;
+}
+
+#reconnectStatusText{
+  margin-bottom: 0.5rem;
+}
+
+.reconnectProgressTrack{
+  width: 240px;
+  max-width: 80vw;
+  height: 8px;
+  margin: 0 auto;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.reconnectProgressFill{
+  height: 100%;
+  width: 100%;
+  background-color: rgb(255, 204, 0);
+  transition: width 0.25s linear;
+}
+
+.reconnectEscalationText{
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
 body{
   background-color: rgb(255, 204, 0);
   color:white;
@@ -74,6 +117,13 @@ select {
   border-width: 2px;
   border-radius: 30px;
   position: relative;
+  touch-action: none;
+}
+
+/* The joystick canvases are styled inline in index.html (no .joystick/.joystickBackground
+   class applied), so touch-action has to target them directly by ID to actually take effect. */
+#LeftJoystick, #LeftJoystickBase, #RightJoystick, #RightJoystickBase{
+  touch-action: none;
 }
 
 .joystickBackground{
@@ -125,6 +175,22 @@ select {
   align-items: center;
 }
 
+.batteryIconWrapper{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.batteryVoltageOverlay{
+  position: absolute;
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 2px black, 0 0 2px black, 0 0 2px black;
+  pointer-events: none;
+}
+
 #NetworkPanel{
   width: 100%;
   display: flex;
@@ -155,47 +221,150 @@ select {
   align-items: center;
 }
 
-#LedPanel{
+/* ===== Settings overlay =====
+   #popupMenu is the full-screen dark backdrop (dims the telemetry canvas behind it, like the
+   app's other popup) and centers #settingsDialog, a size-capped card - on a wide/landscape
+   screen this keeps the actual controls compact and centered instead of stretched edge to edge. */
+
+#popupMenu{
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
-#LedControlsGrid{
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  column-gap: 10px;
-  row-gap: 10px;
-  grid-template-areas: 
-  "A B D"
-  "A C D";
+#settingsDialog{
+  width: min(90vw, 360px);
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
-#Spacer{
-  grid-area: A;
-  color: rgb(255, 255, 255);
+#settingsHeader h1{
+  margin: 0 0 0.15rem;
+  font-size: 1.15rem;
+}
+
+#settingsNavigation{
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+}
+
+.settingsTabButton{
+  flex: 1 1 auto;
+  max-width: 140px;
+  height: 32px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background-color: rgba(20, 20, 20, 0.55);
+}
+
+#settingsPage{
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.settingsSection{
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+  text-align: left;
+}
+
+.settingsSectionLabel{
+  font-size: 0.8rem;
+  font-weight: 600;
+  opacity: 0.85;
+  margin-bottom: 0.4rem;
+}
+
+/* Motor trim */
+
+.trimRow{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trimEndLabel{
+  font-weight: 700;
+  font-size: 0.85rem;
+  width: 1rem;
   text-align: center;
-  align-self: center;
+  opacity: 0.8;
 }
 
-#LedModeSelect{
-  grid-area: B;
+.trimSlider{
+  flex: 1 1 auto;
+  height: 24px;
+  padding: 0;
 }
 
-#LedSendButton{
-  grid-area: C;
+.trimReadout{
+  margin-top: 0.3rem;
+  text-align: center;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* Control modes */
+
+#ModePanel{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.4rem;
+}
+
+.modeButton{
+  height: 46px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  padding: 0.3rem;
+  white-space: normal;
+}
+
+.modeButtonTitle{
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.modeButtonSubtitle{
+  font-size: 0.6rem;
+  opacity: 0.75;
+  text-align: center;
+  line-height: 1.15;
+}
+
+/* Lights tab */
+
+.ledPickerGroup{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
 }
 
 #LedColorPicker{
-  grid-area: D;
-  align-self: center;
-  -webkit-appearance: none;  /* Override default CSS styles */
+  -webkit-appearance: none;
   appearance: none;
-  width: 40px; /* Full-width */
-  height: 40px; /* Specified height */
+  width: 32px;
+  height: 32px;
   border: none;
   background-color: transparent;
+  flex: 0 0 auto;
 }
 
 #LedColorPicker::-webkit-color-swatch{
@@ -203,9 +372,31 @@ select {
   border: none;
 }
 
-#ModePanel{
+.ledUpdateButton{
+  width: 100%;
+  height: 32px;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Footer - always visible regardless of which tab is active */
+
+#settingsFooter{
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap:10px;
+  gap: 0.4rem;
+}
+
+#settingsFooter form{
+  flex: 1 1 auto;
+  display: contents;
+}
+
+.settingsFooterButton{
+  flex: 1 1 auto;
+  height: 36px;
+  width: 100%;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background-color: rgba(255, 255, 255, 0.08);
 }

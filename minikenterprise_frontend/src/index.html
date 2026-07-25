@@ -1,9 +1,16 @@
 <html>
   <head>
     <title>Mini Kenterprise</title>
-    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <!-- Runs fullscreen (no browser chrome) once added to the home screen and launched from
+         there - visiting the URL directly in a normal browser tab is unaffected. -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Mini Kenterprise">
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="./favicon.ico">
   </head>
   <body>
     <div id="MainGridContainer">
@@ -18,7 +25,10 @@
         <div id ="CenterGridContainer">
           <div id ="StatusPanel">
             <div id="BatteryPanel">
-              <span id="BatterySymbol" class="iconify" data-icon="bi:battery-full" style="font-size: 4rem; color: rgb(24, 167, 19);"></span>
+              <div class="batteryIconWrapper">
+                <span id="BatterySymbol" class="iconify" data-icon="bi:battery-full" style="font-size: 4rem; color: rgb(24, 167, 19);"></span>
+                <span id="BatteryVoltage" class="batteryVoltageOverlay"></span>
+              </div>
             </div>
             <div id="NetworkPanel">
               <span id="NetworkSymbol" class="iconify" data-icon="bi:wifi" style="font-size: 4rem; color: rgb(105, 237, 100);"></span>
@@ -26,11 +36,7 @@
           </div>
 
           <div class="MainButtonPanel">
-            <button type="button" class="MainButton">
-              <span class="iconify" data-icon="bi:info" style="font-size: 2rem;"></span>
-            </button>
-          
-          <button type="button" class="MainButton" id="SettingsButton">
+            <button type="button" class="MainButton" id="SettingsButton">
               <span class="iconify" data-icon="bi:gear" style="font-size: 2rem;"></span>
           </button>
         </div>
@@ -44,26 +50,31 @@
           </div>
         </div>
         <div class="popupContent" id="popupMenu">
-        <div id="settingsHeader">
-          <h1>Settings</h1>
-        </div>
-        <div id="settingsNavigation">
-        </div>
-        <div id="settingsPage">
-        </div>
-        <form action="/settings/">
-          <input type="submit" value="Go to Settings Page" />
-        </form>
-        <button type="button" id="SettingsBackButton">Back</button>
+          <div id="settingsDialog">
+            <div id="settingsHeader">
+              <h1>Settings</h1>
+            </div>
+            <div id="settingsNavigation">
+            </div>
+            <div id="settingsPage">
+            </div>
+            <div id="settingsFooter">
+              <form action="/settings/" id="advancedSetupForm">
+                <button type="submit" class="settingsFooterButton">Advanced Setup</button>
+              </form>
+              <button type="button" id="SettingsBackButton" class="settingsFooterButton">Close</button>
+            </div>
+          </div>
         </div>
         <div class="popupContent" id="popupError">
-          <span class="iconify" data-icon="bi:wifi-off" style="font-size: 4rem;"></span>
-          <h1>Network Error</h1>
-          <p>
-            The connection to the boat was lost. <br>
-            The website is trying to automatically reconnect.<br><br>
-            If that does not work.<br>
-            Try to reconnect to the boats wifi through your phones wifi settings.
+          <span class="iconify" id="NetworkErrorIcon" data-icon="bi:wifi-off" style="font-size: 4rem;"></span>
+          <h1>Lost the boat! &#x1F6A3;</h1>
+          <p id="reconnectStatusText">Trying to row back to you...</p>
+          <div class="reconnectProgressTrack">
+            <div class="reconnectProgressFill" id="reconnectProgressFill"></div>
+          </div>
+          <p id="reconnectEscalationText" class="reconnectEscalationText" hidden>
+            Still adrift? Make sure your phone is still connected to the boat's own WiFi network.
           </p>
         </div>
     </div>

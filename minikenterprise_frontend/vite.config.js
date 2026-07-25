@@ -25,6 +25,7 @@ export default defineConfig({
   },
   //publicDir: "public",
   server: {
+    host: true, // expose on the LAN, not just localhost - needed to test from a phone
     hmr:
       { overlay: false },
     proxy: {

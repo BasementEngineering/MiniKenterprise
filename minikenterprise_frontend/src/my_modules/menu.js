@@ -1,8 +1,8 @@
 export class Menu {
     constructor() {
         this.menuItems = [
-            {id: 0, name: "Lights", screen: "Lights"},
-            {id: 1, name: "Input", screen: "Input"}
+            {id: 0, name: "Input", screen: "Input"},
+            {id: 1, name: "Lights", screen: "Lights"}
         ];
         this.currentMenu = this.menuItems[0];
         this.active = false;
@@ -24,6 +24,7 @@ export class Menu {
         this.menuItems.forEach(item => {
             let menuItem = document.createElement('button');
             menuItem.id = "MenuItem"+item.id+"Button";
+            menuItem.className = "settingsTabButton";
             menuItem.innerHTML = item.name;
             menuItem.onclick = () => {
                 this.currentMenu = item;
@@ -40,66 +41,147 @@ export class Menu {
         let screenArea = document.getElementById("settingsPage");
         screenArea.innerHTML = "";
 
-        let modePanel = document.createElement("div");
-        modePanel.id = "ModePanel";
-        for(let i = 0; i < 4; i++){
-            let modeButton = document.createElement("button");
-            modeButton.id = "Mode"+i+"Button";
-            modeButton.innerHTML = "Mode "+i;
-            modeButton.onclick = () => {
-                this.highlightButton("Mode",i,4);
-                this.modeCallback(i+1);
-            };
-            modePanel.appendChild(modeButton);
-        }
+        // --- Motor trim ---
+        let trimSection = document.createElement("div");
+        trimSection.className = "settingsSection";
+
+        let trimLabel = document.createElement("div");
+        trimLabel.className = "settingsSectionLabel";
+        trimLabel.innerHTML = "Motor Trim (L/R)";
+
+        let trimRow = document.createElement("div");
+        trimRow.className = "trimRow";
+
+        let trimLeftLabel = document.createElement("span");
+        trimLeftLabel.className = "trimEndLabel";
+        trimLeftLabel.innerHTML = "L";
 
         let trimSlider = document.createElement("input");
         trimSlider.type = "range";
         trimSlider.id = "TrimSlider";
+        trimSlider.className = "trimSlider";
         trimSlider.min = "-100";
         trimSlider.max = "100";
-        trimSlider.value = "0";
-        trimSlider.oninput = () => {
-          let trimValue = document.getElementById("TrimValue");
-          trimValue.innerHTML = trimSlider.value;
-          this.globalContext.trimValue = trimSlider.value;
+        trimSlider.value = this.globalContext.trimValue ?? "0";
+
+        let trimRightLabel = document.createElement("span");
+        trimRightLabel.className = "trimEndLabel";
+        trimRightLabel.innerHTML = "R";
+
+        let trimReadout = document.createElement("div");
+        trimReadout.id = "TrimValue";
+        trimReadout.className = "trimReadout";
+
+        let updateTrimReadout = (value) => {
+            let numeric = Number(value);
+            if(numeric === 0){
+                trimReadout.innerHTML = "Centered";
+            }
+            else{
+                trimReadout.innerHTML = Math.abs(numeric) + "% " + (numeric > 0 ? "Left" : "Right");
+            }
         };
 
-        let trimValue = document.createElement("span");
-        trimValue.id = "TrimValue";
-        trimValue.innerHTML = trimSlider.value;
+        // globalContext.trimValue is kept as the raw slider string (not parsed), matching how
+        // backendCommunication.js's addTrimToSteering() already consumes it - only this screen's
+        // own display logic needs a Number() for the sign/magnitude split above.
+        trimSlider.oninput = () => {
+            this.globalContext.trimValue = trimSlider.value;
+            updateTrimReadout(trimSlider.value);
+        };
+        updateTrimReadout(trimSlider.value);
 
-        let trimRow = document.createElement("div");
+        trimRow.appendChild(trimLeftLabel);
         trimRow.appendChild(trimSlider);
-        trimRow.appendChild(trimValue);
+        trimRow.appendChild(trimRightLabel);
 
-        screenArea.appendChild(trimRow);
-        screenArea.appendChild(modePanel);
+        trimSection.appendChild(trimLabel);
+        trimSection.appendChild(trimRow);
+        trimSection.appendChild(trimReadout);
+
+        // --- Control modes ---
+        let modeSection = document.createElement("div");
+        modeSection.className = "settingsSection";
+
+        let modeLabel = document.createElement("div");
+        modeLabel.className = "settingsSectionLabel";
+        modeLabel.innerHTML = "Control Mode";
+
+        // Index i matches setMode(i+1) in ui.js exactly (deadband/stickyness/rotation table) -
+        // these labels are purely descriptive, the underlying modes 1-4 are unchanged.
+        let modeDefinitions = [
+            { title: "Arcade", subtitle: "Auto-Center Throttle + Steering" },
+            { title: "Arcade", subtitle: "Sticky Throttle + Steering" },
+            { title: "Tank Drive", subtitle: "Auto-Center L/R Throttles" },
+            { title: "Tank Drive", subtitle: "Sticky L/R Throttles" }
+        ];
+
+        let modePanel = document.createElement("div");
+        modePanel.id = "ModePanel";
+        modeDefinitions.forEach((mode, i) => {
+            let modeButton = document.createElement("button");
+            modeButton.id = "Mode"+i+"Button";
+            modeButton.className = "modeButton";
+            modeButton.innerHTML = "<span class=\"modeButtonTitle\">"+mode.title+"</span><span class=\"modeButtonSubtitle\">"+mode.subtitle+"</span>";
+            modeButton.onclick = () => {
+                this.highlightButton("Mode",i,modeDefinitions.length);
+                this.modeCallback(i+1);
+            };
+            modePanel.appendChild(modeButton);
+        });
+
+        modeSection.appendChild(modeLabel);
+        modeSection.appendChild(modePanel);
+
+        screenArea.appendChild(modeSection);
+        screenArea.appendChild(trimSection);
+
+        // Re-apply the highlight for whichever mode is already active - this screen's DOM gets
+        // torn down and rebuilt every time you switch tabs, so without this, coming back to the
+        // Input tab would show all four mode buttons as unselected even though one is really
+        // active. globalContext.mode is set by setMode() in ui.js (defaults to 1, but init()
+        // runs before that first setMode(1) call, hence the fallback).
+        this.highlightButton("Mode", (this.globalContext.mode ?? 1) - 1, modeDefinitions.length);
     }
-        
+
     renderLightsScreen() {
         let screenArea = document.getElementById("settingsPage");
         screenArea.innerHTML = "";
+
+        let section = document.createElement("div");
+        section.className = "settingsSection";
+
+        let label = document.createElement("div");
+        label.className = "settingsSectionLabel";
+        label.innerHTML = "LED Effect";
+
+        let pickerGroup = document.createElement("div");
+        pickerGroup.className = "ledPickerGroup";
 
         let select = document.createElement("select");
         select.id = "LedModeSelect";
         select.innerHTML = '<option value="0">Solid Color</option><option value="1" selected="selected">Knight Rider</option><option value="2">Blinking</option><option value="3">Boat</option>';
 
-        let sendButton = document.createElement("button");
-        sendButton.id = "LedSendButton";
-        sendButton.innerHTML = "Update LEDs";
-        sendButton.onclick = this.ledCallback;
-        
         let colorPicker = document.createElement("input");
         colorPicker.type = "color";
         colorPicker.id = "LedColorPicker";
         colorPicker.value = "#fcca03";
 
-        screenArea.appendChild(select);
-        screenArea.appendChild(sendButton);
-        screenArea.appendChild(colorPicker);
-    }
+        pickerGroup.appendChild(select);
+        pickerGroup.appendChild(colorPicker);
 
+        let sendButton = document.createElement("button");
+        sendButton.id = "LedSendButton";
+        sendButton.className = "ledUpdateButton";
+        sendButton.innerHTML = "Update LEDs";
+        sendButton.onclick = this.ledCallback;
+
+        section.appendChild(label);
+        section.appendChild(pickerGroup);
+        section.appendChild(sendButton);
+
+        screenArea.appendChild(section);
+    }
 
     renderScreen() {
         switch(this.currentMenu.screen) {
@@ -124,54 +206,11 @@ export class Menu {
         this.active = false;
     }
 
-    highlightButton(idPrefix,choosenOption,optionCount){ 
-      console.log("Highlighting button");
-      console.log(idPrefix);
-      console.log(choosenOption);
+    highlightButton(idPrefix,choosenOption,optionCount){
         for(var i = 0; i < optionCount; i++){
-            var elementId = idPrefix+i+"Button";
-            console.log(elementId);
-            document.getElementById(elementId).style.borderColor = (i==choosenOption) ? "rgb(255, 204, 0)" : "rgb(179, 178, 175)";
+            document.getElementById(idPrefix+i+"Button").style.borderColor = (i==choosenOption) ? "rgb(255, 204, 0)" : "rgb(179, 178, 175)";
         }
     }
-/*
-    highlightModeButton(newMode){
-        for(var i = 1; i <= 4; i++){
-          document.getElementById("Mode"+i+"Button").style.borderColor = (i==newMode) ? "rgb(255, 204, 0)" : "rgb(179, 178, 175)";
-        }
-    }*/
 }
 
 export default Menu;
-
-/*
-LED Settings
-<div id="LedPanel">
-  <div id="LedControlsGrid">
-      <div id="Spacer" ></div>
-      <select id="LedModeSelect" >
-          <option value="0">Solid Color</option>
-          <option value="1" selected="selected">Knight Rider</option>
-          <option value="2">Blinking</option>
-          <option value="3">Boat</option>
-        </select>
-        <button type="button" id="LedSendButton">Update LEDs</button>
-      <input type="color" id="LedColorPicker" value="#fcca03">
-  </div>
-</div>
-<div id="Motor Settings">
-<select id="Motor Driver Type" >
-  <option value="0">H-Bridge</option>
-  <option value="1">ESC</option>
-</select>
-<input type="number" id="MotorPin1" value="0">
-<input type="number" id="MotorPin2" value="0">
-
-</div>
-Input Settings
-<div id="ModePanel">
-<button type="button" id="Mode1Button">Mode 1</button>
-<button type="button" id="Mode2Button">Mode 2</button>
-<button type="button" id="Mode3Button">Mode 3</button>
-<button type="button" id="Mode4Button">Mode 4</button>
-</div></input>v*/

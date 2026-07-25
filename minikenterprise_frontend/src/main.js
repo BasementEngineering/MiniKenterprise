@@ -1,4 +1,4 @@
-import { initUi,showErrorMessage,hideErrorMessage, showPopupMenu, percentageToIcon,resetControls } from "./my_modules/ui";
+import { initUi,showErrorMessage,hideErrorMessage, showPopupMenu, percentageToIcon,resetControls, updateReconnectStatus } from "./my_modules/ui";
 import { CommunicationManager } from "./my_modules/backendCommunication";
 import { Communication_Commands } from "./my_modules/parser";
 
@@ -37,7 +37,15 @@ function init(){
 
 Window.onload = init();
 
+const RECONNECT_INTERVAL_MS = 3000;
+const RECONNECT_INTERVAL_SECONDS = RECONNECT_INTERVAL_MS / 1000;
+// ~18s of failed retries at the current 3s interval before showing the "check your WiFi" hint.
+const ESCALATION_ATTEMPT_THRESHOLD = 6;
+
 var reconnectionTimer = -1;
+var countdownTimer = -1;
+var reconnectAttemptCount = 0;
+var nextAttemptAt = 0;
 var prevConnectionState = true;
 
 function onOffline(){
@@ -50,18 +58,36 @@ function onOffline(){
 function onOnline(){
     console.log("Went back online");
     clearInterval(reconnectionTimer);
+    clearInterval(countdownTimer);
     reconnectionTimer = -1;
+    countdownTimer = -1;
     hideErrorMessage();
 }
 
 function startReconnection(){
     if(reconnectionTimer == -1){
         console.log("Setting reconnection timer");
+        reconnectAttemptCount = 1;
+        nextAttemptAt = Date.now() + RECONNECT_INTERVAL_MS;
+        renderReconnectStatus();
+
         reconnectionTimer = setInterval(() => {
             console.log("Attempting reconnection");
             myCommunicationManager.reconnect();
-        }, 5000);
+            reconnectAttemptCount++;
+            nextAttemptAt = Date.now() + RECONNECT_INTERVAL_MS;
+        }, RECONNECT_INTERVAL_MS);
+
+        // Ticks faster than the retry interval itself so the countdown/progress bar move
+        // smoothly instead of jumping once every 5s.
+        countdownTimer = setInterval(renderReconnectStatus, 250);
     }
+}
+
+function renderReconnectStatus(){
+    var secondsLeft = Math.max(0, Math.ceil((nextAttemptAt - Date.now()) / 1000));
+    var escalate = reconnectAttemptCount >= ESCALATION_ATTEMPT_THRESHOLD;
+    updateReconnectStatus(secondsLeft, reconnectAttemptCount, RECONNECT_INTERVAL_SECONDS, escalate);
 }
 
 function onStatusUpdate(command){
@@ -69,6 +95,13 @@ function onStatusUpdate(command){
     var networkPercentage = parseInt(command.parameters[1]);
     percentageToIcon(batteryPercentage,"Battery");
     percentageToIcon(networkPercentage,"Network");
+
+    // Older firmware only sends 2 status parameters (no voltage) - guard so this
+    // doesn't break against a board that hasn't been reflashed with this change yet.
+    if(command.parameters.length > 2){
+        var voltageV = (parseInt(command.parameters[2]) / 1000).toFixed(1);
+        document.getElementById("BatteryVoltage").textContent = voltageV + "V";
+    }
 }
 
 /*function updateControls(){

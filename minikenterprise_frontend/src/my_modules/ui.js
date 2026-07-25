@@ -10,6 +10,12 @@ export function initUi(sendLedDataCallback,globalContext){
   setupJoysticks();
 
   setMode(1);
+
+  // Neither event alone is fully reliable: 'resize' doesn't fire on every iOS rotation in a
+  // timely way, and immediately after 'orientationchange' iOS can briefly report stale
+  // window.innerWidth/innerHeight values (settling a moment later) - the short delay covers that.
+  window.addEventListener('resize', scaleItems);
+  window.addEventListener('orientationchange', () => setTimeout(scaleItems, 100));
 }
 
 export function resetControls(){
@@ -23,6 +29,15 @@ function scaleItems(){
   var joystickWidth = width * 0.22;
   setJoystickSize("LeftJoystick",joystickWidth);
   setJoystickSize("RightJoystick",joystickWidth);
+
+  // On the very first call (from initUi, before setupJoysticks has run) these don't exist yet -
+  // setJoystickSize above already sized the canvases correctly for that initial render.
+  if(globalContext.leftJoystick){
+    globalContext.leftJoystick.resize();
+  }
+  if(globalContext.rightJoystick){
+    globalContext.rightJoystick.resize();
+  }
 }
 
 function setJoystickSize(name,size){
@@ -114,10 +129,30 @@ function updateStatuIcons(){
 
 export function showErrorMessage(){
   document.getElementById("popupError").style.visibility = "visible";
+  // Reset visual state in case this popup was left mid-countdown/escalated from a previous
+  // offline episode - each new episode should start fresh.
+  document.getElementById("reconnectProgressFill").style.width = "100%";
+  document.getElementById("reconnectEscalationText").hidden = true;
 }
 
 export function hideErrorMessage(){
   document.getElementById("popupError").style.visibility = "hidden";
+}
+
+/**
+ * Renders the live reconnect countdown/attempt-count text and progress bar, and reveals the
+ * escalation hint once the caller decides enough attempts have failed. main.js owns the actual
+ * timing/attempt-count state (and the escalation threshold) - this just renders whatever it's
+ * given.
+ */
+export function updateReconnectStatus(secondsLeft, attemptCount, reconnectIntervalSeconds, escalate){
+  document.getElementById("reconnectStatusText").innerHTML =
+    "Trying to row back to you in " + secondsLeft + "s... (attempt " + attemptCount + ")";
+
+  var progressPercent = (secondsLeft / reconnectIntervalSeconds) * 100;
+  document.getElementById("reconnectProgressFill").style.width = progressPercent + "%";
+
+  document.getElementById("reconnectEscalationText").hidden = !escalate;
 }
 
 //Settings functions

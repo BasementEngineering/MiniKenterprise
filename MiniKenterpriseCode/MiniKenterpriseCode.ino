@@ -220,9 +220,10 @@ void refreshStatus(){
     lastStatusUpdate = millis();
     Command command;
     command.id = Status;
-    command.parameterCount = 2;
+    command.parameterCount = 3;
     command.parameters[0] = Battery_getPercentage();
     command.parameters[1] = Wifi_getQualityPercentage();
+    command.parameters[2] = Battery_getVoltageMv();
     Parser_sendCommand(command);
   }
 }

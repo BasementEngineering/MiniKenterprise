@@ -110,6 +110,16 @@ export class Joystick{
         this.drawBackground();
         this.reset();
     }
+
+    // Call after the canvas element's width/height attributes have been changed externally
+    // (e.g. on window resize/orientation change) - resizing a canvas clears its contents and
+    // this instance's cached sidelenght would otherwise go stale, misaligning all the
+    // position math in calculatePercentage()/drawThumb() with the new actual size.
+    resize(){
+        this.sidelenght = document.getElementById(this.name).width;
+        this.drawBackground();
+        this.reset();
+    }
   
     setStickyness(newStickyness){
         this.sticky = newStickyness;
@@ -125,10 +135,15 @@ export class Joystick{
         topCanvas.addEventListener('mousedown',event => this.onDown());
         topCanvas.addEventListener('mouseup',event => this.onUp());
         topCanvas.addEventListener('mousemove',event => this.processPosition(event) );
-    
-        topCanvas.addEventListener('touchstart',event => this.onDown());
-        topCanvas.addEventListener('touchend',event => this.onUp());
-        topCanvas.addEventListener('touchmove',event => this.processPosition(event) );
+
+        // { passive: false } is required for preventDefault() to actually suppress the
+        // browser's own scroll/pan gesture recognition - touchmove listeners default to
+        // passive (ignoring preventDefault) for scroll-performance reasons. touch-action:
+        // none in CSS (see .joystick/.joystickBackground) handles this in most modern
+        // browsers already; this is a belt-and-suspenders fallback for older ones.
+        topCanvas.addEventListener('touchstart',event => { event.preventDefault(); this.onDown(); }, { passive: false });
+        topCanvas.addEventListener('touchend',event => { event.preventDefault(); this.onUp(); }, { passive: false });
+        topCanvas.addEventListener('touchmove',event => { event.preventDefault(); this.processPosition(event); }, { passive: false });
     }
   
     onDown(){
