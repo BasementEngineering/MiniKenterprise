@@ -22,6 +22,8 @@ static void loadDefaults() {
   settings.motorIn3 = DEFAULT_MOTOR_IN3;
   settings.motorIn4 = DEFAULT_MOTOR_IN4;
   settings.ledCount = DEFAULT_LED_COUNT;
+  settings.regularPwmLimitPercent = DEFAULT_REGULAR_PWM_LIMIT_PERCENT;
+  settings.boostPwmLimitPercent = DEFAULT_BOOST_PWM_LIMIT_PERCENT;
 }
 
 void Settings_load() {

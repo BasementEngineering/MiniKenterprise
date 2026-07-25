@@ -264,9 +264,16 @@ void motorCallback(Command command){
       propulsionSystem->setSpeed(command.parameters[0]);
       propulsionSystem->setDirection(command.parameters[1]);
       break;
-    default: 
+    default:
     //Serial.println("in switch");
     break;
+  }
+
+  // Boost-requested flag, appended as a 3rd parameter to the periodic ControlLR/ControlSD
+  // command - guarded by parameterCount so older frontend builds that don't send it are
+  // unaffected. Applies regardless of which command id carried it (both funnel through here).
+  if(command.parameterCount > 2 && command.parameters[2] == 1){
+    propulsionSystem->requestBoost();
   }
 }
 
@@ -284,10 +291,12 @@ void refreshStatus(){
     lastStatusUpdate = millis();
     Command command;
     command.id = Status;
-    command.parameterCount = 3;
+    command.parameterCount = 5;
     command.parameters[0] = Battery_getPercentage();
     command.parameters[1] = Wifi_getQualityPercentage();
     command.parameters[2] = Battery_getVoltageMv();
+    command.parameters[3] = propulsionSystem->getBoostState();
+    command.parameters[4] = propulsionSystem->getBoostSecondsRemaining();
     Parser_sendCommand(command);
   }
 }

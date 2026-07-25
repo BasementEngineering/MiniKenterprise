@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define SETTINGS_MAGIC 0x4B32 // bump when the struct layout below changes
+#define SETTINGS_MAGIC 0x4B33 // bump when the struct layout below changes
 #define SSID_MAX_LEN 32
 #define PASSWORD_MAX_LEN 64
 
@@ -20,6 +20,8 @@ struct Settings {
   uint8_t motorIn3;
   uint8_t motorIn4;
   uint8_t ledCount;
+  uint8_t regularPwmLimitPercent; // % of max PWM for normal driving (DRV8833 overheat protection)
+  uint8_t boostPwmLimitPercent; // % of max PWM during a boost window
 };
 
 extern Settings settings;

@@ -66,6 +66,8 @@ void handleSettingsGet(){
   response += "motorIn3=" + String(settings.motorIn3) + "\n";
   response += "motorIn4=" + String(settings.motorIn4) + "\n";
   response += "ledCount=" + String(settings.ledCount) + "\n";
+  response += "regularPwmLimitPercent=" + String(settings.regularPwmLimitPercent) + "\n";
+  response += "boostPwmLimitPercent=" + String(settings.boostPwmLimitPercent) + "\n";
   server.send(200, "text/plain", response);
 }
 
@@ -81,6 +83,8 @@ void handleSettingsSave(){
   if(server.hasArg("motorIn3")) settings.motorIn3 = server.arg("motorIn3").toInt();
   if(server.hasArg("motorIn4")) settings.motorIn4 = server.arg("motorIn4").toInt();
   if(server.hasArg("ledCount")) settings.ledCount = server.arg("ledCount").toInt();
+  if(server.hasArg("regularPwmLimitPercent")) settings.regularPwmLimitPercent = server.arg("regularPwmLimitPercent").toInt();
+  if(server.hasArg("boostPwmLimitPercent")) settings.boostPwmLimitPercent = server.arg("boostPwmLimitPercent").toInt();
 
   Settings_save();
 

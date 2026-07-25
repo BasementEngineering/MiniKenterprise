@@ -221,6 +221,59 @@ select {
   align-items: center;
 }
 
+.MainButton:disabled{
+  opacity: 0.4;
+}
+
+.boostButtonWrapper{
+  position: relative;
+}
+
+/* Solid yellow, ready to press - steady, no animation. */
+.MainButton.boostReady{
+  background-color: rgb(255, 204, 0);
+  border-color: rgb(255, 204, 0);
+  color: rgb(40, 40, 40);
+}
+
+@keyframes boostGlowActive{
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 204, 0, 0.9); }
+  50% { box-shadow: 0 0 18px 6px rgba(255, 204, 0, 0.9); }
+}
+
+/* Boost is being spent - stays the same solid yellow as ready (not grayed out or dimmed),
+   with a pulsing glow around it to show something is actively happening. The button is
+   :disabled during this state (can't retrigger boost), which would otherwise dim it via the
+   opacity:0.4 rule above - override back to fully opaque so the yellow stays crisp. */
+.MainButton.boostActive{
+  opacity: 1;
+  background-color: rgb(255, 204, 0);
+  border-color: rgb(255, 204, 0);
+  color: rgb(40, 40, 40);
+  animation: boostGlowActive 0.6s ease-in-out infinite;
+}
+
+@keyframes boostGlowCooldown{
+  0%, 100% { box-shadow: 0 0 6px 1px rgba(200, 200, 200, 0.7); }
+  50% { box-shadow: 0 0 14px 4px rgba(200, 200, 200, 0.7); }
+}
+
+/* Recharging - back to the button's normal gray, with a slower pulsing glow than active. */
+.MainButton.boostCooldown{
+  animation: boostGlowCooldown 2s ease-in-out infinite;
+}
+
+.boostCountdownOverlay{
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-size: 0.65rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 2px black, 0 0 2px black, 0 0 2px black;
+  pointer-events: none;
+}
+
 /* ===== Settings overlay =====
    #popupMenu is the full-screen dark backdrop (dims the telemetry canvas behind it, like the
    app's other popup) and centers #settingsDialog, a size-capped card - on a wide/landscape

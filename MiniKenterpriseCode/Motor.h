@@ -28,6 +28,8 @@ class Motor{
   
   void setPolarity(bool newPolarity){polarity = newPolarity;}
   bool getPolarity(){return polarity;}
+
+  void setMaxPwm(int newMaxPwm){maxPwm = newMaxPwm;}
    
   private:
     int en;

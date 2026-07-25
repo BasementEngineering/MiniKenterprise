@@ -1,4 +1,4 @@
-import { initUi,showErrorMessage,hideErrorMessage, showPopupMenu, percentageToIcon,resetControls, updateReconnectStatus } from "./my_modules/ui";
+import { initUi,showErrorMessage,hideErrorMessage, showPopupMenu, percentageToIcon,resetControls, updateReconnectStatus, updateBoostButton } from "./my_modules/ui";
 import { CommunicationManager } from "./my_modules/backendCommunication";
 import { Communication_Commands } from "./my_modules/parser";
 
@@ -101,6 +101,13 @@ function onStatusUpdate(command){
     if(command.parameters.length > 2){
         var voltageV = (parseInt(command.parameters[2]) / 1000).toFixed(1);
         document.getElementById("BatteryVoltage").textContent = voltageV + "V";
+    }
+
+    // Same backward-compat guard for the boost state/seconds-remaining fields.
+    if(command.parameters.length > 4){
+        var boostState = parseInt(command.parameters[3]);
+        var boostSecondsRemaining = parseInt(command.parameters[4]);
+        updateBoostButton(boostState, boostSecondsRemaining);
     }
 }
 

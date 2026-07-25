@@ -54,11 +54,21 @@
 // don't assign GPIO2 to anything else above.
 #define DEFAULT_LED_COUNT 8
 
+// The DRV8833 thermally shuts off after ~45s at full throttle (as little as 10s if already
+// warm) - regular driving is capped at a percentage of max PWM, with a timed "boost" button
+// temporarily lifting the cap. Defaults: normal driving at 75% of max, boost at 100% (actual max).
+#define DEFAULT_REGULAR_PWM_LIMIT_PERCENT 75
+#define DEFAULT_BOOST_PWM_LIMIT_PERCENT 100
+
 //Motor Settings (not runtime-configurable - tune per hardware and reflash)
 #define MIN_PWM_L 30
 #define MIN_PWM_R 30
 #define MAX_PWM_L 255
 #define MAX_PWM_R 255
+
+// Boost window and mandatory cooldown before it can be used again (see PropulsionSystem).
+#define BOOST_DURATION_MS 10000
+#define BOOST_COOLDOWN_MS 30000
 
 #define TRIM 0.0F
 
