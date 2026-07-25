@@ -1,3 +1,7 @@
+html, body{
+  overscroll-behavior: none;
+}
+
 body{
   background-color: rgb(255, 204, 0);
   color:white;
@@ -74,6 +78,13 @@ select {
   border-width: 2px;
   border-radius: 30px;
   position: relative;
+  touch-action: none;
+}
+
+/* The joystick canvases are styled inline in index.html (no .joystick/.joystickBackground
+   class applied), so touch-action has to target them directly by ID to actually take effect. */
+#LeftJoystick, #LeftJoystickBase, #RightJoystick, #RightJoystickBase{
+  touch-action: none;
 }
 
 .joystickBackground{

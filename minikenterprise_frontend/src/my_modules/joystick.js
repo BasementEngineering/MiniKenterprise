@@ -125,10 +125,15 @@ export class Joystick{
         topCanvas.addEventListener('mousedown',event => this.onDown());
         topCanvas.addEventListener('mouseup',event => this.onUp());
         topCanvas.addEventListener('mousemove',event => this.processPosition(event) );
-    
-        topCanvas.addEventListener('touchstart',event => this.onDown());
-        topCanvas.addEventListener('touchend',event => this.onUp());
-        topCanvas.addEventListener('touchmove',event => this.processPosition(event) );
+
+        // { passive: false } is required for preventDefault() to actually suppress the
+        // browser's own scroll/pan gesture recognition - touchmove listeners default to
+        // passive (ignoring preventDefault) for scroll-performance reasons. touch-action:
+        // none in CSS (see .joystick/.joystickBackground) handles this in most modern
+        // browsers already; this is a belt-and-suspenders fallback for older ones.
+        topCanvas.addEventListener('touchstart',event => { event.preventDefault(); this.onDown(); }, { passive: false });
+        topCanvas.addEventListener('touchend',event => { event.preventDefault(); this.onUp(); }, { passive: false });
+        topCanvas.addEventListener('touchmove',event => { event.preventDefault(); this.processPosition(event); }, { passive: false });
     }
   
     onDown(){
