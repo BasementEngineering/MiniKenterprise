@@ -55,13 +55,19 @@ void startAp();
 void Wifi_setup(){
   scanWiFi();
   myChannel = getBestChannel();
+  #ifdef DEBUG
   Serial.print("Best WiFi Cahnnel: ");Serial.println(myChannel);
+  #endif
   apModeActive = settings.apMode;
 }
 
 void Wifi_start(){
   if( (millis() - lastWifiUpdate) > nextWaitInterval){
     lastWifiUpdate = millis();
+    // wifi_set_sleep_type(NONE_SLEEP_T) fixes websocket disconnects in station mode -
+    // the modem-sleep power saving the ESP8266 SDK defaults to otherwise interferes
+    // with keeping a live connection.
+    wifi_set_sleep_type(NONE_SLEEP_T);
     if(settings.apMode){
       startAp();
     }

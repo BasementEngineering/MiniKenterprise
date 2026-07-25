@@ -1,6 +1,7 @@
 #include "Config.h"
 #include "Settings.h"
 #include "PropulsionSystem.h"
+#include "RudderPropulsion.h"
 #include "LightBar.h"
 #include "Battery.h"
 #include "Wifi.h"
@@ -10,6 +11,11 @@
 // Constructed in setup(), once Settings_load() has read the pin assignments -
 // global objects can't take these as constructor args since Settings isn't
 // loaded yet when global initializers run.
+//
+// RudderPropulsion (rudder-steered boat variant, from origin/main) is included
+// above but not yet wired in here - it assumes a compile-time pin scheme this
+// firmware doesn't use anymore (pins are runtime-configurable via Settings).
+// Revisit if/when rudder steering becomes a selectable Settings-driven mode.
 PropulsionSystem* propulsionSystem;
 LightBar* lightBar;
 
@@ -34,6 +40,7 @@ void switchState(State newState){
 }
 
 void setup(){
+  Serial.setDebugOutput(true);
   Serial.begin(115200);
   Serial.println("Starting Setup");
   Settings_load();
@@ -84,11 +91,11 @@ void runStateMachine(){
       break;
     case WAITING_FOR_WIFI_CLIENT:
       if(Wifi_connected()){
+        Serial.println("Wifi is connected");
         setTimeout(100000);
         Serial.println("SetTimeout done");
         switchState(WAITING_FOR_FRONTEND);
       }
-//Serial.println("Hay");
       if( timoutDone() ){
           Serial.println("Restarting");
           ESP.restart();
