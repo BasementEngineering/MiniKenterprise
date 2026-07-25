@@ -45,7 +45,6 @@ const PIN_ASSIGNMENT_FIELDS = [
     { id: "motorIn2", tag: "IN2" },
     { id: "motorIn3", tag: "IN3" },
     { id: "motorIn4", tag: "IN4" },
-    { id: "ledPin", tag: "LED" },
 ];
 
 const pinRows = Array.from(document.querySelectorAll(".pinout-diagram .pinout-row[data-gpio]"));
@@ -112,7 +111,6 @@ const PIN_DEFAULTS = {
     motorIn2: "12",
     motorIn3: "14",
     motorIn4: "16",
-    ledPin: "2",
     ledCount: "8",
 };
 

@@ -49,7 +49,9 @@
 #define DEFAULT_MOTOR_IN3 14 //D5
 #define DEFAULT_MOTOR_IN4 16 //D0
 
-#define DEFAULT_LED_PIN 2
+// The LED strip is driven via the ESP8266's UART1 hardware (LightBar.h) rather than
+// bit-banged, so its data pin is fixed to GPIO2/D4 (UART1 TX) and isn't configurable -
+// don't assign GPIO2 to anything else above.
 #define DEFAULT_LED_COUNT 8
 
 //Motor Settings (not runtime-configurable - tune per hardware and reflash)

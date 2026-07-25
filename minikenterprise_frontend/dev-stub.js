@@ -31,7 +31,6 @@ let settings = {
     motorIn2: "12",
     motorIn3: "14",
     motorIn4: "16",
-    ledPin: "2",
     ledCount: "8",
 };
 
