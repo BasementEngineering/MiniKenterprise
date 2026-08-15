@@ -1,0 +1,9 @@
+{
+  "bottles": [
+    { "id": "05L", "folder": "05l_Bottle", "diameterMm": 63 },
+    { "id": "075L", "folder": "075l_Bottle", "diameterMm": 68 },
+    { "id": "1L", "folder": "1l_Bottle", "diameterMm": 74 }
+  ],
+  "motorDiametersMm": [7, 8.5, 12],
+  "propDiametersMm": [45, 55, 75]
+}
