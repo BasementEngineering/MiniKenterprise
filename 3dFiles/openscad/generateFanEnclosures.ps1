@@ -88,6 +88,7 @@ foreach ($bottle in $config.bottles) {
       # and avoids that race.
       $argList = @(
         "-o", $destPath,
+        "--export-format", "binstl",
         "-D", "motorDiameter=$motorDiameterMm",
         "-D", "propDiameter=$propDiameterMm",
         "-D", "bottleDiameter=$($bottle.diameterMm)",
