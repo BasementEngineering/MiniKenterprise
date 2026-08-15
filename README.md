@@ -16,9 +16,9 @@ It offers a bunch of features, that can be seen in the graphic above.
 It is an air boat, meaning that it moves by using two propellers. It also has a couple of LEDs that can do a cool knight rider effect.
 [Here](https://user-images.githubusercontent.com/35432032/155309053-8130b957-cc9e-41b4-a569-48ad077a3d52.mp4) is a video of the first maiden voyage of my first working prototype.
 
-## Checkout my new project website
-Now most of the information on how to build your own mini kenterprise, including a dynamic bill of materials and a site to program and update it without the need for the Arduino IDE can be found here:
-![mini kenterprise project website](docs/images/build/ProjectWebsite.png)
+## Check out the new project website
+Now most of the information on how to build your own mini kenterprise, including a dynamic bill of materials and a site to program and update it without the need for the Arduino IDE can be found [here](https://basementengineering.github.io/MiniKenterprise/).
+[![mini kenterprise project website](docs/images/build/ProjectWebsite.png)](https://basementengineering.github.io/MiniKenterprise/)
 
 ## Updates
 - 2026|07 Programming a Mini Kenterprise no longer requires the Arduino IDE - flash it straight from your browser at the [flashing website](https://basementengineering.github.io/MiniKenterprise/). WiFi credentials and pin assignments are now changed from the boat's own settings page instead of by editing code.
