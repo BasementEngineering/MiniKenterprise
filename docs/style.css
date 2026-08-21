@@ -424,3 +424,145 @@ main.build-guide {
   opacity: 0.75;
   font-style: italic;
 }
+
+/* Special-edition reference pages */
+
+main.special-edition {
+  max-width: 60rem;
+  text-align: left;
+}
+
+.special-edition-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 1.1fr);
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.special-edition-eyebrow {
+  margin: 0 0 0.4rem;
+  color: var(--link-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.special-edition-header h1 {
+  margin: 0;
+  font-size: 2.25rem;
+}
+
+.special-edition-intro {
+  max-width: 38rem;
+  line-height: 1.65;
+}
+
+.special-edition-hero {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.special-edition section {
+  margin: 3rem 0;
+}
+
+.special-edition section > h2 {
+  margin-bottom: 0.5rem;
+}
+
+.special-edition-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.special-edition-gallery figure {
+  margin: 0;
+}
+
+.special-edition-gallery img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.special-edition-gallery figcaption {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.special-edition-bom {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.special-edition-bom th,
+.special-edition-bom td {
+  padding: 0.65rem;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.25);
+  text-align: left;
+  vertical-align: top;
+}
+
+.special-edition-bom th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.special-edition-bom td:nth-child(2) {
+  width: 4rem;
+  white-space: nowrap;
+}
+
+.special-edition-downloads {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.special-edition-downloads a {
+  display: block;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(127, 127, 127, 0.3);
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: inherit;
+  font-weight: 600;
+}
+
+.special-edition-downloads a:hover {
+  border-color: var(--accent-dark);
+  background: var(--accent-tint);
+  text-decoration: none;
+}
+
+@media (max-width: 42rem) {
+  .special-edition-header {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .special-edition-gallery,
+  .special-edition-downloads {
+    grid-template-columns: 1fr;
+  }
+
+  .special-edition-bom {
+    font-size: 0.9rem;
+  }
+
+  .special-edition-bom th,
+  .special-edition-bom td {
+    padding: 0.5rem 0.35rem;
+  }
+}

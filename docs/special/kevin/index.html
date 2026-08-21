@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kevin - Mini Kenterprise Special Edition</title>
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body class="light-page">
+  <main class="special-edition">
+    <p class="back-link"><a href="../../index.html">&larr; Back to Mini Kenterprise</a></p>
+
+    <header class="special-edition-header">
+      <div>
+        <p class="special-edition-eyebrow">Mini Kenterprise Special Edition</p>
+        <h1>Kevin</h1>
+        <p class="special-edition-intro">
+          Kevin is a two-wheel robotic car built around the Mini Kenterprise control platform.
+          This is a fixed reference build, made for builders who want to reproduce this particular
+          project rather than configure a boat.
+        </p>
+      </div>
+      <img class="special-edition-hero" src="../../images/build/Kevin/Kevin.png" alt="Kevin, the assembled two-wheel robotic car">
+    </header>
+
+    <section aria-labelledby="kevin-parts-heading">
+      <h2 id="kevin-parts-heading">Reference bill of materials</h2>
+      <p class="note">This list documents the reference build only. It intentionally has no purchasing links, as I won't be able to keep them up to date. Refer to the original Kenterprise components for sourcing. You will have to search for the special parts yourself in your online store of choice.</p>
+      <table class="special-edition-bom">
+        <thead>
+          <tr>
+            <th scope="col">Part</th>
+            <th scope="col">Qty.</th>
+            <th scope="col">Reference notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>TT gear motor</td><td>2</td><td>One motor drives each wheel.</td></tr>
+          <tr><td>Compatible wheel</td><td>2</td><td>Used with the TT gear motors.</td></tr>
+          <tr><td>Wemos D1 Mini</td><td>1</td><td>Microcontroller for the control platform.</td></tr>
+          <tr><td>DRV8833 dual H-bridge driver</td><td>1</td><td>Drives the two motors.</td></tr>
+          <tr><td>18650 Li-Ion cell</td><td>1</td><td>Power source for the reference build.</td></tr>
+          <tr><td>TP4056 charging module</td><td>1</td><td>Used for charging the 18650 cell, charger only.</td></tr>
+          <tr><td>1S 15A Li-Ion BMS board</td><td>1</td><td>Used to protect the battery.</td></tr>
+          <tr><td>Prototype board and pin headers</td><td>1</td><td>For the controller and power wiring.</td></tr>
+          <tr><td>Toggle switch</td><td>1</td><td>Main power switch.</td></tr>
+          <tr><td>Hookup wire, heat-shrink tubing, M3 hardware, and standoffs</td><td>As needed</td><td>Choose lengths to suit the printed chassis and your wiring.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section aria-labelledby="kevin-prints-heading">
+      <h2 id="kevin-prints-heading">3D-printable parts</h2>
+      <p class="note">The chassis is made from the four files below. Download links point directly to the project repository.</p>
+      <ul class="special-edition-downloads">
+        <li><a href="https://raw.githubusercontent.com/BasementEngineering/MiniKenterprise/main/3dFiles/special/kevin/Baseplate.stl">Download Baseplate.stl</a></li>
+        <li><a href="https://raw.githubusercontent.com/BasementEngineering/MiniKenterprise/main/3dFiles/special/kevin/MiddlePlate.stl">Download MiddlePlate.stl</a></li>
+        <li><a href="https://raw.githubusercontent.com/BasementEngineering/MiniKenterprise/main/3dFiles/special/kevin/RearWheel_Holder.stl">Download RearWheel_Holder.stl</a></li>
+        <li><a href="https://raw.githubusercontent.com/BasementEngineering/MiniKenterprise/main/3dFiles/special/kevin/top.stl">Download top.stl</a></li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="kevin-gallery-heading">
+      <h2 id="kevin-gallery-heading">Reference build</h2>
+      <div class="special-edition-gallery">
+        <figure>
+          <img src="../../images/build/Kevin/AssembledView.jpg" alt="Assembled Kevin robotic car">
+          <figcaption>Completed chassis.</figcaption>
+        </figure>
+        <figure>
+          <img src="../../images/build/Kevin/Drive_Components.jpg" alt="Kevin's wheels, gear motors, controller board, and battery">
+          <figcaption>Drive, battery, and control components.</figcaption>
+        </figure>
+        <figure>
+          <img src="../../images/build/Kevin/BatteryCompartment_Top.jpg" alt="Top view of Kevin's battery compartment">
+          <figcaption>Battery compartment from above.</figcaption>
+        </figure>
+        <figure>
+          <img src="../../images/build/Kevin/BatteryCompartment_Bottom.jpg" alt="Bottom view of Kevin's battery compartment">
+          <figcaption>Battery compartment from below.</figcaption>
+        </figure>
+        <figure>
+          <img src="../../images/build/Kevin/BottomElectronics_SideView.jpg" alt="Side view of Kevin's lower electronics">
+          <figcaption>Lower electronics and motor wiring.</figcaption>
+        </figure>
+        <figure>
+          <img src="../../images/build/Kevin/FrontViewElectronics.jpg" alt="Front view of Kevin's electronics">
+          <figcaption>Front electronics view.</figcaption>
+        </figure>
+        <figure>
+          <img src="../../images/build/Kevin/PcbLayout.jpg" alt="Kevin PCB layout reference image">
+          <figcaption>PCB layout reference.</figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
