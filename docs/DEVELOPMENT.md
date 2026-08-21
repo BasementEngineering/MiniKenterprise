@@ -71,6 +71,8 @@ python -m http.server 8080
 ```
 Open http://localhost:8080 — Web Serial requires a secure context, and `localhost` counts as one, so this works without HTTPS. Actually flashing still needs a real board plugged in over USB, in Chrome or Edge. `configure.html` needs no hardware; its STL download links point at `raw.githubusercontent.com/BasementEngineering/MiniKenterprise/main/3dFiles/...`, so they fetch from the pushed `main` branch even when previewing locally — a new STL you haven't pushed yet won't download until it's on `main`. The Build Guide needs internet access (to load `marked` from the CDN) even when previewing locally.
 
+The home-page gallery registers `docs/sw.js` as a service worker. After one successful online visit, it caches the home page shell, gallery manifest, and every current gallery image so the carousel can run offline. Cache paths are derived from the service worker scope, so this works on the GitHub Pages project URL and at the local preview URL.
+
 ### Releasing a new firmware build
 
 1. Build the frontend and regenerate the embedded-website headers: `.\deployFrontend.ps1` (repo root).

@@ -68,5 +68,12 @@
   </main>
 
   <script type="module" src="./js/gallery.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch((error) => {
+        console.warn("Could not register offline cache.", error);
+      });
+    }
+  </script>
 </body>
 </html>

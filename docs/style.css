@@ -8,6 +8,12 @@
   --code-bg: rgba(0, 0, 0, 0.07);
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   font-family: system-ui, sans-serif;
   margin: 0;
@@ -42,6 +48,7 @@ code {
 }
 
 main {
+  width: 100%;
   max-width: 32rem;
   text-align: center;
 }
@@ -547,6 +554,11 @@ main.special-edition {
 }
 
 @media (max-width: 42rem) {
+  body {
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+  }
+
   .special-edition-header {
     grid-template-columns: 1fr;
     gap: 1rem;
