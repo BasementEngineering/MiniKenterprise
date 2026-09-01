@@ -27,12 +27,22 @@ hubWallThickness = 2.4; // mm
 guardClearance = 3;    // mm - gap between prop tip and the inside of the guard ring
 guardThickness = 2;    // mm - guard ring cross-section thickness
 
-spokeWidth = 3;
+spokeWidth = 1.6;
 
 // Mount tab: the bottom mount is cut by the bottle
 tabThickness = 2;       // mm
 zipTieSlotThickness = 2.6;
 zipTieSlotLength = 10;
+
+// Foot: the block bridging the guard ring to the bottle tapers down from
+// the full guard-ring width to a narrower, shorter foot near the bottle,
+// via a smooth rounded taper (hull of two different-sized cylinders).
+taperLength = 18;    // mm - length of the rounded taper from the ring down to the foot (adjustable)
+footWidth = 40;      // mm - width of the straight foot section near the bottle (adjustable)
+
+// Fillet: rounds off the sharp inside corners where the spokes meet the
+// hub and the guard ring, for stress relief.
+filletRadius = 2;    // mm - radius rounding off the spoke junctions (adjustable)
 
 $fn = 64; // smoothness for circles/cylinders - lower for faster preview renders
 
@@ -47,16 +57,16 @@ hubOuterRadius = motorDiameter / 2 + hubClearance + hubWallThickness;
 guardInnerRadius = propDiameter / 2 + guardClearance;
 guardOuterRadius = guardInnerRadius + guardThickness;
 
-blockLength = guardOuterRadius + tabThickness + tabThickness + bottleDiameter / 2;
-blockWidth = 2 * guardOuterRadius;
+zipTieInnerRadius = bottleDiameter / 2 + 2;
+zipTieOuterRadius = zipTieInnerRadius + zipTieSlotThickness;
 
-module motor_hub() {
-  difference() {
-    cylinder(h = motorMountDepth, r = hubOuterRadius);
-    translate([0, 0, -1])
-      cylinder(h = motorMountDepth + tabThickness, r = motorDiameter / 2 + hubClearance);
-  }
-}
+blockLength = guardOuterRadius + tabThickness + zipTieSlotThickness + bottleDiameter / 2;
+footHalfWidth = footWidth / 2;
+minFootLength = tabThickness + zipTieSlotThickness; // mm - always leave at least this much straight foot before the bottle cutout
+taper = min(taperLength, blockLength - minFootLength);
+
+spokeLength = guardInnerRadius - hubOuterRadius + 1;
+fillet = min(filletRadius, hubOuterRadius / 2, guardInnerRadius / 2); // clamp to something sane relative to the hub/ring
 
 module guard_ring() {
   difference() {
@@ -66,26 +76,93 @@ module guard_ring() {
   }
 }
 
-module spokes() {
-  for (i = [0 : spokeCount - 1]) {
-    rotate([0, 0, i * 360 / spokeCount])
-      translate([hubOuterRadius - 0.5, -spokeWidth / 2, 0])
-        cube([guardInnerRadius - hubOuterRadius + 1, spokeWidth, motorMountDepth]);
+function normAngle(a) = a < 0 ? a + 360 : a;
+function shortSweep(a1, a2) =
+  let(d = normAngle(a2) - normAngle(a1))
+  d > 180 ? d - 360 : (d < -180 ? d + 360 : d);
+
+// The exact circular fillet arc that rounds the concave corner where a
+// flat spoke edge (the line y = side*spokeHalf) meets a circle of the
+// given radius centered on the origin - built as an explicit polygon
+// (vertex -> fillet arc -> circle arc) rather than a boolean trim, since
+// offset()/intersection-based trims proved numerically unreliable on this
+// shape. `outside` picks which side of that circle the fillet sits on:
+// true for a fillet bulging out from a solid disk (the hub), false for one
+// tucked just inside a bore (the guard ring's inner surface).
+module concave_fillet(circleRadius, spokeHalf, filletR, side, outside, segs = 16) {
+  cy = side * (spokeHalf + filletR);
+  d = outside ? circleRadius + filletR : circleRadius - filletR;
+  cx = sqrt(max(d * d - cy * cy, 0));
+
+  vx = sqrt(max(circleRadius * circleRadius - spokeHalf * spokeHalf, 0));
+  vy = side * spokeHalf;
+
+  angleToCenter = atan2(cy, cx);
+  ctx = circleRadius * cos(angleToCenter);
+  cty = circleRadius * sin(angleToCenter);
+
+  angLine = atan2(-side * filletR, 0); // the line-tangent point sits directly below/above the fillet center
+  angCircle = atan2(cty - cy, ctx - cx);
+  sweep1 = shortSweep(angLine, angCircle);
+  arcPoints = [for (i = [0 : segs])
+    let(a = angLine + sweep1 * i / segs)
+    [cx + filletR * cos(a), cy + filletR * sin(a)]
+  ];
+
+  angVertexOnCircle = atan2(vy, vx);
+  angTangentOnCircle = atan2(cty, ctx);
+  sweep2 = shortSweep(angTangentOnCircle, angVertexOnCircle);
+  circleArcPoints = [for (i = [0 : segs])
+    let(a = angTangentOnCircle + sweep2 * i / segs)
+    [circleRadius * cos(a), circleRadius * sin(a)]
+  ];
+
+  polygon(points = concat([[vx, vy]], arcPoints, circleArcPoints));
+}
+
+// A spoke with a true rounded fillet at each of its four corners: two
+// where it meets the hub, two where it meets the guard ring's inner
+// surface.
+module spoke() {
+  spokeHalf = spokeWidth / 2;
+  union() {
+    translate([hubOuterRadius - 0.5, -spokeHalf])
+      square([spokeLength, spokeWidth]);
+    concave_fillet(hubOuterRadius, spokeHalf, fillet, 1, true);
+    concave_fillet(hubOuterRadius, spokeHalf, fillet, -1, true);
+    concave_fillet(guardInnerRadius, spokeHalf, fillet, 1, false);
+    concave_fillet(guardInnerRadius, spokeHalf, fillet, -1, false);
+  }
+}
+
+module hub_and_spokes() {
+  difference() {
+    linear_extrude(height = motorMountDepth)
+      union() {
+        circle(r = hubOuterRadius);
+        for (i = [0 : spokeCount - 1])
+          rotate([0, 0, i * 360 / spokeCount])
+            spoke();
+      }
+    translate([0, 0, -1])
+      cylinder(h = motorMountDepth + tabThickness, r = motorDiameter / 2 + hubClearance);
   }
 }
 
 module holder(){
-  blockLength = guardOuterRadius + tabThickness + zipTieSlotThickness + bottleDiameter / 2;
-  blockWidth = 2 * guardOuterRadius;
-
   difference(){
-  difference(){
-    translate([0, -blockWidth / 2, 0])
-      cube([blockLength, blockWidth, partHeight]);
+    union(){
+      hull(){
+        cylinder(h = partHeight, r = guardOuterRadius);
+        translate([taper, 0, 0])
+          cylinder(h = partHeight, r = footHalfWidth);
+      }
+      translate([taper, -footHalfWidth, 0])
+        cube([blockLength - taper, 2 * footHalfWidth, partHeight]);
+    }
     translate([blockLength, 0, -1])
       cylinder(h = partHeight + 2, r = bottleDiameter / 2);
-  };
-      translate([0, 0, -1])
+    translate([0, 0, -1])
       cylinder(h = partHeight + 2, r = guardInnerRadius);
   }
   }
@@ -105,9 +182,6 @@ module bottom_cutter(){
 }
 
 module ziptie_ring() {
-  zipTieInnerRadius = bottleDiameter / 2 + 2;
-  zipTieOuterRadius = zipTieInnerRadius + zipTieSlotThickness;
-
   color([0, 0, 0])
     translate([blockLength, 0, (partHeight-zipTieSlotLength) / 2])
       difference() {
@@ -135,9 +209,8 @@ module fan_enclosure() {
   difference(){
   difference() {
     union() {
-      motor_hub();
+      hub_and_spokes();
       guard_ring();
-      spokes();
       holder();
     }
     slant_cutter();
