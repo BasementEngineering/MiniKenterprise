@@ -15,28 +15,31 @@
 
 // --- Parameters (override with -D on the CLI, or the Customizer in the GUI) ---
 
-motorDiameter = 8.5;   // mm - motor can diameter (from docs/materials/motorsAndProps.csv) (adjustable)
+// Motor / propeller
+motorDiameter = 8.5;    // mm - motor can diameter (from docs/materials/motorsAndProps.csv) (adjustable)
 motorAxleLength = 6;
-motorMountDepth = 10;  // mm - how far the motor is held/gripped by the hub
-propDiameter = 55;     // mm - propeller diameter (adjustable)
-bottleDiameter = 63;   // mm - bottle diameter near the neck, where the real mount actually sits
-                       // (see note below) - PLACEHOLDER, measure per bottle size (adjustable)
+motorMountDepth = 10;   // mm - how far the motor is held/gripped by the hub
+propDiameter = 55;      // mm - propeller diameter (adjustable)
+bottleDiameter = 63;    // mm - bottle diameter near the neck, where the real mount actually sits
+                        // (see note below) - PLACEHOLDER, measure per bottle size (adjustable)
 
-hubClearance = 0.6;    // mm - extra radius so the motor is a friction/glue fit, not press-fit
+// Hub and guard ring
+hubClearance = 0.26;     // mm - extra radius so the motor is a friction/glue fit, not press-fit
 hubWallThickness = 2.4; // mm
-guardClearance = 3;    // mm - gap between prop tip and the inside of the guard ring
-guardThickness = 2;    // mm - guard ring cross-section thickness
+guardClearance = 3;     // mm - gap between prop tip and the inside of the guard ring
+guardThickness = 2;     // mm - guard ring cross-section thickness
 
-spokeWidth = 1.6;
+// Spokes connecting the hub to the guard ring
+spokeWidth = 1.6;       // mm
 
 // Mount tab: the bottom mount is cut by the bottle
-tabThickness = 2;       // mm
+tabThickness = 2;         // mm
 zipTieSlotThickness = 2.6;
 zipTieSlotLength = 10;
 
-// Foot: the block bridging the guard ring to the bottle tapers down from
-// the full guard-ring width to a narrower, shorter foot near the bottle,
-// via a smooth rounded taper (hull of two different-sized cylinders).
+// Arm: the arm bridging the guard ring to the bottle tapers down from the
+// full guard-ring width to a narrower, shorter foot near the bottle, via a
+// smooth rounded taper (hull of two different-sized cylinders).
 taperLength = 18;    // mm - length of the rounded taper from the ring down to the foot (adjustable)
 footWidth = 40;      // mm - width of the straight foot section near the bottle (adjustable)
 
@@ -60,13 +63,15 @@ guardOuterRadius = guardInnerRadius + guardThickness;
 zipTieInnerRadius = bottleDiameter / 2 + 2;
 zipTieOuterRadius = zipTieInnerRadius + zipTieSlotThickness;
 
-blockLength = guardOuterRadius + tabThickness + zipTieSlotThickness + bottleDiameter / 2;
+armLength = guardOuterRadius + tabThickness + zipTieSlotThickness + bottleDiameter / 2;
 footHalfWidth = footWidth / 2;
 minFootLength = tabThickness + zipTieSlotThickness; // mm - always leave at least this much straight foot before the bottle cutout
-taper = min(taperLength, blockLength - minFootLength);
+taper = min(taperLength, armLength - minFootLength);
 
 spokeLength = guardInnerRadius - hubOuterRadius + 1;
 fillet = min(filletRadius, hubOuterRadius / 2, guardInnerRadius / 2); // clamp to something sane relative to the hub/ring
+
+// --- Parts ---
 
 module guard_ring() {
   difference() {
@@ -149,24 +154,32 @@ module hub_and_spokes() {
   }
 }
 
-module holder(){
-  difference(){
-    union(){
-      hull(){
+// The arm bridging the guard ring to the bottle mount: a smooth taper
+// (hull of two different-sized cylinders) from the full guard-ring width
+// down to a narrower foot, then a straight run out to the bottle cutout.
+module mounting_arm() {
+  difference() {
+    union() {
+      hull() {
         cylinder(h = partHeight, r = guardOuterRadius);
         translate([taper, 0, 0])
           cylinder(h = partHeight, r = footHalfWidth);
       }
       translate([taper, -footHalfWidth, 0])
-        cube([blockLength - taper, 2 * footHalfWidth, partHeight]);
+        cube([armLength - taper, 2 * footHalfWidth, partHeight]);
     }
-    translate([blockLength, 0, -1])
+    translate([armLength, 0, -1])
       cylinder(h = partHeight + 2, r = bottleDiameter / 2);
     translate([0, 0, -1])
       cylinder(h = partHeight + 2, r = guardInnerRadius);
   }
-  }
+}
 
+// --- Cutters ---
+
+// Trims the top of the assembly down to a shallow slope instead of a flat
+// top, so the ring/arm taper from partHeight (at one side) to minPartHeight
+// (at the other).
 module slant_cutter() {
   angle = atan((partHeight - minPartHeight) / (2 * guardOuterRadius));
   translate([-guardOuterRadius, guardOuterRadius, minPartHeight])
@@ -174,50 +187,43 @@ module slant_cutter() {
       cube([guardOuterRadius * 2, guardOuterRadius * 4, guardOuterRadius * 2]);
 }
 
-module bottom_cutter(){
+module bottom_cutter() {
   cutDistance = (bottleDiameter / 2) * 0.3;
-  color([1, 0, 0])
-    translate([(guardOuterRadius+bottleDiameter/2 + 2 + zipTieSlotThickness - cutDistance), -guardOuterRadius, 0])
-      cube([(bottleDiameter / 2) * 0.5, guardOuterRadius * 2, partHeight]);
+  translate([armLength - cutDistance, -guardOuterRadius, 0])
+    cube([(bottleDiameter / 2) * 0.5, guardOuterRadius * 2, partHeight]);
 }
 
 module ziptie_ring() {
-  color([0, 0, 0])
-    translate([blockLength, 0, (partHeight-zipTieSlotLength) / 2])
-      difference() {
-        cylinder(h = zipTieSlotLength, r = zipTieOuterRadius);
-        translate([0, 0, -1])
-          cylinder(h = zipTieSlotLength + 2, r = zipTieInnerRadius);
-      }
+  translate([armLength, 0, (partHeight - zipTieSlotLength) / 2])
+    difference() {
+      cylinder(h = zipTieSlotLength, r = zipTieOuterRadius);
+      translate([0, 0, -1])
+        cylinder(h = zipTieSlotLength + 2, r = zipTieInnerRadius);
+    }
 }
 
-module debug_point() {
-  translate([-guardOuterRadius, -guardOuterRadius, minPartHeight])
-    sphere(r = 2, $fn = 16);
-}
+// --- Debug helpers ---
 
+// Reference bottle, for checking the mounting arm's fit - not part of the
+// printed model. Uncomment the call in fan_enclosure() to show it.
 module bottle() {
   color([0.2, 0.5, 0.8])
-    translate([blockLength, 0, 0])
+    translate([armLength, 0, 0])
       cylinder(h = partHeight * 1.5, r = bottleDiameter / 2);
 }
 
-module fan_enclosure() {
-  //ziptie_ring();
+// --- Assembly ---
 
-  difference(){
-  difference(){
+module fan_enclosure() {
   difference() {
     union() {
       hub_and_spokes();
       guard_ring();
-      holder();
+      mounting_arm();
     }
     slant_cutter();
-    }
     ziptie_ring();
-  }
-  bottom_cutter();
+    bottom_cutter();
   }
   //bottle();
 }
