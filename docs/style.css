@@ -412,6 +412,49 @@ main.build-guide {
   background: none;
 }
 
+.bom-thumb-clickable {
+  cursor: zoom-in;
+}
+
+.image-lightbox {
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0;
+  background: transparent;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.image-lightbox::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.image-lightbox img {
+  display: block;
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 0.75rem;
+}
+
+.image-lightbox-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.image-lightbox-close:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
 .bom-buy {
   text-align: right;
   white-space: nowrap;

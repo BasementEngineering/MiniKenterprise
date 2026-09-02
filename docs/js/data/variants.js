@@ -138,7 +138,7 @@ export const VARIANT_DATA = {
       highCurrent: false,
       recommended: false,
       validProps: ["45mm", "55mm"],
-      parts: [{ id: "motor-716", name: "716 coreless motor", qty: 1, links: [{ label: "Amazon", url: "https://amzn.eu/d/0aft2ixm" }] }],
+      parts: [{ id: "motor-716", name: "716 coreless motor", qty: 1, image: "images/components/CorelessDcMotor.jpg", links: [{ label: "Amazon", url: "https://amzn.eu/d/0aft2ixm" }] }],
     },
     "720": {
       label: "720",
@@ -147,7 +147,7 @@ export const VARIANT_DATA = {
       highCurrent: false,
       recommended: true,
       validProps: ["55mm"],
-      parts: [{ id: "motor-720", name: "720 coreless motor", qty: 1, links: [{ label: "Amazon", url: "https://amzn.eu/d/003OHyOD" }] }],
+      parts: [{ id: "motor-720", name: "720 coreless motor", qty: 1, image: "images/components/CorelessDcMotor.jpg", links: [{ label: "Amazon", url: "https://amzn.eu/d/003OHyOD" }] }],
     },
     "8520": {
       label: "8520",
@@ -185,9 +185,9 @@ export const VARIANT_DATA = {
   },
 
   props: {
-    "45mm": { label: "45 mm", parts: [{ id: "prop-45mm", name: "45mm propeller", qty: 1 }] },
-    "55mm": { label: "55 mm", parts: [{ id: "prop-55mm", name: "55mm propeller", qty: 1 }] },
-    "75mm": { label: "75 mm", parts: [{ id: "prop-75mm", name: "75mm propeller", qty: 1 }] },
+    "45mm": { label: "45 mm", parts: [{ id: "prop-45mm", name: "45mm propeller", qty: 1, image: "images/components/Propeller.jpg" }] },
+    "55mm": { label: "55 mm", parts: [{ id: "prop-55mm", name: "55mm propeller", qty: 1, image: "images/components/Propeller.jpg" }] },
+    "75mm": { label: "75 mm", parts: [{ id: "prop-75mm", name: "75mm propeller", qty: 1, image: "images/components/Propeller.jpg" }] },
   },
 
   // Pre-convention legacy files, mapped explicitly by (bottle, motorDiameter, propDiameter).
@@ -243,7 +243,7 @@ export const VARIANT_DATA = {
 
   // Axis-independent parts every Variant needs, split by BOM section. Images sourced from
   // docs/materials/images - jumper-wires uses SolidCoreWire.jpg as a best-guess match for
-  // "stiff" jumper wire (as opposed to FlexibleWire.jpg); battery-holder has no dedicated photo.
+  // "stiff" jumper wire (as opposed to FlexibleWire.jpg).
   commonElectronicsParts: [
     {
       id: "mcu-d1mini",
@@ -259,13 +259,14 @@ export const VARIANT_DATA = {
       id: "battery-18650",
       name: "18650 Li-Ion cell",
       qty: 1,
-      image: "images/components/Battery_18650WithConnector.jpg",
+      image: "images/components/18650_battery.jpg",
       links: [{ label: "reichelt", url: "https://www.reichelt.de/industriezelle-18650-3-6-v-2850-mah-ungeschuetzt-1er-pack-sam-18650-29e-s-p278089.html" }],
     },
     {
       id: "battery-holder",
       name: "18650 battery holder",
       qty: 1,
+      image: "images/components/BatteryHolder.jpg",
       links: [{ label: "reichelt", url: "https://www.reichelt.de/batteriehalter-fuer-1-18650-zelle-pin-halter-ha-1x18650-p141630.html" }],
     },
     { id: "switch-toggle", name: "2-pin toggle switch", qty: 1, image: "images/components/Switch.jpg" },

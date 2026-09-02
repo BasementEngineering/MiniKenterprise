@@ -63,9 +63,15 @@
 
     <section class="bom-section">
       <h2>Bill of materials</h2>
+      <p class="note">Click a component's photo for a larger view.</p>
       <div id="bomOutput"></div>
     </section>
   </main>
+
+  <dialog id="imageLightbox" class="image-lightbox">
+    <button type="button" id="imageLightboxClose" class="image-lightbox-close" aria-label="Close">&times;</button>
+    <img id="imageLightboxImg" src="" alt="">
+  </dialog>
 
   <script type="module" src="./js/configurator.js"></script>
 </body>

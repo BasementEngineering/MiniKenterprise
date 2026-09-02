@@ -91,7 +91,7 @@ function renderBom() {
     table.className = "bom-table";
     for (const part of group.parts) {
       const thumbHtml = part.image
-        ? `<img class="bom-thumb" src="./${part.image}" alt="">`
+        ? `<img class="bom-thumb bom-thumb-clickable" src="./${part.image}" alt="" data-full-src="./${part.image}" data-full-alt="${part.name}">`
         : `<span class="bom-thumb bom-thumb-placeholder"></span>`;
       const buyHtml = part.links?.length
         ? part.links.map((link) => `<a href="${link.url}" target="_blank" rel="noopener">${link.label}</a>`).join(" ")
@@ -199,6 +199,30 @@ function render() {
   writeSelectionToUrl(selection);
 }
 
+/** Lets clicking any .bom-thumb-clickable image open it larger in a <dialog>, without enlarging
+ * the inline BOM thumbnails themselves. Delegated on #bomOutput since renderBom() replaces its
+ * contents on every selection change, but the container element itself stays put. */
+function initImageLightbox() {
+  const bomOutput = document.getElementById("bomOutput");
+  const dialog = document.getElementById("imageLightbox");
+  const dialogImg = document.getElementById("imageLightboxImg");
+
+  bomOutput.addEventListener("click", (event) => {
+    const thumb = event.target.closest(".bom-thumb-clickable");
+    if (!thumb) return;
+    dialogImg.src = thumb.dataset.fullSrc;
+    dialogImg.alt = thumb.dataset.fullAlt;
+    dialog.showModal();
+  });
+
+  document.getElementById("imageLightboxClose").addEventListener("click", () => dialog.close());
+
+  // Click on the backdrop (i.e. directly on the <dialog>, not something inside it) closes it too.
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+}
+
 function initCustomizeToggle() {
   const toggleButton = document.getElementById("toggleCustomize");
   const optionsContainer = document.getElementById("customizeOptions");
@@ -212,6 +236,7 @@ function initCustomizeToggle() {
 
 async function init() {
   initCustomizeToggle();
+  initImageLightbox();
   await loadKnownFiles();
   selection = readSelectionFromUrl(data);
 
