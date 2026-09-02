@@ -22,5 +22,17 @@
         "caption":  "Wilhelmshaven Workshop",
         "location":  "Wilhelmshaven",
         "year":  2022
+    },
+    {
+        "file":  "MiniKenterprises_at_Maker_Faire.jpg",
+        "caption":  "Maker Faire booth",
+        "location":  "Hannover",
+        "year":  2026
+    },
+    {
+        "file":  "RemoteControlInAction.jpg",
+        "caption":  "Remote control in action",
+        "location":  null,
+        "year":  null
     }
 ]
