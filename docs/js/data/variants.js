@@ -41,10 +41,10 @@ export const VARIANT_DATA = {
       label: "0.5 L",
       recommended: true,
       description: "Smallest and lightest - the fastest boat, and the most-built size so far.",
-      connectorFile: "3dFiles/05l_Bottle/CenterPiece_ZiptieHoles.stl",
+      connectorFile: "3dFiles/05l_Bottle/Bridge.stl",
       parts: [
         { id: "bottle-05l", name: "Hard plastic 0.5L bottle (e.g. Coke, Sprite)", qty: 2 },
-        { id: "connector-05l", name: "Centerpiece (3D printed electronics enclosure)", qty: 1 },
+        { id: "connector-05l", name: "Bridge (3D printed electronics enclosure)", qty: 1 },
       ],
     },
     "075L": {
